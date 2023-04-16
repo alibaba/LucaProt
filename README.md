@@ -61,7 +61,8 @@ All 3D-structure PDB files of the model building dataset and predicted data for 
   This vocab file is `struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt`                        
   [struct_vocab.txt](struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt)
 
-* **subword-level vocab**            
+* **subword-level vocab**       
+  The size of the vocab of sequence we use is 20,000.            
   This vocab file is `vocab/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt`                  
   [subword_vocab_20000.txt](subword/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt)
 
