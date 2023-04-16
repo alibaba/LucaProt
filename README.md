@@ -1,5 +1,6 @@
 # LucaProt
 LucaProt(DeepProtFunc) is a open source project developed by Alibaba and licensed under the Apache License (Version 2.0).      
+
 This product contains various third-party components under other open source licenses.
 See the NOTICE file for more information.
 
@@ -10,9 +11,9 @@ See the NOTICE file for more information.
 
 ### 1) Model Introduction
 
-We developed a new deep learning model, namely, Deep Sequential and Structural Information Fusion Network for Proteins Function Prediction (DeepProtFunc), which takes into account protein sequence composition and structure to facilitate the accurate annotation of protein function.
+We developed a new deep learning model, namely, Deep Sequential and Structural Information Fusion Network for Proteins Function Prediction (DeepProtFunc/LucaProt), which takes into account protein sequence composition and structure to facilitate the accurate annotation of protein function.
 
-Here, we applied DeepProtFunc to identify viral RdRP.
+Here, we applied LucaProt to identify viral RdRP.
 
 ### 2) Model Architecture
 
@@ -22,7 +23,7 @@ We treat protein function prediction as a classification problem. For example, v
 <center>
 <img src="pics/LucaProt.png"/>
 
-Figure 1 The Architecture of DeepProtFunc
+Figure 1 The Architecture of LucaProt
 </center>
 
 ### 3) Model Input/Output
@@ -37,6 +38,7 @@ Use the amino acid letter sequence as the input of our model. The model outputs 
 
   The positive sequence fasta file is in `data/rdrp/all_dataset_positive.fasta.zip`                               
   [all_dataset_positive.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_positive.fasta.zip)
+
 
 * **Non-viral RdRP(Negative: 229434)**
 
@@ -61,6 +63,7 @@ All 3D-structure PDB files of the model building dataset and predicted data for 
   This vocab file is `struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt`                        
   [struct_vocab.txt](struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt)
 
+
 * **subword-level vocab**       
   The size of the vocab of sequence we use is 20,000.            
   This vocab file is `vocab/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt`                  
@@ -82,17 +85,23 @@ We constructed a data set with 235,413 samples for model building, which include
 * **Entire Dataset**     
   This file is `dataset/rdrp/all_dataset_with_pdb_emb.csv.zip`                                         
   [all_dataset_with_pdb_emb.csv.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_with_pdb_emb.csv.zip)
+
+
 * **Training set**        
   This file copy to `dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv`                 
   [train_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)
+
+  
 * **Validation set**         
   This file copy to `dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv`                         
-  [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)
+  [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)     
+
+
 * **Testing set**         
   This file copy to `dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv`                          
   [test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)
-*
-One row in all the above files represents one sample. All three files consist of 9 columns, including prot_id, seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename, label, and source. The details of these columns are as follows:
+
+One row in all the above files represents one sample. All three files consist of 9 columns, including **prot_id**, **seq**, **seq_len**, **pdb_filename**, **ptm**, **mean_plddt**, **emb_filename**, **label**, and **source**. The details of these columns are as follows:
 
 * **prot_id**        
   the protein id
@@ -120,8 +129,10 @@ One row in all the above files represents one sample. All three files consist of
 * **binary-class classification**    
   The label is 0 or 1 for binary-class classification, such as viral RdRP identification.
 
+
 * **multi-class classification**      
   The label is 0~N-1 for multi-class classification, such as the species prediction for proteins.
+
 
 * **multi-label classification**   
   The labels form a list of 0~N-1 for multi-label classification, such as Gene Ontology annotation for proteins.
@@ -130,7 +141,7 @@ One row in all the above files represents one sample. All three files consist of
 
 ### 1) Prediction of protein 3D-structure(Optional)
 
-The script ```structure_from_esm_v1.py``` is in the directory "src/protein_structure", and it use ESMFold (esmfold_v1) to predict 3D-structure.
+The script ```structure_from_esm_v1.py``` is in the directory "src/protein_structure", and it use ESMFold (esmfold_v1) to predict 3D-Structure of protein.
 
 #### I. Prediction from file
 
@@ -261,9 +272,13 @@ python structure_from_esm_v1.py
 
 ### 3) Construct dataset for model building
 Construct your dataset and randomly divide the dataset into training, validation, and testing sets with a specified ratio, and save the three sets in ```dataset/${dataset_name}/${dataset_type}/${task_type}```, including train_*.csv, dev_*.csv, test_*.csv.    
+
 The file format can be .csv (must include the header ) or .txt (does not need to have the header).    
-Each file line is a sample containing 9 columns, including prot_id, seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename, label, and source.      
-Colunm seq is the sequence, Colunm pdb_filename is the saved PDB filename for structure encoder strategy 2, Colunm ptm and Column mean_plddt are optional, which are obtained from the 3D-structure computed model, Colunm emb_filename is the saved embedding filename for structure encoder strategy 1, Column label is the sample class(a single value or a list value of label index or label name). Column source is the sample source (optional).     
+
+Each file line is a sample containing 9 columns, including **prot_id**, **seq**, **seq_len**, **pdb_filename**, **ptm**, **mean_plddt**, **emb_filename**, **label**, and **source**.      
+
+Colunm **seq** is the sequence, Colunm **pdb_filename** is the saved PDB filename for structure encoder strategy 2, Colunm **ptm** and Column **mean_plddt** are optional, which are obtained from the 3D-Structure computed model, Colunm **emb_filename** is the saved embedding filename for structure encoder strategy 1, Column **label** is the sample class(a single value or a list value of label index or label name). Column **source** is the sample source (optional).     
+
 For example:
 
 ```
@@ -409,8 +424,10 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
   The configuration files of all methods is in "config/rdrp_40_extend/protein/binary_class/".        
   If training your model, please put the configuration file in "config/${dataset_name}/${dataset_type}/${task_type}/"
 
+
 * **Value meaning in configuration file**      
   referring to "src/SSFN/README.md"
+
 
 * **Baselines**
     * LGBM (using the embedding vector: \<bos> as the input)
@@ -449,6 +466,7 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
       cd src/training
       run_subword_rdrp_emb_v2.sh
       ```
+
 * **Ours**
     * Ours (the sequence + the 3D-structure)     
       coming soon...
@@ -464,6 +482,7 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
 
 #### logs
 The running information is saved in "logs/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str}/logs.txt".
+
 The information includes the model configuration, model layers, running parameters, and evaluation information.
 
 #### models
@@ -477,6 +496,8 @@ Figure 2: The File List in Checkpoint Dir Path
 
 #### tb-logs
 The metrics are recorded in "tb-logs/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str}/events.out.tfevents.xxxxx.xxxxx"
+
+run: 
 tensorboard --logdir=tb-logs/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str --bind_all
 
 #### predicts
@@ -513,7 +534,7 @@ sh run_predict_one_sample.sh
 export CUDA_VISIBLE_DEVICES=0
 python predict_one_sample.py 
     --protein_id protein_1 
-    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	--emb_dir ./emb/
+    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ --emb_dir ./emb/
     --truncation_seq_length 4096
     --dataset_name rdrp_40_extend 
     --dataset_type protein 
@@ -644,6 +665,7 @@ including:
 * run_predict_from_file.sh     
   run prediction for many samples from a file.
 
+
 * run_predict_one_sample.sh     
   run prediction for one sample from the input.
 
@@ -653,8 +675,10 @@ We perform ablation studies on our model by removing specific module(sequence-sp
 * run_predict_only_seq_from_file.sh    
   only using the sequence to predict and calculate metrics three positive testing datasets,  three negative testing datasets, and our checked RdRPs by prediction SRA.
 
+
 * run_predict_only_emb_from_file.sh     
   only using the structural embedding to predict and calculate metrics three positive testing datasets,  three negative testing datasets, and our checked RdRPs by prediction SRA.
+
 
 * run_predict_seq_emb_from_file.sh     
   using the sequentail info and the structural embedding to predict and calculate metrics three positive testing datasets,  three negative testing datasets, and our checked RdRPs by prediction SRA.
@@ -679,11 +703,17 @@ Virtifier: a deep learning-based identifier for viral sequences from metagenomes
 RNN-VirSeeker: RNN-VirSeeker: A Deep Learning Method for Identification of Short Viral Sequences From Metagenomes.  code: <a href="https://github.com/crazyinter/RNN-VirSeeker" title="RNN-VirSeeker"> RNN-VirSeeker </a>
 
 * run_deep_baselines.sh   
-  the script to train deep baseline models
+  the script to train deep baseline models.               
+
+
 * run_predict_deep_baselines.sh   
-  use trained deep baseline models to predict three positive test datasets,  three negative test datasets, and our checked RdRP datasets
+  use trained deep baseline models to predict three positive test datasets,  three negative test datasets, and our checked RdRP datasets.        
+
+
 * run.py     
-  the main script for training deep baseline models
+  the main script for training deep baseline models.                
+
+
 * statistics    
   the script to statistic the accuracy in three kinds of test datasets(positive, negative, our checked) after prediction by deep baselines.
 
@@ -732,63 +762,76 @@ As mentioned above.
 #### Model Building Dataset
 * sequential info    
   [train_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)    
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/        
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`              
+ 
   [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)     
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/      
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`               
+  
   [test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)   
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/     
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`             
 
-* structural info
-  [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)      
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/embs/       
+* structural info      
+  [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)         
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/embs/`                   
 
 * tfrcords     
   [train](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/train/)       
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/train/     
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/train/`                  
+  
   [dev](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/dev/)      
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/dev/      
-  [test](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/)
-  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/        
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/dev/`              
+  
+  [test](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/)       
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/`                   
 
-#### Testing（Validation) Dataset
+#### Testing (Validation) Dataset
 * Three Positive Testing Dataset
     * sequential info      
       [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022Cell_RdRP_with_pdb_emb.csv)    
-      copy to LucaProt/data/rdrp       
+      copy to `LucaProt/data/rdrp`                  
       Reference: Expansion of the global RNA virome reveals diverse clades of bacteriophages   
+      
       [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022Science_RdRP_with_pdb_emb.csv)        
-      copy to LucaProt/data/rdrp      
+      copy to `LucaProt/data/rdrp`                
       Reference: Cryptic and abundant marine viruses at the evolutionary origins of Earth’s RNA virome
+      
       [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022NM_RdRP_with_pdb_emb.csv)      
-      copy to LucaProt/data/rdrp       
+      copy to `LucaProt/data/rdrp`             
       Reference: RNA viromes from terrestrial sites across China expand environmental viral diversity
 
     * structural info     
       [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Cell_RdRP/esm2_t36_3B_UR50D)          
+      
       [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Science_RdRP/esm2_t36_3B_UR50D)           
+      
       [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022NM_RdRP/esm2_t36_3B_UR50D)   
+
 
 * Three Negative Testing Dataset
     * sequential info       
-      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/All_RT_with_pdb_emb.csv)   
-      copy to LucaProt/data/rdrp      
-      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_DdRP_with_pdb_emb.csv)            
-      copy to LucaProt/data/rdrp        
-      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_RdRP_with_pdb_emb.csv)   
-      copy to LucaProt/data/rdrp
-
-    * structural info          
-      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/All_RT/esm2_t36_3B_UR50D)                    
-      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_DdRP/esm2_t36_3B_UR50D)                
-      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_RdRP/esm2_t36_3B_UR50D)
+      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/All_RT_with_pdb_emb.csv)     
+      copy to `LucaProt/data/rdrp`       
+  
+      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_DdRP_with_pdb_emb.csv)              
+      copy to `LucaProt/data/rdrp`   
+  
+      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_RdRP_with_pdb_emb.csv)     
+      copy to `LucaProt/data/rdrp`
+    
+    * structural info       
+      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/All_RT/esm2_t36_3B_UR50D)       
+      
+      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_DdRP/esm2_t36_3B_UR50D)     
+      
+      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_RdRP/esm2_t36_3B_UR50D)        
 
 
 * Our Checked RdRP Dataset (Our Results)
     * sequential info    
       [ours_checked_rdrp_final.csv](http://47.93.21.181/LucaProt/our_identified_rdrp/ours_checked_rdrp_final.csv)
 
-    * structural info    
-      [emb.zip](http://47.93.21.181/LucaProt/our_identified_rdrp/embs/esm2_t36_3B_UR50D)
+    * structural info        
+      [embs](http://47.93.21.181/LucaProt/our_identified_rdrp/embs/esm2_t36_3B_UR50D)
   
     * PDB    
       All 3D-structure PDB files of our predicted results for opening are in the process.   
@@ -801,15 +844,21 @@ As mentioned above.
 
 ### Trained Model
 The trained model for RdRP identification is available at:
-* logs    
-  [logs](http://47.93.21.181/LucaProt/logs/)
+* logs         
+  [logs](http://47.93.21.181/LucaProt/logs/)     
+  copy tp `LucaProt/logs/`
+
 * models       
-  [models](http://47.93.21.181/LucaProt/models/)
+  [models](http://47.93.21.181/LucaProt/models/)      
+  copy tp `LucaProt/models/`      
 
 # 7. Contributor     
-Yong He, Zhaorong Li    
- 
-# 8. Citation   
+Yong He, Zhaorong Li   
+
+# 8. FTP   
+The all data of LucaProt is available at the website: <a href="http://47.93.21.181/" title="Open Resources"> Open Resources </a>
+
+# 9. Citation   
 
 
 
