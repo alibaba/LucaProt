@@ -806,7 +806,10 @@ The trained model for RdRP identification is available at:
 * models       
   [models](http://47.93.21.181/LucaProt/models/)
 
-# 7. Citation   
+# 7. Contributor     
+Yong He, Zhaorong Li    
+ 
+# 8. Citation   
 
 
 
