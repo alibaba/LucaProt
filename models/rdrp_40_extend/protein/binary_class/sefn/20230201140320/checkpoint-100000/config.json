@@ -1,0 +1,44 @@
+{
+  "activate_func": "tanh",
+  "architectures": [
+    "SequenceAndStructureFusionNetwork"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "directionality": "bidi",
+  "embedding_fc_size": [
+    128
+  ],
+  "embedding_input_size": 2560,
+  "embedding_pooling_type": "value_attention",
+  "embedding_weight": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 128,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "layer_norm_eps": 1e-12,
+  "loss_reduction": "mean",
+  "max_position_embeddings": 2048,
+  "model_type": "bert",
+  "no_token_type_embeddings": true,
+  "num_attention_heads": 4,
+  "num_hidden_layers": 4,
+  "pad_token_id": 0,
+  "pooler_fc_size": 128,
+  "pooler_num_attention_heads": 4,
+  "pooler_num_fc_layers": 1,
+  "pooler_size_per_head": 128,
+  "pooler_type": "first_token_transform",
+  "pos_weight": 40,
+  "position_embedding_type": "absolute",
+  "seq_fc_size": [
+    128
+  ],
+  "seq_weight": null,
+  "torch_dtype": "float32",
+  "transformers_version": "4.26.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 19983
+}

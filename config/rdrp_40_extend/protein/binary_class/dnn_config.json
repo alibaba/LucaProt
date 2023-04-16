@@ -1,0 +1,11 @@
+{
+  "activate_func": "tanh",
+  "dropout": 0.1,
+  "input_dim": 2560,
+  "hidden_dim_list": [2560, 1024, 512],
+  "bias": false,
+  "pos_weight": 40,
+  "weight": null,
+  "num_labels": 2
+}
+
