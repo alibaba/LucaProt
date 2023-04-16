@@ -1,0 +1,20 @@
+{
+  "max_position_embeddings": 2048,
+  "vocab_size": 32,
+  "bidirectional": false,
+  "embedding": true,
+  "embedding_trainable": false,
+  "embedding_dim": 256,
+  "num_layers": 1,
+  "hidden_dim": 256,
+  "batch_first": true,
+  "dropout": 0.0,
+  "bias": true,
+  "pos_weight": 40,
+  "weight": null,
+  "num_labels": 2,
+  "padding_idx": 0,
+  "rnn_model": "lstm",
+  "batch_norm": false
+}
+

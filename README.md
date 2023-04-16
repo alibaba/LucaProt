@@ -35,62 +35,61 @@ Use the amino acid letter sequence as the input of our model. The model outputs 
 
 * **viral RdRP(Postive: 5979)**
 
-  The positive sequence fasta file is in "dataset/rdrp/all_dataset_positive.fasta.zip":                         
-  [all_dataset_positive.fasta.zip](data/all_dataset_positive.fasta.zip)
+  The positive sequence fasta file is in `data/rdrp/all_dataset_positive.fasta.zip`                               
+  [all_dataset_positive.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_positive.fasta.zip)
 
 * **Non-viral RdRP(Negative: 229434)**
 
-  The negative sequence  fasta file is in "dataset/rdrp/all_dataset_negative.fasta.zip":     
+  The negative sequence  fasta file is in `dataset/rdrp/all_dataset_negative.fasta.zip"`        
   including:
 
     * other proteins of the virus
     * other protein domains of the virus
     * non-viral proteins
 
-  [all_dataset_negative.fasta.zip](data/all_dataset_negative.fasta.zip)
+  [all_dataset_negative.fasta.zip](http://47.93.21.181/LucaProt/data/data/all_dataset_negative.fasta.zip)
 
 ### 2) Structural embedding(matrix and vector)
-All structural embedding files of the dataset for model building are available at: [embs](/mnt/sanyuan.hy/workspace/DeepProtFunc/dataset/rdrp_40_extend/protein/binary_class/)         
+All structural embedding files of the dataset for model building are available at: [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)         
 All structural embedding files of the prediction data for opening are in the process(because of the amount of data).
 
-### 3) PDB (3D Structure)
-All 3D-structure PDB files of the dataset for model building are available at: [pdb](/mnt/sanyuan.hy/workspace/BioScience/dataset/rdrp_40_extend/protein/binary_class/pdb)              
-All 3D-structure PDB files of the prediction data for opening are in the process(because of the amount of data).
+### 3) PDB (3D Structure) 
+All 3D-structure PDB files of the model building dataset and predicted data for opening are in the process (because of the amount of data).
 
 ### 4) Vocab
 * **structure vocab**      
-  This vocab file is "struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt":              
+  This vocab file is `struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt`                        
   [struct_vocab.txt](struct_vocab/rdrp_40_extend/protein/binary_class/struct_vocab.txt)
 
 * **subword-level vocab**            
-  This vocab file is "vocab/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt":             
+  This vocab file is `vocab/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt`                  
   [subword_vocab_20000.txt](subword/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt)
 
 
 * **char-level vocab**         
-  This vocab file is "vocab/rdrp_40_extend/protein/binary_class/vocab.txt":                  
+  This vocab file is `vocab/rdrp_40_extend/protein/binary_class/vocab.txt`                      
   [vocab.txt](vocab/rdrp_40_extend/protein/binary_class/vocab.txt)
 
 ### 5) Label
 Viral RdRP identification is a binary-class classification task, including positive and negative classes, using 0 and 1 to represent a negative and positive sample, respectively.
-The label list file is "dataset/rdrp_40_extend/protein/binary_class/label.txt":               
+The label list file is `dataset/rdrp_40_extend/protein/binary_class/label.txt`                        
 [label.txt](dataset/rdrp_40_extend/protein/binary_class/label.txt)
 
 ### 6) Dataset
 We constructed a data set with 235,413 samples for model building, which included 5,879 positive samples of known viral RdRPs (i.e. the well-curated RdRP database described in the previous section of Methods), and 229,434 (to maintain a 1:40 ratio for viral RdRP and non-virus RdRPs) negative samples of confirmed non-virus RdRPs. And the non-virus RdRPs contained proteins from Eukaryota DNA dependent RNA polymerase (Eu DdRP, N=1,184), Eukaryota RNA dependent RNA polymerase (Eu RdRP, N=2,233), Reverse Transcriptase (RT, N=48,490), proteins obtained from DNA viruses (N=1,533), non-RdRP proteins obtained from RNA viruses (N=1,574), and a wide array of cellular proteins from different functional categories (N=174,420). We randomly divided the dataset into training, validation, and testing sets with a ratio of 8.5:1:1, which were used for model fitting, model finalization (based on the best F1-score training iteration), and performance reporting (including accuracy, precision, recall, F1-score, and Area under the ROC Curve (AUC)), respectively.
 
 * **Entire Dataset**     
-  This file is "dataset/rdrp/all_dataset_with_pdb_emb.csv.zip":                
-  [all_dataset_with_pdb_emb.csv.zip](data/rdrp/all_dataset_with_pdb_emb.csv.zip)
+  This file is `dataset/rdrp/all_dataset_with_pdb_emb.csv.zip`                                         
+  [all_dataset_with_pdb_emb.csv.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_with_pdb_emb.csv.zip)
 * **Training set**        
-  This file is "dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv":            
-  [train_with_pdb_emb.csv](dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)
-* **Validation set**        
-  This file is "dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv":                
-  [dev_with_pdb_emb.csv](dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)
+  This file copy to `dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv`                 
+  [train_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)
+* **Validation set**         
+  This file copy to `dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv`                         
+  [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)
 * **Testing set**         
-  This file is "dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv":                  
-  [test_with_pdb_emb.csv](dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)
+  This file copy to `dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv`                          
+  [test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)
 *
 One row in all the above files represents one sample. All three files consist of 9 columns, including prot_id, seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename, label, and source. The details of these columns are as follows:
 
@@ -622,7 +621,7 @@ python predict.py
 
 **Note:** the embedding matrices of all the proteins in this file need to prepare in advance.
 
-# 7. Related to the Project
+# 5. Related to the Project
 
 ### 1) ClstrSearch
 
@@ -721,7 +720,7 @@ the scripts of pictures ploting is in "src/plot".
 the codes and results of Geo information Spider in "src/geo_map".
 
 
-# 8. Open Source
+# 6. Open Source
 Open sources of our study are as follows, including **code**, **model building dataset**, **model testing datasets**, and **our trained model**.
 
 ### Code
@@ -731,66 +730,82 @@ As mentioned above.
 
 #### Model Building Dataset
 * sequential info    
-  [train_with_pdb_emb.csv](dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)      
-  [dev_with_pdb_emb.csv](dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)            
-  [test_with_pdb_emb.csv](dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)
+  [train_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)    
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/        
+  [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)     
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/      
+  [test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)   
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/     
 
-* structural info    
-  [embs](/mnt/sanyuan.hy/workspace/DeepProtFunc/dataset/rdrp_40_extend/protein/binary_class/)
+* structural info
+  [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)      
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/embs/       
 
-* tfrcords    
-  [train](/mnt/sanyuan.hy/workspace/DeepProtFunc/dataset/rdrp_40_extend/protein/binary_class/tfrecords/train)       
-  [dev](/mnt/sanyuan.hy/workspace/DeepProtFunc/dataset/rdrp_40_extend/protein/binary_class/tfrecords/dev)      
-  [test](/mnt/sanyuan.hy/workspace/DeepProtFunc/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test)
+* tfrcords     
+  [train](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/train/)       
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/train/     
+  [dev](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/dev/)      
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/dev/      
+  [test](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/)
+  copy to LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/        
 
 #### Testing（Validation) Dataset
 * Three Positive Testing Dataset
     * sequential info      
-      [Neri RdRP](data/rdrp/2022Cell_RdRP_with_pdb_emb.csv)        
+      [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022Cell_RdRP_with_pdb_emb.csv)    
+      copy to LucaProt/data/rdrp       
       Reference: Expansion of the global RNA virome reveals diverse clades of bacteriophages   
-      [Zayed RdRP](data/rdrp/2022Science_RdRP_with_pdb_emb.csv)        
-      Reference: Cryptic and abundant marine viruses at the evolutionary origins of Earth’s RNA virome         
-      [Chen RdRP](data/rdrp/2022NM_RdRP_with_pdb_emb.csv)        
+      [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022Science_RdRP_with_pdb_emb.csv)        
+      copy to LucaProt/data/rdrp      
+      Reference: Cryptic and abundant marine viruses at the evolutionary origins of Earth’s RNA virome
+      [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022NM_RdRP_with_pdb_emb.csv)      
+      copy to LucaProt/data/rdrp       
       Reference: RNA viromes from terrestrial sites across China expand environmental viral diversity
 
     * structural info     
-      [Neri RdRP](/mnt_nas2/sanyuan.hy/biodata/rdrp/validation/2022Cell_RdRP/esm2_t36_3B_UR50D)        
-      [Zayed RdRP](/mnt_nas2/sanyuan.hy/biodata/rdrp/validation/2022Science_RdRP/esm2_t36_3B_UR50D)        
-      [Chen RdRP](/mnt_nas/sanyuan.hy/biodata/rdrp/2022NM_RdRP/esm2_t36_3B_UR50D)
+      [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Cell_RdRP/esm2_t36_3B_UR50D)          
+      [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Science_RdRP/esm2_t36_3B_UR50D)           
+      [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022NM_RdRP/esm2_t36_3B_UR50D)   
 
 * Three Negative Testing Dataset
     * sequential info       
-      [RT](data/rdrp/All_RT_with_pdb_emb.csv)                    
-      [Eu DdRP](data/rdrp/Eukaryota_DdRP_with_pdb_emb.csv)                
-      [Eu RdRP](data/rdrp/Eukaryota_RdRP_with_pdb_emb.csv)
+      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/All_RT_with_pdb_emb.csv)   
+      copy to LucaProt/data/rdrp      
+      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_DdRP_with_pdb_emb.csv)            
+      copy to LucaProt/data/rdrp        
+      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_RdRP_with_pdb_emb.csv)   
+      copy to LucaProt/data/rdrp
 
     * structural info          
-      [RT](/mnt_nas2/sanyuan.hy/biodata/rdrp/validation/All_RT/esm2_t36_3B_UR50D)                    
-      [Eu DdRP](/mnt_nas2/sanyuan.hy/biodata/rdrp/validation/Eukaryota_DdRP/esm2_t36_3B_UR50D)                
-      [Eu RdRP](/mnt_nas2/sanyuan.hy/biodata/rdrp/validation/Eukaryota_RdRP/esm2_t36_3B_UR50D)
+      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/All_RT/esm2_t36_3B_UR50D)                    
+      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_DdRP/esm2_t36_3B_UR50D)                
+      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_RdRP/esm2_t36_3B_UR50D)
 
 
-* Our Checked RdRP Dataset
+* Our Checked RdRP Dataset (Our Results)
     * sequential info    
-      [ours_checked_rdrp_final.csv](data/rdrp/ours_checked_rdrp_final.csv)
+      [ours_checked_rdrp_final.csv](http://47.93.21.181/LucaProt/our_identified_rdrp/ours_checked_rdrp_final.csv)
 
     * structural info    
-      [emb.zip](/mnt_nas2/sanyuan.hy/biodata/all_predicted_checked_unchecked/emb/esm2_t36_3B_UR50D)
+      [emb.zip](http://47.93.21.181/LucaProt/our_identified_rdrp/embs/esm2_t36_3B_UR50D)
+  
+    * PDB    
+      All 3D-structure PDB files of our predicted results for opening are in the process.   
 
 
 * Our Sampled Dataset
     * fasta   
-      [00self_sequecing_300aa.pep](/mnt_nas/sanyuan.hy/biodata/20230131-to-Ali/00self_sequecing_300aa/00self_sequecing_300aa.pep)
+      [00self_sequecing_300aa.pep](http://47.93.21.181/LucaProt/self_sequencing_proteins/00self_sequecing_300aa.pep)       
 
 
 ### Trained Model
 The trained model for RdRP identification is available at:
 * logs    
-  [logs](logs/rdrp_40_extend/protein/binary_class/sefn/20230201140320)
+  [logs](http://47.93.21.181/LucaProt/logs/)
 * models       
-  [models](models/rdrp_40_extend/protein/binary_class/sefn/20230201140320)
+  [models](http://47.93.21.181/LucaProt/models/)
 
-# 9. Citation   
+# 7. Citation   
 
 
 
