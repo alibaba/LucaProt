@@ -858,7 +858,10 @@ Yong He, Zhaorong Li, Xin Hou, Mang Shi
 # 8. FTP   
 The all data of LucaProt is available at the website: <a href="http://47.93.21.181/" title="Open Resources"> Open Resources </a>
 
-# 9. Citation   
+# 9. Citation        
+If you use our codes, please cite this paper: xxxx.           
+
+Please wait, our paper is now under review, and we will submit the pre-print later.     
 
 
 
