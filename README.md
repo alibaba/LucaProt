@@ -859,7 +859,7 @@ Yong He, Zhaorong Li, Xin Hou, Mang Shi
 The all data of LucaProt is available at the website: <a href="http://47.93.21.181/" title="Open Resources"> Open Resources </a>
 
 # 9. Citation   
-If you use our codes, please cite this paper: xxxx     
+If you use our codes, please cite this paper: to be updated soon.       
 
 Please wait, our paper is now under review, and we will submit the pre-print later.     
 
