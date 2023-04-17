@@ -119,7 +119,7 @@ One row in all the above files represents one sample. All three files consist of
   The filename of the embedding matrix or vector of protein structure.      
   **Note:** the embedding matrics of the dataset need to prepare in advance.
 * **label**    
-  the sample label, 0 or 1 for binary-class classification, 0~N-1 for multi-class classification, a list of 0~N-1 for multi-label classification.
+  the sample label, 0 or 1 for binary-class classification, [0, 1, ..., N-1] for multi-class classification, a list of [0, 1, ..., N-1] for multi-label classification.
 * **source**    
   optional, the sample source (such as RdRP, RT, DdRP, non-virus RdRP, and Other).
 
@@ -534,7 +534,7 @@ sh run_predict_one_sample.sh
 export CUDA_VISIBLE_DEVICES=0
 python predict_one_sample.py 
     --protein_id protein_1 
-    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	--emb_dir ./emb/
+    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ --emb_dir ./emb/
     --truncation_seq_length 4096
     --dataset_name rdrp_40_extend 
     --dataset_type protein 
@@ -858,10 +858,9 @@ Yong He, Zhaorong Li, Xin Hou, Mang Shi
 # 8. FTP   
 The all data of LucaProt is available at the website: <a href="http://47.93.21.181/" title="Open Resources"> Open Resources </a>
 
-# 9. Citation        
-If you use our codes, please cite this paper: xxxx.           
+# 9. Citation   
+If you use our codes, please cite this paper: xxxx     
 
 Please wait, our paper is now under review, and we will submit the pre-print later.     
-
 
 
