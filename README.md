@@ -858,9 +858,21 @@ The trained model for RdRP identification is available at:
 # 8. FTP   
 The all data of LucaProt is available at the website: <a href="http://47.93.21.181/" title="Open Resources"> Open Resources </a>
 
-# 9. Citation   
-If you use our codes, please cite this paper: to be updated soon.      
+# 9. Citation        
+the pre-print version:
 
-Please wait, our paper is now under review, and we will submit the pre-print later.     
+@article { lucaprot,     
+author = {Xin Hou and Yong He and Pan Fang and Shi-Qiang Mei and Zan Xu and Wei-Chen Wu and Jun-Hua Tian and Shun Zhang and Zhen-Yu Zeng and Qin-Yu Gou and Gen-Yang Xin and Shi-Jia Le and Yin-Yue Xia and Yu-Lan Zhou and Feng-Ming Hui and Yuan-Fei Pan and John-Sebastian Eden and Zhao-Hui Yang and Chong Han and Yue-Long Shu and Deyin Guo and Jun Li and Edward C Holmes and Zhao-Rong Li and Mang Shi},            
+title = {Artificial intelligence redefines RNA virus discovery},      
+elocation-id = {2023.04.18.537342},      
+year = {2023},       
+doi = {10.1101/2023.04.18.537342},        
+publisher = {Cold Spring Harbor Laboratory},      
+URL = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342},       
+eprint = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342.full.pdf},         
+journal = {bioRxiv}          
+}
+
+
 
 
