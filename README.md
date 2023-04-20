@@ -853,26 +853,26 @@ The trained model for RdRP identification is available at:
   copy tp `LucaProt/models/`      
 
 # 7. Contributor
+<a href="http://lucalab.tech/" title="LucaTeam">LucaTeam:</a>    
 <a href="https://scholar.google.com.hk/citations?user=RDbqGTcAAAAJ&hl=en" title="Yong He">Yong He</a>,  <a href="https://scholar.google.com/citations?user=lT3nelQAAAAJ&hl=en" title="Zhaorong Li">Zhaorong Li</a>,  <a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=zA310LMAAAAJ" title="Xin Hou">Xin Hou</a>,  <a href="https://scholar.google.com/citations?user=1KJOH7YAAAAJ&hl=zh-CN&oi=ao" title="Mang Shi">Mang Shi</a>
 
 # 8. FTP   
-The all data of LucaProt is available at the website: <a href="http://47.93.21.181/" title="Open Resources"> Open Resources </a>
+The all data of LucaProt is available at the website: <a href="http://ftp.lucaprot.tech" title="Open Resources"> Open Resources </a>
 
-# 9. Citation        
+# 9. Citation   
 the pre-print version:
 
 @article { lucaprot,     
-author = {Xin Hou and Yong He and Pan Fang and Shi-Qiang Mei and Zan Xu and Wei-Chen Wu and Jun-Hua Tian and Shun Zhang and Zhen-Yu Zeng and Qin-Yu Gou and Gen-Yang Xin and Shi-Jia Le and Yin-Yue Xia and Yu-Lan Zhou and Feng-Ming Hui and Yuan-Fei Pan and John-Sebastian Eden and Zhao-Hui Yang and Chong Han and Yue-Long Shu and Deyin Guo and Jun Li and Edward C Holmes and Zhao-Rong Li and Mang Shi},            
+author = {Xin Hou and Yong He and Pan Fang and Shi-Qiang Mei and Zan Xu and Wei-Chen Wu and Jun-Hua Tian and Shun Zhang and Zhen-Yu Zeng and Qin-Yu Gou and Gen-Yang Xin and Shi-Jia Le and Yin-Yue Xia and Yu-Lan Zhou and Feng-Ming Hui and Yuan-Fei Pan and John-Sebastian Eden and Zhao-Hui Yang and Chong Han and Yue-Long Shu and Deyin Guo and Jun Li and Edward C Holmes and Zhao-Rong Li and Mang Shi},        
 title = {Artificial intelligence redefines RNA virus discovery},      
-elocation-id = {2023.04.18.537342},      
-year = {2023},       
-doi = {10.1101/2023.04.18.537342},        
-publisher = {Cold Spring Harbor Laboratory},      
-URL = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342},       
-eprint = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342.full.pdf},         
-journal = {bioRxiv}          
+elocation-id = {2023.04.18.537342},    
+year = {2023},     
+doi = {10.1101/2023.04.18.537342},      
+publisher = {Cold Spring Harbor Laboratory}, 
+URL = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342},    
+eprint = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342.full.pdf},       
+journal = {bioRxiv}        
 }
-
 
 
 
