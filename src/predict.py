@@ -302,6 +302,7 @@ def transform_sample_2_feature(args,
                         embedding_info = embedding_info[-args.embedding_max_length:, -args.embedding_max_length:]
                     else:
                         embedding_info = embedding_info[:args.embedding_max_length, :args.embedding_max_length]
+                    embedding_attention_mask = [1 if mask_padding_with_zero else 0] * args.embedding_max_length
                 else:
                     embedding_padding_length = args.embedding_max_length - emb_l
                     if embedding_padding_length > 0:
@@ -311,7 +312,6 @@ def transform_sample_2_feature(args,
                         else:
                             embedding_attention_mask = embedding_attention_mask + [0 if mask_padding_with_zero else 1] * embedding_padding_length
                             embedding_info = np.pad(embedding_info, [(0, embedding_padding_length), (0, embedding_padding_length)], mode='constant', constant_values=pad_token)
-                    attention_mask = attention_mask + ([0 if mask_padding_with_zero else 1] * attention_mask_padding_length)
             elif args.embedding_type == "matrix":
                 embedding_info = embedding["representations"][36].numpy()
                 emb_l = embedding_info.shape[0]
@@ -321,6 +321,7 @@ def transform_sample_2_feature(args,
                         embedding_info = embedding_info[-args.embedding_max_length:, :]
                     else:
                         embedding_info = embedding_info[:args.embedding_max_length, :]
+                    embedding_attention_mask = [1 if mask_padding_with_zero else 0] * args.embedding_max_length
                 else:
                     embedding_padding_length = args.embedding_max_length - emb_l
                     if embedding_padding_length > 0:

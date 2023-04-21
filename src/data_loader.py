@@ -555,6 +555,7 @@ def convert_examples_to_features(examples,
                         embedding_info = embedding_info[-embedding_max_length:, -embedding_max_length:]
                     else:
                         embedding_info = embedding_info[:embedding_max_length, :embedding_max_length]
+                    embedding_attention_mask = [1 if mask_padding_with_zero else 0] * embedding_max_length
                 else:
                     embedding_padding_length = embedding_max_length - emb_l
                     if embedding_padding_length > 0:
@@ -573,6 +574,7 @@ def convert_examples_to_features(examples,
                         embedding_info = embedding_info[-embedding_max_length:, :]
                     else:
                         embedding_info = embedding_info[:embedding_max_length, :]
+                    embedding_attention_mask = [1 if mask_padding_with_zero else 0] * embedding_max_length
                 else:
                     embedding_padding_length = embedding_max_length - emb_l
                     if embedding_padding_length > 0:
@@ -958,6 +960,7 @@ def convert_one_example_to_features(example,
                     embedding_info = embedding_info[-embedding_max_length:, -embedding_max_length:]
                 else:
                     embedding_info = embedding_info[:embedding_max_length, :embedding_max_length]
+                embedding_attention_mask = [1 if mask_padding_with_zero else 0] * embedding_max_length
             else:
                 embedding_padding_length = embedding_max_length - emb_l
                 if embedding_padding_length > 0:
@@ -967,8 +970,6 @@ def convert_one_example_to_features(example,
                     else:
                         embedding_attention_mask = embedding_attention_mask + [0 if mask_padding_with_zero else 1] * embedding_padding_length
                         embedding_info = np.pad(embedding_info, [(0, embedding_padding_length), (0, embedding_padding_length)], mode='constant', constant_values=pad_token)
-                attention_mask = attention_mask + ([0 if mask_padding_with_zero else 1] * attention_mask_padding_length)
-
         elif embedding_type == "matrix":
             embedding_info = example["representations"]
             if emb_l > embedding_max_length:
@@ -976,6 +977,7 @@ def convert_one_example_to_features(example,
                     embedding_info = embedding_info[-embedding_max_length:, :]
                 else:
                     embedding_info = embedding_info[:embedding_max_length, :]
+                embedding_attention_mask = [1 if mask_padding_with_zero else 0] * embedding_max_length
             else:
                 embedding_padding_length = embedding_max_length - emb_l
                 if embedding_padding_length > 0:
