@@ -164,7 +164,7 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
     :param truncation_seq_length: [4094,2046,1982,1790,1534,1278,1150,1022]
     :return: embedding, processed_seq_len
     '''
-    assert embedding_type in ["bos", "representations"]
+    assert embedding_type in ["bos", "representations", "matrix"]
     protein_id, protein_seq = sample[0], sample[1]
     if len(protein_seq) > truncation_seq_length:
         if trunc_type == "left":
@@ -180,7 +180,7 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
         model = model.cuda()
         print("Transferred model to GPU")
     converter = BatchConverter(alphabet, truncation_seq_length)
-    protein_ids, raw_seqs, tokens = converter([protein_id, protein_seq])
+    protein_ids, raw_seqs, tokens = converter([[protein_id, protein_seq]])
     with torch.no_grad():
         if torch.cuda.is_available():
             tokens = tokens.to(device="cuda", non_blocking=True)

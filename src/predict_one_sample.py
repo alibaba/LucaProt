@@ -33,13 +33,13 @@ sys.path.append("..")
 sys.path.append("../src")
 try:
     from multi_label_metrics import *
-    from protein_structure import predict_embedding, predict_pdb, calc_distance_maps
+    from protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
     from utils import set_seed, plot_bins, csv_reader
     from SSFN.model import *
     from data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
 except ImportError:
     from src.common.multi_label_metrics import *
-    from src.protein_structure import predict_embedding, predict_pdb, calc_distance_maps
+    from src.protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
     from src.utils import set_seed, plot_bins, csv_reader
     from src.SSFN.model import *
     from src.data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
@@ -240,11 +240,12 @@ def transform_sample_2_feature(args,
         padding_length = args.struct_max_length - real_struct_node_size if real_struct_node_size < args.struct_max_length else 0
         pdb, mean_plddt, ptm, processed_seq = predict_pdb([prot_id, protein_seq], args.trunc_type, num_recycles=4, truncation_seq_length=args.truncation_seq_length, chunk_size=64, cpu_type="cpu-offload")
         # if the savepath not exists, create it
-        if not os.path.exists(args.pdb_dir):
-            os.makedirs(args.pdb_dir)
-        pdb_filepath = os.path.join(args.pdb_dir, prot_id.replace("/", "_") + ".pdb")
-        with open(pdb_filepath, "w") as wfp:
-            wfp.write(pdb)
+        if args.pdb_dir:
+            if not os.path.exists(args.pdb_dir):
+                os.makedirs(args.pdb_dir)
+            pdb_filepath = os.path.join(args.pdb_dir, prot_id.replace("/", "_") + ".pdb")
+            with open(pdb_filepath, "w") as wfp:
+                wfp.write(pdb)
         c_alpha, c_beta = calc_distance_maps(pdb, args.chain, processed_seq)
         cmap = c_alpha[args.chain]['contact-map'] if args.cmap_type == "C_alpha" else c_beta[args.chain]['contact-map']
         # use the specific threshold to transform the float contact map into 0-1 contact map
@@ -278,12 +279,13 @@ def transform_sample_2_feature(args,
 
     if args.embedding_type:
         # for embedding
-        embedding_info, processed_seq = predict_embedding([prot_id, protein_seq], args.trunc_type, args.embedding_type, repr_layers=[-1], truncation_seq_length=args.truncation_seq_length-2)
-        if not os.path.exists(args.emb_dir):
-            os.makedirs(args.emb_dir)
+        embedding_info, processed_seq = predict_embedding([prot_id, protein_seq], args.trunc_type, "representations" if args.embedding_type == "matrix" else args.embedding_type , repr_layers=[-1], truncation_seq_length=args.truncation_seq_length-2)
+        if args.emb_dir:
+            if not os.path.exists(args.emb_dir):
+                os.makedirs(args.emb_dir)
 
-        embedding_filepath = os.path.join(args.emb_dir, prot_id.replace("/", "_") + ".pt")
-        torch.save(embedding_info, embedding_filepath)
+            embedding_filepath = os.path.join(args.emb_dir, prot_id.replace("/", "_") + ".pt")
+            torch.save(embedding_info, embedding_filepath)
         if args.embedding_type == "contacts":
             emb_l = embedding_info.shape[0]
             embedding_attention_mask = [1 if mask_padding_with_zero else 0] * emb_l
@@ -458,24 +460,27 @@ def predict_multi_label(args, label_id_2_name, seq_tokenizer, subword, struct_to
     return res
 
 
-parser = argparse.ArgumentParser(description="Prediction")
-parser.add_argument("--protein_id", default=None, type=str, required=True, help="the protein id")
-parser.add_argument("--sequence", default=None, type=str, required=True, help="the protein sequence")
-parser.add_argument("--truncation_seq_length", default=4096, type=str, required=True, help="truncation seq length")
-parser.add_argument("--emb_dir", default=None, type=str, help="the structural embedding save dir. default: None")
-parser.add_argument("--pdb_dir", default="protein", type=str, help="the 3d-structure pdb save dir. default: None")
-parser.add_argument("--chain", default=None, type=str, help="pdb chain for contact map computing")
-parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True, help="the dataset name for model buliding.")
-parser.add_argument("--dataset_type", default="protein", type=str, required=True, help="the dataset type for model buliding.")
-parser.add_argument("--task_type", default=None, type=str, required=True, choices=["multi_label", "multi_class", "binary_class"], help="the task type for model buliding.")
-parser.add_argument("--model_type", default=None, type=str, required=True, help="model type.")
-parser.add_argument("--time_str", default=None, type=str, required=True, help="the running time string(yyyymmddHimiss) of model building.")
-parser.add_argument("--step", default=None, type=str, required=True, help="the training global step of model finalization.")
-parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
-args = parser.parse_args()
+def main():
+    parser = argparse.ArgumentParser(description="Prediction")
+    parser.add_argument("--protein_id", default=None, type=str, required=True, help="the protein id")
+    parser.add_argument("--sequence", default=None, type=str, required=True, help="the protein sequence")
+    parser.add_argument("--truncation_seq_length", default=4096, type=int, required=True, help="truncation seq length")
+    parser.add_argument("--emb_dir", default=None, type=str, help="the structural embedding save dir. default: None")
+    parser.add_argument("--pdb_dir", default="protein", type=str, help="the 3d-structure pdb save dir. default: None")
+    parser.add_argument("--chain", default=None, type=str, help="pdb chain for contact map computing")
+    parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True, help="the dataset name for model buliding.")
+    parser.add_argument("--dataset_type", default="protein", type=str, required=True, help="the dataset type for model buliding.")
+    parser.add_argument("--task_type", default=None, type=str, required=True, choices=["multi_label", "multi_class", "binary_class"], help="the task type for model buliding.")
+    parser.add_argument("--model_type", default=None, type=str, required=True, help="model type.")
+    parser.add_argument("--time_str", default=None, type=str, required=True, help="the running time string(yyyymmddHimiss) of model building.")
+    parser.add_argument("--step", default=None, type=str, required=True, help="the training global step of model finalization.")
+    parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == "__main__":
+    args = main()
     model_dir = "../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type, args.time_str, args.step if args.step == "best" else "checkpoint-{}".format(args.step))
     config_dir = "../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type,  args.time_str)
     predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type, args.time_str, "checkpoint-{}".format(args.step))
