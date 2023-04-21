@@ -30,7 +30,7 @@ Figure 1 The Architecture of LucaProt
 
 Use the amino acid letter sequence as the input of our model. The model outputs the function label of the input protein, which is a single tag (binary-class classification or multi-class classification) or a set of tags (multi-label classification).
 
-### 4) inference time     
+### 4) Inference Time     
 LucaProt is faster because it only needs to predict the structural representation matrix rather than the complete 3d structure of the protein sequence.          
 to be updated soon...    
 
