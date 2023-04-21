@@ -49,7 +49,7 @@ Use the amino acid letter sequence as the input of our model. The model outputs 
     * other protein domains of the virus
     * non-viral proteins
 
-  [all_dataset_negative.fasta.zip](http://47.93.21.181/LucaProt/data/data/all_dataset_negative.fasta.zip)
+  [all_dataset_negative.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_negative.fasta.zip)
 
 ### 2) Structural embedding(matrix and vector)
 All structural embedding files of the dataset for model building are available at: [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)         
@@ -67,7 +67,7 @@ All 3D-structure PDB files of the model building dataset and predicted data for 
 * **subword-level vocab**       
   The size of the vocab of sequence we use is 20,000.            
   This vocab file is `vocab/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt`                  
-  [subword_vocab_20000.txt](subword/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt)
+  [subword_vocab_20000.txt](vocab/rdrp_40_extend/protein/binary_class/subword_vocab_20000.txt)
 
 
 * **char-level vocab**         
