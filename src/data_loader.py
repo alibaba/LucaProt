@@ -565,7 +565,6 @@ def convert_examples_to_features(examples,
                         else:
                             embedding_attention_mask = embedding_attention_mask + [0 if mask_padding_with_zero else 1] * embedding_padding_length
                             embedding_info = np.pad(embedding_info, [(0, embedding_padding_length), (0, embedding_padding_length)], mode='constant', constant_values=pad_token)
-                    attention_mask = attention_mask + ([0 if mask_padding_with_zero else 1] * attention_mask_padding_length)
 
             elif embedding_type == "matrix":
                 embedding_info = example.embedding_info
