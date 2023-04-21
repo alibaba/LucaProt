@@ -30,6 +30,14 @@ Figure 1 The Architecture of LucaProt
 
 Use the amino acid letter sequence as the input of our model. The model outputs the function label of the input protein, which is a single tag (binary-class classification or multi-class classification) or a set of tags (multi-label classification).
 
+### 4) inference time     
+LucaProt is faster because it only needs to predict the structural representation matrix rather than the complete 3d structure of the protein sequence.          
+to be updated soon...    
+
+#### CPU    
+
+#### GPU     
+
 # 2. Dataset for Virus RdRP
 
 ### 1) Fasta
@@ -52,7 +60,7 @@ Use the amino acid letter sequence as the input of our model. The model outputs 
   [all_dataset_negative.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_negative.fasta.zip)
 
 ### 2) Structural embedding(matrix and vector)
-All structural embedding files of the dataset for model building are available at: [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)         
+All structural embedding files of the dataset for model building are available at: [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/)         
 All structural embedding files of the prediction data for opening are in the process(because of the amount of data).
 
 ### 3) PDB (3D Structure) 
@@ -771,7 +779,7 @@ As mentioned above.
   copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`             
 
 * structural info      
-  [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/embs/)         
+  [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/)         
   copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/embs/`                   
 
 * tfrcords     
@@ -800,11 +808,11 @@ As mentioned above.
       Reference: RNA viromes from terrestrial sites across China expand environmental viral diversity
 
     * structural info     
-      [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Cell_RdRP/esm2_t36_3B_UR50D)          
+      [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Cell_RdRP/)          
       
-      [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Science_RdRP/esm2_t36_3B_UR50D)           
+      [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Science_RdRP/)           
       
-      [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022NM_RdRP/esm2_t36_3B_UR50D)   
+      [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022NM_RdRP/)   
 
 
 * Three Negative Testing Dataset
@@ -819,19 +827,19 @@ As mentioned above.
       copy to `LucaProt/data/rdrp`
     
     * structural info       
-      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/All_RT/esm2_t36_3B_UR50D)       
+      [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/All_RT/)       
       
-      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_DdRP/esm2_t36_3B_UR50D)     
+      [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_DdRP/)     
       
-      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_RdRP/esm2_t36_3B_UR50D)        
+      [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_RdRP/)        
 
 
 * Our Checked RdRP Dataset (Our Results)
     * sequential info    
-      [ours_checked_rdrp_final.csv](http://47.93.21.181/LucaProt/our_identified_rdrp/ours_checked_rdrp_final.csv)
+      [ours_checked_rdrp_final.csv](http://47.93.21.181/LucaProt/our_identified_rdrp/)
 
     * structural info        
-      [embs](http://47.93.21.181/LucaProt/our_identified_rdrp/embs/esm2_t36_3B_UR50D)
+      [embs](http://47.93.21.181/LucaProt/our_identified_rdrp/embs/)
   
     * PDB    
       All 3D-structure PDB files of our predicted results for opening are in the process.   
@@ -839,7 +847,7 @@ As mentioned above.
 
 * Our Sampled Dataset
     * fasta   
-      [00self_sequecing_300aa.pep](http://47.93.21.181/LucaProt/self_sequencing_proteins/00self_sequecing_300aa.pep)       
+      [00self_sequecing_300aa.pep](http://47.93.21.181/LucaProt/self_sequencing_proteins/)       
 
 
 ### Trained Model
