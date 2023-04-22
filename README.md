@@ -32,17 +32,32 @@ Use the amino acid letter sequence as the input of our model. The model outputs 
 
 ### 4) Inference Time     
 LucaProt is faster because it only needs to predict the structural representation matrix rather than the complete 3d structure of the protein sequence.          
-to be updated soon...    
+
+Benchmark: For each sequence length range, selected 50 viral-RdRPS and 50 non-viral RdRPs for inference time cost calculation.     
 
 #### CPU    
+to be updated soon…   
 
-#### GPU     
+#### GPU(Nvidia A100)
+
+|  Protein Seq Len Range  |  Average Time  |  Maximum Time  |  Minimum Time  |
+|:-----------------------:|:--------------:|:--------------:|:--------------:|
+|    300 <= Len < 500     |     0.20s      |     0.24s      |     0.16s      |
+|    500 <= Len < 800     |     0.30s      |     0.39s      |     0.24s      | 
+|   800 <= Len < 1,000    |     0.42s      |     0.46s      |     0.39s      |
+|  1,000 <= Len < 1,500   |     0.59s      |     0.74s      |     0.45s      | 
+|  1,500 <= Len < 2,000   |     0.87s      |     1.02s      |     0.73s      |   
+|  2,000 <= Len < 3,000   |     1.31s      |     1.69s      |     1.01s      |   
+|  3,000 <= Len < 5,000   |     2.14s      |     2.78s      |     1.72s      |
+|  5,000 <= Len < 8,000   |     3.03s      |     3.45s      |     2.65s      |
+|  8,000 <= Len < 10,000  |     3.77s      |     4.24s      |     3.32s      |
+|      10,000 <= Len      |     9.92s      |     17.66s     |     4.30s      | 
 
 # 2. Dataset for Virus RdRP
 
 ### 1) Fasta
 
-* **viral RdRP(Postive: 5979)**
+* **viral RdRP(Postive: 5,979)**
 
   The positive sequence fasta file is in `data/rdrp/all_dataset_positive.fasta.zip`                               
   [all_dataset_positive.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_positive.fasta.zip)
@@ -88,7 +103,7 @@ The label list file is `dataset/rdrp_40_extend/protein/binary_class/label.txt`
 [label.txt](dataset/rdrp_40_extend/protein/binary_class/label.txt)
 
 ### 6) Dataset
-We constructed a data set with 235,413 samples for model building, which included 5,879 positive samples of known viral RdRPs (i.e. the well-curated RdRP database described in the previous section of Methods), and 229,434 (to maintain a 1:40 ratio for viral RdRP and non-virus RdRPs) negative samples of confirmed non-virus RdRPs. And the non-virus RdRPs contained proteins from Eukaryota DNA dependent RNA polymerase (Eu DdRP, N=1,184), Eukaryota RNA dependent RNA polymerase (Eu RdRP, N=2,233), Reverse Transcriptase (RT, N=48,490), proteins obtained from DNA viruses (N=1,533), non-RdRP proteins obtained from RNA viruses (N=1,574), and a wide array of cellular proteins from different functional categories (N=174,420). We randomly divided the dataset into training, validation, and testing sets with a ratio of 8.5:1:1, which were used for model fitting, model finalization (based on the best F1-score training iteration), and performance reporting (including accuracy, precision, recall, F1-score, and Area under the ROC Curve (AUC)), respectively.
+We constructed a data set with 235,413 samples for model building, which included 5,979 positive samples of known viral RdRPs (i.e. the well-curated RdRP database described in the previous section of Methods), and 229,434 (to maintain a 1:40 ratio for viral RdRP and non-virus RdRPs) negative samples of confirmed non-virus RdRPs. And the non-virus RdRPs contained proteins from Eukaryota DNA dependent RNA polymerase (Eu DdRP, N=1,184), Eukaryota RNA dependent RNA polymerase (Eu RdRP, N=2,233), Reverse Transcriptase (RT, N=48,490), proteins obtained from DNA viruses (N=1,533), non-RdRP proteins obtained from RNA viruses (N=1,574), and a wide array of cellular proteins from different functional categories (N=174,420). We randomly divided the dataset into training, validation, and testing sets with a ratio of 8.5:1:1, which were used for model fitting, model finalization (based on the best F1-score training iteration), and performance reporting (including accuracy, precision, recall, F1-score, and Area under the ROC Curve (AUC)), respectively.
 
 * **Entire Dataset**     
   This file is `dataset/rdrp/all_dataset_with_pdb_emb.csv.zip`                                         
