@@ -1,8 +1,8 @@
 # LucaProt
-LucaProt(DeepProtFunc) is a open source project developed by Alibaba and licensed under the Apache License (Version 2.0).      
+**LucaProt(DeepProtFunc)** is a open source project developed by **Alibaba** and licensed under the **Apache License (Version 2.0)**.      
 
 This product contains various third-party components under other open source licenses.
-See the NOTICE file for more information.
+See the **NOTICE** file for more information.
 
 # Introduction
 **LucaProt**: A novel deep learning framework that incorporates protein amino acid sequence and structure information to predict protein function.
@@ -31,12 +31,11 @@ Figure 1 The Architecture of LucaProt
 Use the amino acid letter sequence as the input of our model. The model outputs the function label of the input protein, which is a single tag (binary-class classification or multi-class classification) or a set of tags (multi-label classification).
 
 ### 4) Inference Time     
-LucaProt is faster because it only needs to predict the structural representation matrix rather than the complete 3d structure of the protein sequence.          
+**LucaProt** is suitably speedy because it only needs to predict the **structural representation matrix** rather than the complete **3D structure** of the protein sequence.          
 
-Benchmark: For each sequence length range, selected 50 viral-RdRPS and 50 non-viral RdRPs for inference time cost calculation.     
+**Benchmark:** For each sequence length range, selected **50** viral-RdRPS and **50** non-viral RdRPs for inference time cost calculation.     
 
-#### CPU    
-to be updated soon…   
+**Note:**  The spend time includes the time of the **structural representation matrix** inference.
 
 #### GPU(Nvidia A100)
 
@@ -52,6 +51,39 @@ to be updated soon…
 |  5,000 <= Len < 8,000   |     3.03s      |     3.45s      |     2.65s      |
 |  8,000 <= Len < 10,000  |     3.77s      |     4.24s      |     3.32s      |
 |      10,000 <= Len      |     9.92s      |     17.66s     |     4.30s      | 
+
+
+#### CPU (16 cores, 64G memory of Alibaba Cloud ECS)
+
+|  Protein Seq Len Range  | Average Time | Maximum Time | Minimum Time |
+|:-----------------------:|:------------:|:------------:|:------------:|
+|    300 <= Len < 500     |    3.97s     |    5.71s     |    2.77s     |
+|    500 <= Len < 800     |    5.78s     |    7.50s     |    4.48s     | 
+|   800 <= Len < 1,000    |    8.23s     |    9.41s     |    7.41s     |
+|  1,000 <= Len < 1,500   |    11.49s    |    16.42s    |    9.22s     | 
+|  1,500 <= Len < 2,000   |    17.71s    |    22.36s    |    14.93s    |   
+|  2,000 <= Len < 3,000   |    26.97s    |    36.68s    |    20.99s    |   
+|  3,000 <= Len < 5,000   |    45.56s    |    58.42s    |    35.82s    |
+|  5,000 <= Len < 8,000   |    56.57s    |    58.17s    |    55.55s    |
+|  8,000 <= Len < 10,000  |    57.76s    |    58.86s    |    56.66s    |
+|      10,000 <= Len      |    66.49s    |    76.80s    |    58.42s    |
+
+
+#### CPU (96 cores, 768G memory of Alibaba Cloud ECS)       
+
+|  Protein Seq Len Range  | Average Time | Maximum Time | Minimum Time |
+|:-----------------------:|:------------:|:------------:|:------------:|
+|    300 <= Len < 500     |    1.89s     |    2.55s     |    1.10s     |
+|    500 <= Len < 800     |    2.68s     |    3.44s     |    2.13s     | 
+|   800 <= Len < 1,000    |    3.45s     |    4.25s     |    2.65s     |
+|  1,000 <= Len < 1,500   |    4.27s     |    5.90s     |    3.54s     | 
+|  1,500 <= Len < 2,000   |    5.81s     |    7.44s     |    4.76s     |   
+|  2,000 <= Len < 3,000   |    8.14s     |    10.74s    |    6.37s     |   
+|  3,000 <= Len < 5,000   |    13.25s    |    17.69s    |    10.06s    |
+|  5,000 <= Len < 8,000   |    17.03s    |    18.20s    |    15.98s    |
+|  8,000 <= Len < 10,000  |    17.90s    |    18.99s    |    16.92s    |
+|      10,000 <= Len      |    25.90s    |    35.02s    |    18.66s    | 
+
 
 # 2. Dataset for Virus RdRP
 
@@ -557,7 +589,7 @@ sh run_predict_one_sample.sh
 export CUDA_VISIBLE_DEVICES=0
 python predict_one_sample.py 
     --protein_id protein_1 
-    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	--emb_dir ./emb/
+    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ --emb_dir ./emb/
     --truncation_seq_length 4096
     --dataset_name rdrp_40_extend 
     --dataset_type protein 
