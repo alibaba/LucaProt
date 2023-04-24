@@ -370,12 +370,12 @@ def run():
 
     if args.local_rank == -1 or args.no_cuda:
         device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-        args.n_gpu = torch.cuda.device_count()
+        args.n_gpu = 1 if not args.no_cuda else 0
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
         torch.cuda.set_device(args.local_rank)
         device = torch.device("cuda", args.local_rank)
         torch.distributed.init_process_group(backend="nccl")
-        args.n_gpu = 1
+        args.n_gpu = torch.cuda.device_count()
     args.device = device
 
     int_2_token, token_2_int = load_vocab(args.seq_vocab_path)
@@ -509,11 +509,11 @@ def trainer(args, model, train_dataset, dev_dataset, test_dataset, log_fp=None):
         log_fp = open(os.path.join(args.log_dir, "logs.txt"), "w")
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
 
-    # multi-gpu training (should be after apex fp16 initialization)
+    # multi-gpu training
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
 
-    # Distributed training (should be after apex fp16 initialization)
+    # Distributed training
     if args.local_rank != -1:
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank],
                                                           output_device=args.local_rank,
