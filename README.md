@@ -71,6 +71,7 @@ sh run_predict_one_sample.sh
 
 ```
 cd LucaProt/src/
+
 export CUDA_VISIBLE_DEVICES=0
 
 python predict_one_sample.py 
@@ -192,7 +193,7 @@ python predict.py
 * **--print_per_batch**      
   int,  how many batches are completed every time for printing progress information, default: 1000.
 
-**Note:** the embedding matrices of all the proteins in this file need to prepare in advance(**emb_dir**)$.
+**Note:** the embedding matrices of all the proteins in this file need to prepare in advance(**$emb_dir**).
 
 
 # 4. Inference Time
