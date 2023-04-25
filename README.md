@@ -61,7 +61,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ## 1) Prediction from one sample
 
 ```
-cd LucaProt/src/prediction
+cd LucaProt/src/prediction/ 
 sh run_predict_one_sample.sh
 ```
 
@@ -125,10 +125,12 @@ python predict_one_sample.py
 ## 2) Prediction from the file
 
 The test data (small and real) is in [demo.csv](./data/rdrp/demo/demo.csv), where the 7th column of each line is the filename of the structural embedding information prepared in advance.   
-And the structural embedding files store in [embs](./data/rdrp/demo/embs)
+And the structural embedding files store in [embs](./data/rdrp/demo/embs).
+
+The test data includes 50 viral-RdRPs and 50 non-viral RdRPs.
 
 ```
-cd LucaProt/src/prediction
+cd LucaProt/src/prediction/   
 sh run_predict_from_file.sh
 ```
 
