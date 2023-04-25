@@ -5,10 +5,114 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/demo.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/1.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/10.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/100.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/11.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/12.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/13.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/14.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/15.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/16.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/17.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/18.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/19.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/20.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/21.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/22.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/23.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/24.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/25.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/26.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/27.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/28.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/29.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/3.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/30.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/31.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/32.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/33.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/34.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/35.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/36.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/37.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/38.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/39.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/40.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/41.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/42.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/43.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/44.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/45.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/46.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/47.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/48.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/49.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/5.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/50.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/51.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/52.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/53.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/54.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/55.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/56.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/57.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/58.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/59.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/6.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/60.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/61.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/62.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/63.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/64.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/65.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/66.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/67.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/68.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/69.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/7.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/70.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/71.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/72.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/73.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/74.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/75.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/76.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/77.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/78.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/79.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/8.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/80.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/81.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/82.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/83.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/84.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/85.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/86.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/87.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/88.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/89.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/9.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/90.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/91.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/92.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/93.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/94.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/95.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/96.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/97.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/98.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/rdrp/demo/embs/esm2_t36_3B_UR50D/99.pt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/baselines/dnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/baselines/dnn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/deep_baselines/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/deep_baselines/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/environment.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements_simple.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements_simple.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/prediction/run_predict_from_file.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/prediction/run_predict_from_file.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +149,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data/rdrp/demo" />
       <recent name="$PROJECT_DIR$/logs/rdrp_40_append/protein/binary_class/sefn/20230201140320" />
     </key>
   </component>
@@ -87,12 +192,24 @@
       <updated>1681463732044</updated>
       <workItem from="1681463733544" duration="2128000" />
       <workItem from="1681718659404" duration="3000" />
-      <workItem from="1682350499934" duration="939000" />
+      <workItem from="1682350499934" duration="2858000" />
+      <workItem from="1682392341700" duration="4655000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/LucaProt$test.coverage" NAME="test Coverage Results" MODIFIED="1681466342540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models/rdrp_40_append/protein/binary_class/sefn/20230201140320/checkpoint-100000/sequence" />
