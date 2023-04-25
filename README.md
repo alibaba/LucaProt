@@ -37,13 +37,15 @@ Python: 3.9.13
 Download anaconda: <a href="https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh" title="anaconda"> anaconda </a>       
 Cuda: <a href="https://developer.nvidia.com/cuda-11-7-0-download-archive" title="cuda11.7 (torch==1.13.1)"> cuda11.7 (torch==1.13.1)</a>
 ```shell
-# Select 'YES' during installation for init the environment       
-sh Anaconda3-2022.10-Linux-x86_64.sh    
+# Select 'YES' during installation for initializing the conda environment  
+sh Anaconda3-2022.10-Linux-x86_64.sh  
+# Source the environment
+source ~/.bashrc  
 # Verification
 conda  
 # Install env and python 3.9.13   
 conda create -n lucaprot python=3.9.13    
-#
+# activate env
 conda activate lucaprot  
 # Install git      
 sudo apt-get update         
