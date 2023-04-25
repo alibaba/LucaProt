@@ -265,7 +265,7 @@ python predict.py
 
 * **Non-viral RdRP(Negative: 229434)**
 
-  The negative sequence  fasta file is in `dataset/rdrp/all_dataset_negative.fasta.zip"`        
+  The negative sequence  fasta file is in `dataset/rdrp/all_dataset_negative.fasta.zip`        
   including:
 
   * other proteins of the virus
