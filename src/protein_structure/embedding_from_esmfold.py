@@ -172,7 +172,7 @@ def main(args):
         )
     if torch.cuda.is_available() and not args.nogpu:
         model = model.cuda()
-        print("Transferred model to GPU")
+        # print("Transferred model to GPU")
 
     dataset = FastaBatchedDataset.from_file(args.file)
     '''
@@ -363,6 +363,7 @@ if __name__ == "__main__":
                 total_example += 1
     else:
         seqs = args.seq.split(",")
+        total_example = len(seqs)
         names = args.name.split(",")
         assert len(seqs) == len(names)
         sequence_list = []

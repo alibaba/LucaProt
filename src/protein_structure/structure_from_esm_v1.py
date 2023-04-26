@@ -270,20 +270,26 @@ def predict_for_structure(args, filepath_list, sequence_list, reverse=False):
                         if cnt == 1:
                             continue
                         all_sequences.append([row[0], row[1]])
-            elif ".fas" in filepath:
+            elif ".fa" in filepath:
                 filename = os.path.basename(filepath)
-                cur_save_dir = os.path.join(args.save_dir, filepath.replace("../", "").replace(filename, ""), "pdb", filename.replace(".fasta", "").replace(".fas", ""))
+                cur_save_dir = os.path.join(args.save_dir, filepath.replace("../", "").replace(filename, ""), "pdb", filename.replace(".fasta", "").replace(".fas", "").replace(".fa", ""))
                 if not os.path.exists(cur_save_dir):
                     os.makedirs(cur_save_dir)
                 print("save dir: %s." % cur_save_dir)
                 all_sequences = all_sequences + [[v[0].strip(), v[1].strip()] for v in fasta_reader(filepath)]
+            else:
+                raise Exception("not support the type file: %s, must endswith '.csv' or '.fa*" % filepath)
     else:
+        cur_save_dir = os.path.join(args.save_dir, "pdb")
+        if not os.path.exists(cur_save_dir):
+            os.makedirs(cur_save_dir)
         all_sequences = sequence_list
 
     if args.try_failure:
         done_set, begin_uuid_index = load_done_set(os.path.join(cur_save_dir, "result_info.csv"), None)
     else:
-        done_set, begin_uuid_index = load_done_set(os.path.join(cur_save_dir, "result_info.csv"), os.path.join(cur_save_dir, "uncompleted.txt"))
+        done_set, begin_uuid_index = load_done_set(os.path.join(cur_save_dir, "result_info.csv"),
+                                                   os.path.join(cur_save_dir, "uncompleted.txt"))
     print("all number: %d" % len(all_sequences))
     print("done number: %d" % len(done_set))
     # exists
@@ -301,7 +307,10 @@ def predict_for_structure(args, filepath_list, sequence_list, reverse=False):
 
     num_sequences, num_completed, avg_use_time, avg_total_seq_len = prediction(args, all_sequences, save_dir=cur_save_dir, begin_uuid_index=begin_uuid_index)
     print("total protein num: %d, completed num: %d, use time per seq: %f, avg seq len: %f" %(num_sequences, num_completed, avg_use_time, avg_total_seq_len))
-    print("filepath: %s done." % filepath)
+    if filepath_list:
+        print("filepath: %s done." % filepath_list)
+    else:
+        print("done")
     print("#"*100)
 
 

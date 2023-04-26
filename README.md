@@ -76,16 +76,17 @@ cd LucaProt/src/
 
 export CUDA_VISIBLE_DEVICES=0
 
-python predict_one_sample.py 
-    --protein_id protein_1 
-    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	--emb_dir ./emb/
-    --truncation_seq_length 4096
-    --dataset_name rdrp_40_extend 
-    --dataset_type protein 
-    --task_type binary_class 
-    --model_type sefn
-    --time_str 20230201140320 
-    --step 100000  
+python predict_one_sample.py \
+    --protein_id protein_1 \
+    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	\
+    --emb_dir ./emb/ \
+    --truncation_seq_length 4096 \
+    --dataset_name rdrp_40_extend \
+    --dataset_type protein \
+    --task_type binary_class \
+    --model_type sefn \
+    --time_str 20230201140320 \ 
+    --step 100000 \ 
     --threshold 0.5
 ```
 
@@ -127,9 +128,9 @@ python predict_one_sample.py
 ## 2) Prediction from the file
 
 The test data (small and real) is in [demo.csv](./data/rdrp/demo/demo.csv), where the 7th column of each line is the filename of the structural embedding information prepared in advance.   
-And the structural embedding files store in [embs](./data/rdrp/demo/embs).
+And the structural embedding files store in [embs](./data/rdrp/demo/embs).   
 
-The test data includes 50 viral-RdRPs and 50 non-viral RdRPs.
+The test data includes 50 viral-RdRPs and 50 non-viral RdRPs.   
 
 ```
 cd LucaProt/src/prediction/   
@@ -143,18 +144,18 @@ cd LucaProt/src/
 
 export CUDA_VISIBLE_DEVICES=0
 
-python predict.py 
-    --data_path ../data/rdrp/demo/demo.csv
-    --emb_dir ../data/rdrp/demo/embs/esm2_t36_3B_UR50D
-    --dataset_name rdrp_40_extend
-    --dataset_type protein 
-    --task_type binary_class 
-    --model_type sefn
-    --time_str 20230201140320 
-    --step 100000 
-    --evaluate 
-    --threshold 0.5 
-    --batch_size 16 
+python predict.py \
+    --data_path ../data/rdrp/demo/demo.csv \
+    --emb_dir ../data/rdrp/demo/embs/esm2_t36_3B_UR50D \
+    --dataset_name rdrp_40_extend \
+    --dataset_type protein \
+    --task_type binary_class \
+    --model_type sefn \
+    --time_str 20230201140320 \
+    --step 100000 \
+    --evaluate \
+    --threshold 0.5 \
+    --batch_size 16 \
     --print_per_batch 2
 ```
 
@@ -376,13 +377,13 @@ cd LucaProt/src/protein_structure/
 
 export CUDA_VISIBLE_DEVICES=0
 
-python structure_from_esm_v1.py 
-    -i data/rdrp/rdrp.fasta
-    -o pdbs/rdrp/ 
-    --num-recycles 4 
-    --truncation_seq_length 4096 
-    --chunk-size 64 
-    --cpu-offload 
+python structure_from_esm_v1.py \
+    -i data/rdrp/rdrp.fasta \
+    -o pdbs/rdrp/ \
+    --num-recycles 4 \
+    --truncation_seq_length 4096 \
+    --chunk-size 64 \
+    --cpu-offload \
     --batch_size 1
 ```
 
@@ -423,15 +424,15 @@ cd LucaProt/src/protein_structure/
 
 export CUDA_VISIBLE_DEVICES=0
 
-python structure_from_esm_v1.py     
-    -name protein_id1,protein_id2    
-    -seq VGGLFDYYSVPIMT,LPDSWENKLLTDLILFAGSFVGSDTCGKLF     
-    -o pdbs/rdrp/       
-    --num-recycles 4      
-    --truncation_seq_length 4096         
-    --chunk-size 64        
-    --cpu-offload         
-    --batch_size 1   
+python structure_from_esm_v1.py \
+    -name protein_id1,protein_id2  \
+    -seq VGGLFDYYSVPIMT,LPDSWENKLLTDLILFAGSFVGSDTCGKLF \
+    -o pdbs/rdrp/  \
+    --num-recycles 4 \
+    --truncation_seq_length 4096 \
+    --chunk-size 64 \
+    --cpu-offload \
+    --batch_size 1
 ```             
 
 **Parameters:**
@@ -451,11 +452,11 @@ cd LucaProt/src/protein_structure/
 
 export CUDA_VISIBLE_DEVICES=0  
 
-python embedding_from_esmfold.py 
-    --model_name esm2_t36_3B_UR50D 
-    --file data/rdrp.fasta
-    --output_dir emb/rdrp/ 
-    --include per_tok contacts bos 
+python embedding_from_esmfold.py \
+    --model_name esm2_t36_3B_UR50D \
+    --file data/rdrp.fasta \
+    --output_dir emb/rdrp/ \
+    --include per_tok contacts bos \
     --truncation_seq_length 4094 
 ```   
 
@@ -494,15 +495,13 @@ cd LucaProt/src/protein_structure/
 
 export CUDA_VISIBLE_DEVICES=0  
 
-python embedding_from_esmfold.py 
-    -name protein_id1,protein_id2
-    -seq VGGLFDYYSVPIMT,LPDSWENKLLTDLILFAGSFVGSDTCGKLF
-    -o pdbs/rdrp/ 
-    --num-recycles 4 
-    --truncation_seq_length 4094 
-    --chunk-size 64 
-    --cpu-offload 
-    --batch_size 1
+python embedding_from_esmfold.py \
+    --model_name esm2_t36_3B_UR50D \
+    -name protein_id1,protein_id2 \
+    -seq VGGLFDYYSVPIMT,LPDSWENKLLTDLILFAGSFVGSDTCGKLF \
+    --output_dir embs/rdrp/test/ \
+    --include per_tok contacts bos \
+    --truncation_seq_length 4094
 ```
 
 **Parameters:**
