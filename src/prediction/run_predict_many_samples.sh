@@ -1,8 +1,6 @@
 export CUDA_VISIBLE_DEVICES=0
-cd ..
-cd LucaProt/src/
 
-export CUDA_VISIBLE_DEVICES=0
+cd ..
 
 python predict_many_samples.py \
 	--fasta_file ../data/test/test.fasta  \
