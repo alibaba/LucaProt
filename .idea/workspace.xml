@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/data/rdrp/test/test.fasta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -48,6 +49,7 @@
       <recent name="$PROJECT_DIR$/src/protein_structure" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data/rdrp/test" />
       <recent name="$PROJECT_DIR$/data/rdrp/demo" />
       <recent name="$PROJECT_DIR$/logs/rdrp_40_append/protein/binary_class/sefn/20230201140320" />
     </key>
@@ -96,7 +98,10 @@
       <workItem from="1682418370315" duration="575000" />
       <workItem from="1682424519893" duration="718000" />
       <workItem from="1682494532090" duration="2481000" />
-      <workItem from="1682514354489" duration="2220000" />
+      <workItem from="1682514354489" duration="3396000" />
+      <workItem from="1682565646665" duration="875000" />
+      <workItem from="1682607075074" duration="55000" />
+      <workItem from="1682681051286" duration="813000" />
     </task>
     <servers />
   </component>

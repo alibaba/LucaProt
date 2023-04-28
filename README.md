@@ -85,8 +85,8 @@ python predict_one_sample.py \
     --dataset_type protein \
     --task_type binary_class \
     --model_type sefn \
-    --time_str 20230201140320 \
-    --step 100000 \
+    --time_str 20230201140320 \ 
+    --step 100000 \ 
     --threshold 0.5
 ```
 
@@ -124,13 +124,52 @@ python predict_one_sample.py \
 * **--threshold**    
   float, sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5.
 
+## 2) Prediction from many samples
+the samples are in *.fasta, sample by sample prediction.
 
-## 2) Prediction from the file
+* **--fasta_file**    
+  str, the samples fasta file
+
+* **--save_file**    
+  str, file path, save the predicted results into the file.
+
+* **--print_per_number**   
+  int, print progress information for every number of samples completed, default: 100.
+
+```shell
+cd LucaProt/src/prediction/   
+sh run_predict_many_samples.sh
+```
+
+**Or:**
+
+```shell
+cd LucaProt/src/
+
+export CUDA_VISIBLE_DEVICES=0  
+
+python predict_many_samples.py \
+	--fasta_file ../data/test/test.fasta  \
+	--save_file ../result/test/test_result.cav  \
+	--emb_dir ../emb/   \
+	--truncation_seq_length 4096  \
+	--dataset_name rdrp_40_extend  \
+	--dataset_type protein     \
+	--task_type binary_class     \
+	--model_type sefn     \
+	--time_str 20230201140320   \
+	--step 100000  \
+	--threshold 0.5 \
+	--print_per_number 10 
+```
+
+
+## 3) Prediction from the file
 
 The test data (small and real) is in [demo.csv](./data/rdrp/demo/demo.csv), where the 7th column of each line is the filename of the structural embedding information prepared in advance.   
-And the structural embedding files store in [embs](./data/rdrp/demo/embs).   
+And the structural embedding files store in [embs](./data/rdrp/demo/embs).
 
-The test data includes 50 viral-RdRPs and 50 non-viral RdRPs.   
+The test data includes 50 viral-RdRPs and 50 non-viral RdRPs.
 
 ```
 cd LucaProt/src/prediction/   
@@ -206,7 +245,7 @@ python predict.py \
 
 **Benchmark:** For each sequence length range, selected **50** viral-RdRPS and **50** non-viral RdRPs for inference time cost calculation.
 
-**Note:**  The spend time includes the time of the **structural representation matrix** inference.
+**Note:**  The spend time includes the time of the **structural representation matrix** inference, excludes the time of model loading.
 
 ## 1) GPU(Nvidia A100, Cuda: 11.7)
 
@@ -780,12 +819,13 @@ See `ClstrSerch/README.md` for details.
 *.sh in "src/prediction"    
 including:
 * run_predict_from_file.sh     
-  run prediction for many samples from a file.
+  run prediction for many samples from a file, the structural embedding information prepared in advance.
 
-
-* run_predict_one_sample.sh     
+* run_predict_one_sample.sh      
   run prediction for one sample from the input.
 
+* run_predict_many_samples.sh      
+  run prediction for many samples from the input.
 
 We perform ablation studies on our model by removing specific module(sequence-specific and embedding-specific) one at a time to explore their relative importance.
 
