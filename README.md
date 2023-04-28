@@ -85,8 +85,8 @@ python predict_one_sample.py \
     --dataset_type protein \
     --task_type binary_class \
     --model_type sefn \
-    --time_str 20230201140320 \ 
-    --step 100000 \ 
+    --time_str 20230201140320 \
+    --step 100000 \
     --threshold 0.5
 ```
 
