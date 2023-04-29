@@ -27,7 +27,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 try:
-    from layers import GraphAttentionLayer, SpGraphAttentionLayer
+    from SSFN.layers import GraphAttentionLayer, SpGraphAttentionLayer
 except ImportError:
     from src.SSFN.layers import GraphAttentionLayer, SpGraphAttentionLayer
 
