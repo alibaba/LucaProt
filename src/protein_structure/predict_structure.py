@@ -154,6 +154,9 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
         return ca.chains, cb.chains
 
 
+model, alphabet = None, None
+
+
 def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], truncation_seq_length=4094):
     '''
     use sequence to predict protein embedding matrix or vector(bos)
@@ -164,6 +167,7 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
     :param truncation_seq_length: [4094,2046,1982,1790,1534,1278,1150,1022]
     :return: embedding, processed_seq_len
     '''
+    global model, alphabet
     assert embedding_type in ["bos", "representations", "matrix"]
     protein_id, protein_seq = sample[0], sample[1]
     if len(protein_seq) > truncation_seq_length:
@@ -171,14 +175,14 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
             protein_seq = protein_seq[-truncation_seq_length:]
         else:
             protein_seq = protein_seq[:truncation_seq_length]
-
-    model, alphabet = pretrained.load_model_and_alphabet("esm2_t36_3B_UR50D")
+    if model is None or alphabet is None:
+        model, alphabet = pretrained.load_model_and_alphabet("esm2_t36_3B_UR50D")
     assert all(-(model.num_layers + 1) <= i <= model.num_layers for i in repr_layers)
     repr_layers = [(i + model.num_layers + 1) % (model.num_layers + 1) for i in repr_layers]
     model.eval()
     if torch.cuda.is_available():
         model = model.cuda()
-        print("Transferred model to GPU")
+        # print("Transferred model to GPU")
     converter = BatchConverter(alphabet, truncation_seq_length)
     protein_ids, raw_seqs, tokens = converter([[protein_id, protein_seq]])
     with torch.no_grad():

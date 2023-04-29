@@ -20,7 +20,7 @@
 @datetime: 2022/12/10 20:18
 @project: DeepProtFunc
 @file: predict
-@desc: predict batch data from file
+@desc: predict batch data from file(the structural embedding information prepared in advance)
 '''
 
 import argparse, time
@@ -34,8 +34,8 @@ sys.path.append("..")
 sys.path.append("../src")
 sys.path.append("../src/common")
 try:
-    from metrics import *
-    from multi_label_metrics import *
+    from common.metrics import *
+    from common.multi_label_metrics import *
     from utils import set_seed, plot_bins, csv_reader
     from SSFN.model import *
     from data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures

@@ -17,10 +17,10 @@
 @author: Hey
 @email: sanyuan.**@**.com
 @tel: 137****6540
-@datetime: 2022/12/10 20:18
+@datetime: 2023/3/20 20:28
 @project: DeepProtFunc
-@file: predict
-@desc: predict batch data from file
+@file: predict one sample
+@desc: predict one sample from input
 '''
 import argparse
 import numpy as np
@@ -32,7 +32,7 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../src")
 try:
-    from multi_label_metrics import *
+    from common.multi_label_metrics import *
     from protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
     from utils import set_seed, plot_bins, csv_reader
     from SSFN.model import *

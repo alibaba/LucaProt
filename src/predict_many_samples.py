@@ -17,14 +17,13 @@
 @author: Hey
 @email: sanyuan.**@**.com
 @tel: 137****6540
-@datetime: 2022/12/10 20:18
+@datetime: 2023/4/10 18:26
 @project: DeepProtFunc
-@file: predict
-@desc: predict batch data from file
+@file: predict_many_samples
+@desc: predict many samples from file
 '''
 import argparse
 import csv
-
 import numpy as np
 import os, sys, json, codecs
 from subword_nmt.apply_bpe import BPE
@@ -34,7 +33,7 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../src")
 try:
-    from multi_label_metrics import *
+    from common.multi_label_metrics import *
     from protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
     from utils import set_seed, plot_bins, csv_reade, fasta_reader, clean_seq
     from SSFN.model import *
