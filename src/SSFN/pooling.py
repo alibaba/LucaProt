@@ -25,7 +25,7 @@
 import torch
 import torch.nn as nn
 try:
-    from src.SSFN.modeling_bert import BertEncoder, BertPooler
+    from SSFN.modeling_bert import BertEncoder, BertPooler
 except ImportError:
     from src.SSFN.modeling_bert import BertEncoder, BertPooler
 
