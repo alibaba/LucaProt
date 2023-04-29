@@ -3,8 +3,8 @@ export CUDA_VISIBLE_DEVICES=0
 cd ..
 
 python predict_many_samples.py \
-	--fasta_file ../data/test/test.fasta  \
-	--save_file ../result/test_result.csv  \
+	--fasta_file ../data/rdrp/test/test.fasta  \
+	--save_file ../result/rdrp/test_result.csv  \
 	--emb_dir ../emb/   \
 	--truncation_seq_length 4096  \
 	--dataset_name rdrp_40_extend  \
