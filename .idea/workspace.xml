@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/predict_many_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_many_samples.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/predict_one_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_one_sample.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prediction/run_predict_many_samples.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/prediction/run_predict_many_samples.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SSFN/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +104,9 @@
       <workItem from="1682607075074" duration="55000" />
       <workItem from="1682681051286" duration="4137000" />
       <workItem from="1682747795251" duration="3705000" />
-      <workItem from="1682752527542" duration="1615000" />
+      <workItem from="1682752527542" duration="1920000" />
+      <workItem from="1682771252543" duration="172000" />
+      <workItem from="1683125816424" duration="54000" />
     </task>
     <servers />
   </component>

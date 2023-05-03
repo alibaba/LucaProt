@@ -243,6 +243,7 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
                 self.classifier = nn.Linear(output_size, config.num_labels)
             self.output = nn.Sigmoid()
         else:
+            self.classifier = nn.Linear(output_size, config.num_labels)
             if self.num_labels > 1:
                 self.output = nn.Softmax(dim=1)
             else:
