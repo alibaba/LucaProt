@@ -430,7 +430,7 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
             elif self.output_mode in ["binary_class", "binary-class"]:
                 loss = self.loss_fct(logits.view(-1), labels.view(-1).float())
             elif self.output_mode in ["multi_class", "multi-class"]:
-                loss = self.loss_fct(logits.view(-1, self.num_labels), labels.view(-1, self.num_labels).float())
+                loss = self.loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             outputs = [loss, *outputs]
 
         return outputs
