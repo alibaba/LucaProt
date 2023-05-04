@@ -263,10 +263,6 @@ def main():
     logger.info("Num Labels: %d" % num_labels)
     save_labels(os.path.join(args.log_dir, "label.txt"), label_list)
 
-    if args.local_rank not in [-1, 0]:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
-
     # Get different task models according to the task type name
     args.model_type = args.model_type.lower()
     # Load config
@@ -312,10 +308,14 @@ def main():
     log_fp.write("Mode Architecture:\n %s\n" % str(model))
     log_fp.write("#" * 50 + "\n")
 
-    if args.local_rank == 0:
-        torch.distributed.barrier()  # Make sure only the first process in distributed training will download model & vocab
-
     model.to(args.device)
+    if args.local_rank not in [-1, 0]:
+        # Make sure only the first process in distributed training will download model & vocab
+        torch.distributed.barrier()
+
+    if args.local_rank == 0:
+        # Make sure only the first process in distributed training will download model & vocab
+        torch.distributed.barrier()
 
     # output training/evaluation hyperparameters in logger
     logger.info("==== Training/Evaluation Parameters: =====")
