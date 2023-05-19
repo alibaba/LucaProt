@@ -1006,11 +1006,11 @@ As mentioned above.
 The trained model for RdRP identification is available at:
 * logs         
   [logs](http://47.93.21.181/LucaProt/logs/)     
-  copy tp `LucaProt/logs/`
+  copy to `LucaProt/logs/`
 
 * models       
   [models](http://47.93.21.181/LucaProt/models/)      
-  copy tp `LucaProt/models/`
+  copy to `LucaProt/models/`
 
 # 10. Contributor
 <a href="http://lucalab.tech/" title="LucaTeam">LucaTeam:</a>    
