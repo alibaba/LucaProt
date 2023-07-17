@@ -193,7 +193,7 @@ if __name__ == "__main__":
             if os.path.exists(savepath):
                 raise Exception("Save path :%s exsits!" % savepath)
             fasta_to_corpus(args.infile, savepath)
-            os.infile = savepath
+            args.infile = savepath
         learn(args)
     elif args.func == "tokenize":
         #  python subword.py --func tokenize --seq IPKIDNPEFASQYRPISCCNIFYKCISKMFCSRLKAVVLHLVAENQAAFVQGSQARGGAMDRITTTTRKFE --codes_file ../subword/rdrp/protein_codes_rdrp_1000.txt

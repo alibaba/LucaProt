@@ -257,7 +257,7 @@ def main(args):
                         layer: t[idx, 0].clone() for layer, t in representations.items()
                     }
                 if return_contacts:
-                    result["contacts"] = contacts[idx, : truncate_len, : truncate_len].clone()
+                    result["contacts"] = contacts[idx, 1: truncate_len + 1, 1: truncate_len + 1].clone()
 
                 torch.save(
                     result,
