@@ -208,6 +208,8 @@ def main():
     if os.path.exists(args.output_dir) and os.listdir(args.output_dir) and args.do_train and not args.overwrite_output_dir:
         raise ValueError("Output directory ({}) already exists and is not empty. Use --overwrite_output_dir to overcome.".format(args.output_dir))
     else:
+        if os.path.exists(args.output_dir):
+            shutil.rmtree(args.output_dir)
         os.makedirs(args.output_dir)
     # create the logs dir
     if not os.path.exists(args.log_dir):
@@ -259,7 +261,7 @@ def main():
     # get label list
     label_list = processor.get_labels(label_filepath=args.label_filepath)
     num_labels = len(label_list)
-    logger.info("#" * 25 + "Lables Num:" + "#" * 25)
+    logger.info("#" * 25 + "Labels Num:" + "#" * 25)
     logger.info("Num Labels: %d" % num_labels)
     save_labels(os.path.join(args.log_dir, "label.txt"), label_list)
 
@@ -271,6 +273,8 @@ def main():
     config.max_position_embeddings = int(args.seq_max_length)
     config.num_labels = num_labels
     config.embedding_pooling_type = args.embedding_pooling_type
+    if args.pos_weight:
+        config.pos_weight = args.pos_weight
     # tokenization
     subword = None
     if args.has_seq_encoder:

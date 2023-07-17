@@ -49,11 +49,14 @@ def evaluate(args, model, processor, seq_tokenizer, subword, struct_tokenizer, p
     :param model:
     :param processor:
     :param seq_tokenizer:
+    :param subword:
+    :param struct_tokenizer:
     :param prefix:
+    :param log_fp:
     :return:
     '''
     output_dir = os.path.join(args.output_dir, prefix)
-    print("Evaluating infomation dir: ", output_dir)
+    print("Evaluating information dir: ", output_dir)
     if not os.path.exists(output_dir) and args.local_rank in [-1, 0]:
         os.makedirs(output_dir)
     result = {}
@@ -89,7 +92,7 @@ def evaluate(args, model, processor, seq_tokenizer, subword, struct_tokenizer, p
     nb_eval_steps = 0
     # predicted prob
     pred_scores = None
-    # ground trutj
+    # ground truth
     out_label_ids = None
 
     for batch in tqdm(eval_dataloader, total=eval_batch_total_num, desc="Evaluating"):

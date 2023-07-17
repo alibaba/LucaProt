@@ -170,7 +170,7 @@ class GenerateTFRecord(object):
         print("Save path:", tfrecord_fn)
         writer = tf.io.TFRecordWriter(tfrecord_fn)
         tmp_prot_list = self.prot_list[self.indices[idx][0]:self.indices[idx][1]]
-        print("Serializing %d examples into %s" % (len(self.tmp_prot_list), tfrecord_fn))
+        print("Serializing %d examples into %s" % (len(tmp_prot_list), tfrecord_fn))
 
         for i, protein_id in enumerate(tmp_prot_list):
             if i % 500 == 0:

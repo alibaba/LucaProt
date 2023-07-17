@@ -343,7 +343,7 @@ if __name__ == "__main__":
             for row in csv_reader(rfp, header=True, header_filter=False):
                 if len(row) > 7:
                     col_names.extend(row[7:])
-                    break
+                break
     # statistics
     ground_truth_stats = {}
     predict_stats = {}
