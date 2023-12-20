@@ -7,13 +7,8 @@
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_into_tfrecords_for_rdrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_into_tfrecords_for_rdrp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/subword.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/subword.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/deep_baselines/predict_deep_baselines.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/deep_baselines/predict_deep_baselines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/deep_baselines/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/deep_baselines/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/evaluater.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/evaluater.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/protein_structure/embedding_from_esmfold.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/embedding_from_esmfold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SSFN/pooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/pooling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/trainer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +149,22 @@
       <workItem from="1688038321228" duration="392000" />
       <workItem from="1688089292242" duration="20000" />
       <workItem from="1688124598177" duration="770000" />
-      <workItem from="1689579076660" duration="2064000" />
+      <workItem from="1689579076660" duration="2500000" />
+      <workItem from="1690814511879" duration="16000" />
+      <workItem from="1690860185151" duration="47000" />
+      <workItem from="1691720833822" duration="525000" />
+      <workItem from="1691731329074" duration="1278000" />
+      <workItem from="1693446182020" duration="1190000" />
+      <workItem from="1695626527982" duration="1470000" />
+      <workItem from="1697594707519" duration="31000" />
+      <workItem from="1697795302248" duration="14000" />
+      <workItem from="1697800468376" duration="2601000" />
+      <workItem from="1698233743328" duration="229000" />
+      <workItem from="1700530890440" duration="37000" />
+      <workItem from="1701401254214" duration="183000" />
+      <workItem from="1702206776601" duration="39000" />
+      <workItem from="1703039349527" duration="1678000" />
+      <workItem from="1703054019091" duration="5547000" />
     </task>
     <servers />
   </component>
