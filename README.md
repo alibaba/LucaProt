@@ -247,7 +247,7 @@ The performance on these 11 independent verification datasets of LucaProt.
 
 # 5. LucaProt App   
 This project is used to predict unlabeled protein sequences and to measure the time spent.   
-[LuaProtApp](http://47.93.21.181/LucaProt/Benchmark/LucaProtApp/
+[LuaProtApp](http://47.93.21.181/LucaProt/Benchmark/LucaProtApp/)
 
 # 6. Inference Time
 **LucaProt** is suitably speedy because it only needs to predict the **structural representation matrix** rather than the complete **3D structure** of the protein sequence.
@@ -959,9 +959,9 @@ As mentioned above.
 
 ### Model Testing (Validation) Dataset
 
-* 7 Positive Testing Datasets 
+* 7 Positive Testing Datasets    
     [Wolf et al., 2020 NM](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Wolf_2020_NM_RdRP.fa)       
-    Reference: Doubling of the known set of RNA viruses by metagenomic analysis of an aquatic virome.   
+    Reference: Doubling of the known set of RNA viruses by metagenomic analysis of an aquatic virome.  
 
     [Edgar et al., 2022 Nature](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Edgar_2022_Nature_Serratus_RdRP.fa)           
     Reference: Petabase-scale sequence alignment catalyses viral discovery.
@@ -983,7 +983,7 @@ As mentioned above.
 
 
 
-* 4 Negative Testing Datasets
+* 4 Negative Testing Datasets     
     [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/4_negative_datasets/RT.fa)
 
     [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/4_negative_datasets/Eukaryota-DdRP.fa)
