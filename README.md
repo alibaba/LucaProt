@@ -247,13 +247,13 @@ The performance on these 11 independent verification datasets of LucaProt.
 
 # 5. LucaProt App   
 This project is used to predict unlabeled protein sequences and to measure the time spent.   
-[LuaProtApp](http://47.93.21.181/LucaProt/Benchmark/LucaProtApp/)
+[LuaProtApp](http://47.93.21.181/Benchmark/LucaProtApp/)
 
 # 6. Inference Time
 **LucaProt** is suitably speedy because it only needs to predict the **structural representation matrix** rather than the complete **3D structure** of the protein sequence.
 
 **Benchmark:** For each sequence length range(total 10 groups), selected **50** viral-RdRPS and **50** non-viral RdRPs for each group for inference time cost calculation.    
-[inference_time_data_of_github.csv](http://47.93.21.181/LucaProt/Benchmark/LucaProtApp/data/inference_time/inference_time_data_of_github.csv)         
+[inference_time_data_of_github.csv](http://47.93.21.181/Benchmark/LucaProtApp/data/inference_time/inference_time_data_of_github.csv)         
 
 **Note:**  The spend time includes the time of the **structural representation matrix** inference, excludes the time of model loading.
 
