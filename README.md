@@ -239,15 +239,27 @@ python predict.py \
 
 **Note:** the embedding matrices of all the proteins in this file need to prepare in advance(**$emb_dir**).
 
+# 4. 11 independent validation datasets   
+11 verification datasets unrelated to the model building dataset, include 7 exists viral-RdRP datasets and 4 exists non viral-RdRP datasets.   
+Run the prediction python script  `https://github.com/alibaba/LucaProt/src/predict_many_samples.py`    
+The performance on these 11 independent verification datasets of LucaProt.      
+[LucaProt-Performance-On-11-Independent-Datasets.xlsx](http://47.93.21.181/LucaProt/LucaProt-Performance-On-11-Independent-Datasets.xlsx)   
 
-# 4. Inference Time
+# 5. LucaProt App   
+This project is used to predict unlabeled protein sequences and to measure the time spent.   
+[LuaProtApp](http://47.93.21.181/LucaProt/Benchmark/LucaProtApp/)
+
+# 6. Inference Time
 **LucaProt** is suitably speedy because it only needs to predict the **structural representation matrix** rather than the complete **3D structure** of the protein sequence.
 
-**Benchmark:** For each sequence length range, selected **50** viral-RdRPS and **50** non-viral RdRPs for inference time cost calculation.
+**Benchmark:** For each sequence length range(total 10 groups), selected **50** viral-RdRPS and **50** non-viral RdRPs for each group for inference time cost calculation.    
+[inference_time_data_of_github.csv](http://47.93.21.181/LucaProt/Benchmark/LucaProtApp/data/inference_time/inference_time_data_of_github.csv)         
 
 **Note:**  The spend time includes the time of the **structural representation matrix** inference, excludes the time of model loading.
 
-## 1) GPU(Nvidia A100, Cuda: 11.7)
+## 1) GPU(Nvidia A100, Cuda: 11.7)  
+
+**Notice**: when the sequence length does not exceed 1024, you can use the 24GB GPU for inference, such as the A10.        
 
 |  Protein Seq Len Range  |  Average Time  |  Maximum Time  |  Minimum Time  |
 |:-----------------------:|:--------------:|:--------------:|:--------------:|
@@ -295,14 +307,14 @@ python predict.py \
 |      10,000 <= Len      |    25.90s    |    35.02s    |    18.66s    | 
 
 
-# 5. Dataset for Virus RdRP
+# 7. Dataset for Virus RdRP
 
 ## 1) Fasta
 
-* **viral RdRP(Postive: 5,979)**
+* **Viral RdRP(Postive: 5,979)**
 
   The positive sequence fasta file is in `data/rdrp/all_dataset_positive.fasta.zip`                               
-  [all_dataset_positive.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_positive.fasta.zip)
+  [all_dataset_positive.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_positive.fasta.zip) 
 
 
 * **Non-viral RdRP(Negative: 229434)**
@@ -314,7 +326,7 @@ python predict.py \
   * other protein domains of the virus
   * non-viral proteins
 
-  [all_dataset_negative.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_negative.fasta.zip)
+  [all_dataset_negative.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_negative.fasta.zip)   
 
 ## 2) Structural embedding(matrix and vector)
 All structural embedding files of the dataset for model building are available at: [embs](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/)         
@@ -390,7 +402,7 @@ One row in all the above files represents one sample. All three files consist of
 
 **Note:** if using strategy one in structure encoder, the pdb_filename, the ptm, and the mean_plddt can be null.
 
-# 6. Supported Task Types
+# 8. Supported Task Types
 
 * **binary-class classification**    
   The label is 0 or 1 for binary-class classification, such as viral RdRP identification.
@@ -403,7 +415,7 @@ One row in all the above files represents one sample. All three files consist of
 * **multi-label classification**   
   The labels form a list of 0~N-1 for multi-label classification, such as Gene Ontology annotation for proteins.
 
-# 7. Building Your Model
+# 9. Building Your Model
 
 ## 1) Prediction of protein 3D-structure(Optional)
 
@@ -799,7 +811,7 @@ Figure 3: The File List in Prediction Dir Path
 **Note:** when using the saved model to predict, the "logs.txt" and the checkpoint dirpath will be used.
 
 
-# 8. Related to the Project
+# 10. Related to the Project
 
 ## 1) ClstrSearch
 
@@ -908,10 +920,12 @@ the scripts of pictures ploting is in "src/plot".
 the codes and results of Geo information Spider in "src/geo_map".
 
 
-# 9. Open Resource
-The open resources of our study ar includes six subdirectories: `Known_RdRPs`, `Results`, `All_Contigs`, `All_Protein_Sequences`, and `LucaProt`, and `Self_Sequencing_Reads`.
+# 11. Open Resource
+The open resources of our study ar includes 10 subdirectories: `Known_RdRPs`, `Benchmark`, `Results`, `All_Contigs`, `All_Protein_Sequences`, `SG_predicted_protein_structure_supplementation/`, `Serratus`, `Self_Sequencing_Proteins`, `Self_Sequencing_Reads`, and `LucaProt`.   
+Please refer to [README.md](http://47.93.21.181/README.md)  .   
 
-`LucaProt/` includes some resources related to LucaProt, including **code**, **model building dataset**, **model testing datasets**, and **our trained model**.
+
+`LucaProt/` includes some resources related to LucaProt, including **dataset for model building(dataset_for_model_building)**, **dataset for_model evaluation(dataset_for_model_evaluation)**, and **our trained model(logs/ and models/)**.
 
 ## 1) Code
 As mentioned above.
@@ -944,45 +958,41 @@ As mentioned above.
   copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/tfrecords/test/`
 
 ### Model Testing (Validation) Dataset
-* Three Positive Testing Dataset
-  * sequential info      
-    [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022Cell_RdRP_with_pdb_emb.csv)    
-    copy to `LucaProt/data/rdrp`                  
-    Reference: Expansion of the global RNA virome reveals diverse clades of bacteriophages
 
-    [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022Science_RdRP_with_pdb_emb.csv)        
-    copy to `LucaProt/data/rdrp`                
-    Reference: Cryptic and abundant marine viruses at the evolutionary origins of Earth’s RNA virome
+* 7 Positive Testing Datasets    
+    [Wolf et al., 2020 NM](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Wolf_2020_NM_RdRP.fa)       
+    Reference: Doubling of the known set of RNA viruses by metagenomic analysis of an aquatic virome.  
 
-    [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/2022NM_RdRP_with_pdb_emb.csv)      
-    copy to `LucaProt/data/rdrp`             
-    Reference: RNA viromes from terrestrial sites across China expand environmental viral diversity
+    [Edgar et al., 2022 Nature](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Edgar_2022_Nature_Serratus_RdRP.fa)           
+    Reference: Petabase-scale sequence alignment catalyses viral discovery.
 
-  * structural info     
-    [Neri RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Cell_RdRP/)
+    [Zayed et al, 2022 Science](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Zayed_2022_Science_RdRP.fa)         
+    Reference: Cryptic and abundant marine viruses at the evolutionary origins of Earth's RNA virome.  
 
-    [Zayed RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022Science_RdRP/)
+    [Neri et al., 2022 Cell](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Neri_2022_Cell_RdRP.fa)         
+    Reference: Expansion of the global RNA virome reveals diverse clades of bacteriophages.
 
-    [Chen RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/2022NM_RdRP/)
+    [Chen et al., 2022 NM](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Chen_2022_NM_RdRP.fa)         
+    Reference: RNA viromes from terrestrial sites across China expand environmental viral diversity.
+
+    [Olendraite et al., 2023 MBE](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/Olendraite_2023_MBE_RdRP.fa)         
+    Reference: Identification of RNA Virus-Derived RdRp Sequences in Publicly Available Transcriptomic Data Sets.
+
+    [This Study](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/7_positive_datasets/This_Study.fa)         
+    Reference: Artificial intelligence redefines RNA virus discovery. 
 
 
-* Three Negative Testing Dataset
-  * sequential info       
-    [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/All_RT_with_pdb_emb.csv)     
-    copy to `LucaProt/data/rdrp`
 
-    [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_DdRP_with_pdb_emb.csv)              
-    copy to `LucaProt/data/rdrp`
+* 4 Negative Testing Datasets     
+    [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/4_negative_datasets/RT.fa)
 
-    [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/Eukaryota_RdRP_with_pdb_emb.csv)     
-    copy to `LucaProt/data/rdrp`
+    [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/4_negative_datasets/Eukaryota-DdRP.fa)
 
-  * structural info       
-    [RT](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/All_RT/)
+    [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/4_negative_datasets/Eukaryota-RdRP.fa) 
 
-    [Eu DdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_DdRP/)
+    [Self-Sequencing-Negatives](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/4_negative_datasets/Self-Sequencing-Negatives.fa)
 
-    [Eu RdRP](http://47.93.21.181/LucaProt/dataset_for_model_evaluation/embs/Eukaryota_RdRP/)
+
 
 ### Results
 
@@ -1012,14 +1022,14 @@ The trained model for RdRP identification is available at:
   [models](http://47.93.21.181/LucaProt/models/)      
   copy to `LucaProt/models/`
 
-# 10. Contributor
+# 12. Contributor
 <a href="http://lucalab.tech/" title="LucaTeam">LucaTeam:</a>    
 <a href="https://scholar.google.com.hk/citations?user=RDbqGTcAAAAJ&hl=en" title="Yong He">Yong He</a>,  <a href="https://scholar.google.com/citations?user=lT3nelQAAAAJ&hl=en" title="Zhaorong Li">Zhaorong Li</a>,  <a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=zA310LMAAAAJ" title="Xin Hou">Xin Hou</a>,  <a href="https://scholar.google.com/citations?user=1KJOH7YAAAAJ&hl=zh-CN&oi=ao" title="Mang Shi">Mang Shi</a>,  <a href="https://scholar.google.com/citations?user=ODcOX4AAAAAJ&hl=zh-CN" title="Mang Shi">Pan Fang</a>
 
-# 11. FTP
+# 13. FTP
 The all data of LucaProt is available at the website: <a href="http://47.93.21.181" title="Open Resources"> Open Resources </a>
 
-# 12. Citation
+# 14. Citation
 the pre-print version:
 
 @article { lucaprot,     

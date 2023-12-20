@@ -70,7 +70,7 @@ class GlobalMaskAvgPooling1D(nn.Module):
         return torch.sum(x, dim=1)/torch.sum(mask, dim=1)
 
 
-class GlobalMaskSumPooling1D():
+class GlobalMaskSumPooling1D(nn.Module):
     def __init__(self, axis, **kwargs):
         '''
         sum pooling
