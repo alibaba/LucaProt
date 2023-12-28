@@ -223,7 +223,7 @@ def predict_binary_class(args, label_id_2_name, token_2_int, model, rows):
     preds = (probs >= args.threshold).astype(int).flatten()
     res = []
     for idx, info in enumerate(batch_info):
-        res.append([info[0], info[1], float(probs[idx]), label_id_2_name[preds[idx]], *info[2:]])
+        res.append([info[0], info[1], float(probs[idx][0]), label_id_2_name[preds[idx]], *info[2:]])
     return res
 
 
