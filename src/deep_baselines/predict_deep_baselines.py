@@ -165,8 +165,12 @@ def transform_sample_2_feature(args, rows, token_2_int):
     lens = []
     for row in rows:
         # agreed 7 columns
-        prot_id, protein_seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename = row[0:7]
-        batch_info.append([prot_id, protein_seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename])
+        if len(row) < 7:
+            prot_id, protein_seq = row[0:2]
+            batch_info.append([prot_id, protein_seq])
+        else:
+            prot_id, protein_seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename = row[0:7]
+            batch_info.append([prot_id, protein_seq, seq_len, pdb_filename, ptm, mean_plddt, emb_filename])
         if len(row) > 7:
             batch_info[-1].extend(row[7:])
         encode_func = None
@@ -324,7 +328,6 @@ if __name__ == "__main__":
     int_2_token, token_2_int = load_vocab(args.seq_vocab_path)
     # config.vocab_size = len(token_2_int)
 
-    col_names = ["protein_id", "seq", "predict_prob", "predict_label", "seq_len", "pdb_filename", "ptm", "mean_plddt", "emb_filename"]
     predict_func = None
     evaluate_func = None
     if args.task_type in ["multi-label", "multi_label"]:
@@ -339,11 +342,17 @@ if __name__ == "__main__":
     # append other columns to the result csv file
     if args.data_path.endswith(".csv"):
         # expand the csv header
+        col_names = ["protein_id", "seq", "predict_prob", "predict_label", "seq_len", "pdb_filename", "ptm", "mean_plddt", "emb_filename"]
         with open(args.data_path, "r") as rfp:
             for row in csv_reader(rfp, header=True, header_filter=False):
                 if len(row) > 7:
                     col_names.extend(row[7:])
                 break
+    elif args.data_path.endswith(".fasta") or args.data_path.endswith(".fas") or args.data_path.endswith(".fa"):
+        col_names = ["protein_id", "seq", "predict_prob", "predict_label"]
+    else:
+        raise Exception("not csv file or fasta file.")
+
     # statistics
     ground_truth_stats = {}
     predict_stats = {}
@@ -386,8 +395,11 @@ if __name__ == "__main__":
         reader = csv_reader(rfp, header=True, header_filter=True)
         for row in reader:
             total_cnt += 1
+    elif args.data_path.endswith(".fasta") or args.data_path.endswith(".fas") or args.data_path.endswith(".fa"):
+        for row in fasta_reader(args.data_path):
+            total_cnt += 1
     else:
-        raise Exception("not csv file.")
+        raise Exception("not csv file or fasta file.")
     # total batch number
     total_batch_num = (total_cnt + args.batch_size - 1 - had_done_cnt)//args.batch_size
     print("total num: %d, had done num: %d, batch size: %d, batch_num: %d" %(total_cnt, had_done_cnt, args.batch_size, total_batch_num))
@@ -402,6 +414,8 @@ if __name__ == "__main__":
         rfp = open(args.data_path, "r")
         if args.data_path.endswith(".csv"):
             reader = csv_reader(rfp, header=True, header_filter=True)
+        elif args.data_path.endswith(".fasta") or args.data_path.endswith(".fas") or args.data_path.endswith(".fa"):
+            reader = fasta_reader(args.data_path)
         else:
             raise Exception("not csv file.")
         row_batch = []
