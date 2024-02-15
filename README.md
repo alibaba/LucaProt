@@ -311,7 +311,7 @@ This project is used to predict unlabeled protein sequences and to measure the t
 
 ## 1) Fasta
 
-* **Viral RdRP(Postive: 5,979)**
+* **Viral RdRP(Positive: 5,979)**
 
   The positive sequence fasta file is in `data/rdrp/all_dataset_positive.fasta.zip`                               
   [all_dataset_positive.fasta.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_positive.fasta.zip) 
