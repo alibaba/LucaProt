@@ -24,7 +24,7 @@
 '''
 import numpy as np
 from Bio import Align
-from Bio.Data.SCOPData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1
 from Bio.SeqUtils import seq1
 
 TEN_ANGSTROMS = 10.0

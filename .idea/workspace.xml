@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="Update some scripts">
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="Update README.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SSFN/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SSFN/pooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/pooling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/biotoolbox/contact_map_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/biotoolbox/contact_map_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/biotoolbox/structure_file_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/biotoolbox/structure_file_reader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/protein_structure/structure_from_esm_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/structure_from_esm_v1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +54,7 @@
       <recent name="$PROJECT_DIR$/src/protein_structure" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data/extra_p" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/data/rdrp/test" />
       <recent name="$PROJECT_DIR$/data/rdrp/demo" />
@@ -172,6 +178,29 @@
       <workItem from="1705215561938" duration="6495000" />
       <workItem from="1705563894294" duration="876000" />
       <workItem from="1707957847802" duration="2445000" />
+      <workItem from="1708577518646" duration="211000" />
+      <workItem from="1709624117247" duration="1411000" />
+      <workItem from="1709643596586" duration="405000" />
+      <workItem from="1709805983171" duration="646000" />
+      <workItem from="1709861015944" duration="2015000" />
+      <workItem from="1709871472247" duration="951000" />
+      <workItem from="1709883486737" duration="2200000" />
+      <workItem from="1710140552985" duration="626000" />
+      <workItem from="1711335185831" duration="597000" />
+      <workItem from="1711343990995" duration="631000" />
+      <workItem from="1711680598010" duration="317000" />
+      <workItem from="1711681975672" duration="27000" />
+      <workItem from="1711807993354" duration="15000" />
+      <workItem from="1714469003832" duration="67000" />
+      <workItem from="1714981719429" duration="22000" />
+      <workItem from="1714981832192" duration="16000" />
+      <workItem from="1714986119799" duration="504000" />
+      <workItem from="1715318559362" duration="69000" />
+      <workItem from="1715330429456" duration="771000" />
+      <workItem from="1715422011521" duration="42000" />
+      <workItem from="1715925205147" duration="86000" />
+      <workItem from="1715925384225" duration="48000" />
+      <workItem from="1715930299860" duration="533000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -215,7 +244,14 @@
       <option name="project" value="LOCAL" />
       <updated>1707958730837</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Update README.md">
+      <created>1708577620218</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1708577620218</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,9 +269,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update README.md" />
     <MESSAGE value="Update some scripts" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update some scripts" />
+    <MESSAGE value="Update README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update README.md" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
