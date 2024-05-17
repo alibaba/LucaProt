@@ -147,7 +147,7 @@ def metrics_multi_class_for_pred(targets, preds, savepath=None):
     '''
     metrcis for multi-class classification
     :param targets: 1d-array class index (n_samples, )
-    :param prebs:  1d-array class index (n_samples, )
+    :param preds:  1d-array class index (n_samples, )
     :return:
     '''
     if targets.ndim == 2 and targets.shape[1] > 1:
@@ -421,6 +421,33 @@ def write_error_samples_binary(filepath, samples, input_indexs, input_id_2_names
                 new_sample = sample
             row = [score, target_label, pred_label, new_sample]
             writer.writerow(row)
+
+
+def plot_confusion_matrix_for_binary_class(targets, preds, cm=None, savepath=None):
+    '''
+    :param targets: ground truth
+    :param preds: prediction probs
+    :param cm: confusion matrix
+    :param savepath: confusion matrix picture savepth
+    '''
+
+    plt.figure(figsize=(40, 20), dpi=100)
+    if cm is None:
+        cm = confusion_matrix(targets, preds, labels=[0, 1])
+
+    plt.matshow(cm, cmap=plt.cm.Oranges)
+    plt.colorbar()
+
+    for x in range(len(cm)):
+        for y in range(len(cm)):
+            plt.annotate(cm[x, y], xy=(y, x), verticalalignment='center', horizontalalignment='center')
+    plt.ylabel('True')
+    plt.xlabel('Prediction')
+    if savepath:
+        plt.savefig(savepath, dpi=100)
+    else:
+        plt.show()
+    plt.close("all")
 
 
 if __name__ == "__main__":
