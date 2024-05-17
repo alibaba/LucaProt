@@ -418,8 +418,19 @@ if __name__ == "__main__":
     else:
         raise Exception("-i or -seq")
 
-    # export CUDA_VISIBLE_DEVICES=0
-    # python structure_from_esm_v1.py -i /mnt_nas/****/rdrp/predicts/rdrp_40_extend/protein/binary_class/sefn/20230201140320-bak/checkpoint-100000/all/protein_structure_analysis/ -o /mnt/****/biodata/rdrp -m /mnt/****/ESMFold/esmfold_v1 --num-recycles 4 --truncation_seq_length 4096 --chunk-size 64 --cpu-offload --batch_size 1
+    #
+    '''
+    export CUDA_VISIBLE_DEVICES=1
+    python structure_from_esm_v1.py \
+            -i /public/home/alicloud/sanyuan.hy/workspace/LucaProt/data/extra_p/all_wide70_non-singleton.faa \
+            -o /public/home/alicloud/sanyuan.hy/workspace/LucaProt/structure_predicted/extra_p/all_wide70_non-singleton \
+            --num-recycles 4 \
+            --truncation_seq_length 4096 \
+            --chunk-size 64 \
+            --cpu-offload \
+            --batch_size 1 \
+            --try_failure
+    '''
 
 
 

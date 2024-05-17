@@ -60,11 +60,13 @@ def create_pooler(pooler_type, config, args):
     elif pooler_type == "embedding":
         pooling_type = args.embedding_pooling_type
         hidden_size = config.embedding_input_size
+    else:
+        raise Exception("Not support pooler_type=%s" % pooler_type)
 
     if pooling_type == "max":
         return GlobalMaskMaxPooling1D()
     elif pooling_type == "sum":
-        return GlobalMaskSumPooling1D()
+        return GlobalMaskSumPooling1D(axis=1)
     elif pooling_type == "avg":
         return GlobalMaskAvgPooling1D()
     elif pooling_type == "attention":
@@ -414,6 +416,8 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
                 pooled_output = torch.cat([seq_pooled_output, embedding_pooled_output], dim=-1)
             elif struct_pooled_output is not None and embedding_pooled_output is not None:
                 pooled_output = torch.cat([struct_pooled_output, embedding_pooled_output], dim=-1)
+            else:
+                raise Exception("Not support this type.")
 
         logits = self.classifier(pooled_output)
         if self.output:
@@ -431,6 +435,8 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
                 loss = self.loss_fct(logits.view(-1), labels.view(-1).float())
             elif self.output_mode in ["multi_class", "multi-class"]:
                 loss = self.loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+            else:
+                raise Exception("Not support output_mode=%s" % self.output_mode)
             outputs = [loss, *outputs]
 
         return outputs

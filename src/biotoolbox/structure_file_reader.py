@@ -29,7 +29,7 @@ import re
 
 import Bio
 from Bio import SeqIO
-from Bio.Data.SCOPData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1
 
 
 class PdbSeqResDataParser:
