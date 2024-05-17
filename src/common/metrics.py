@@ -101,8 +101,10 @@ def metrics_multi_class(targets, probs, average="macro"):
     :param probs:  2d-array probability (n_samples, m_classes)
     :return:
     '''
-    if targets.ndim == 2:
+    if targets.ndim == 2 and targets.shape[1] > 1:
         targets = np.argmax(targets, axis=1)
+    elif targets.ndim == 2 and targets.shape[1] == 1:
+        targets = np.squeeze(targets, axis=1)
 
     preds = np.argmax(probs, axis=1)
     acc = accuracy_score(targets, preds)
@@ -148,8 +150,10 @@ def metrics_multi_class_for_pred(targets, preds, savepath=None):
     :param prebs:  1d-array class index (n_samples, )
     :return:
     '''
-    if targets.ndim == 2:
+    if targets.ndim == 2 and targets.shape[1] > 1:
         targets = np.argmax(targets, axis=1)
+    elif targets.ndim == 2 and targets.shape[1] == 1:
+        targets = np.squeeze(targets, axis=1)
 
     acc = accuracy_score(targets, preds)
     prec = precision_score(targets, preds, average='macro')

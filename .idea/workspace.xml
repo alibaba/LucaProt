@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="Update README.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SSFN/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SSFN/pooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/pooling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/biotoolbox/contact_map_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/biotoolbox/contact_map_builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/biotoolbox/structure_file_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/biotoolbox/structure_file_reader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/protein_structure/structure_from_esm_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/structure_from_esm_v1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/metrics.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +196,8 @@
       <workItem from="1715422011521" duration="42000" />
       <workItem from="1715925205147" duration="86000" />
       <workItem from="1715925384225" duration="48000" />
-      <workItem from="1715930299860" duration="533000" />
+      <workItem from="1715930299860" duration="1487000" />
+      <workItem from="1715934507125" duration="24000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -251,7 +248,14 @@
       <option name="project" value="LOCAL" />
       <updated>1708577620218</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Update README.md">
+      <created>1715930903588</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1715930903588</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,17 +276,6 @@
     <MESSAGE value="Update some scripts" />
     <MESSAGE value="Update README.md" />
     <option name="LAST_COMMIT_MESSAGE" value="Update README.md" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/SSFN/gcn.py</url>
-          <line>25</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/LucaProt$test.coverage" NAME="test Coverage Results" MODIFIED="1681466342540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models/rdrp_40_append/protein/binary_class/sefn/20230201140320/checkpoint-100000/sequence" />
