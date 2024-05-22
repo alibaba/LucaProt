@@ -123,9 +123,9 @@ def metrics_multi_class(targets, probs, average="macro"):
     except Exception as e:
         roc_auc = 0
         print(e)
-    z = probs.shape[1]
-    new_targets = np.eye(z)[targets]
     try:
+        z = probs.shape[1]
+        new_targets = np.eye(z)[targets]
         pr_auc = average_precision_score(new_targets, probs, average=average)
     except Exception as e:
         pr_auc = 0
