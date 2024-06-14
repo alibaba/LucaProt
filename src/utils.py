@@ -368,9 +368,10 @@ def subprocess_popen(statement):
                 result.append(res)
             return result
 
+
 # not {'O', 'U', 'Z', 'J', 'B'}
 # Common amino acids
-common_amino_acid_set = set(['R', 'X', 'S', 'G', 'W', 'I', 'Q', 'A', 'T', 'V', 'K', 'Y', 'C', 'N', 'L', 'F', 'D', 'M', 'P', 'H', 'E'])
+common_amino_acid_set = {'R', 'X', 'S', 'G', 'W', 'I', 'Q', 'A', 'T', 'V', 'K', 'Y', 'C', 'N', 'L', 'F', 'D', 'M', 'P', 'H', 'E'}
 
 
 def clean_seq(protein_id, seq):
