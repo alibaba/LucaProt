@@ -1,0 +1,4 @@
+/var/folders/
+*.log
+*.tmp
+.DS_Store
