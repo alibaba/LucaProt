@@ -174,7 +174,7 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
             if hasattr(config, "seq_weight") and hasattr(config, "struct_weight") and hasattr(config, "embedding_weight"):
                 self.seq_weight = config.seq_weight
                 self.struct_weight = config.struct_weight
-                self.embedding_weight = config.embeddingct_weight
+                self.embedding_weight = config.embedding_weight
             else:
                 self.seq_weight = None
                 self.struct_weight = None
