@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="Update README.md" />
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="Update README.md">
+      <change afterPath="$PROJECT_DIR$/LucaProt-10-Fold_Cross-Validation.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,8 +50,8 @@
       <recent name="$PROJECT_DIR$/src/protein_structure" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/data/extra_p" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/data/extra_p" />
       <recent name="$PROJECT_DIR$/data/rdrp/test" />
       <recent name="$PROJECT_DIR$/data/rdrp/demo" />
       <recent name="$PROJECT_DIR$/logs/rdrp_40_append/protein/binary_class/sefn/20230201140320" />
@@ -218,7 +221,13 @@
       <workItem from="1721013395454" duration="31000" />
       <workItem from="1721104267715" duration="443000" />
       <workItem from="1721222227477" duration="78000" />
-      <workItem from="1721225597532" duration="424000" />
+      <workItem from="1721225597532" duration="789000" />
+      <workItem from="1721227874880" duration="9000" />
+      <workItem from="1721280518751" duration="35000" />
+      <workItem from="1721318094627" duration="231000" />
+      <workItem from="1721368746051" duration="215000" />
+      <workItem from="1721372664440" duration="240000" />
+      <workItem from="1721373255987" duration="118000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -304,7 +313,14 @@
       <option name="project" value="LOCAL" />
       <updated>1721225697421</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Update README.md">
+      <created>1721226057370</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1721226057370</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
