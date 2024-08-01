@@ -61,7 +61,8 @@ cd LucaProt
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple        
 ```
 
-# 3. Inference
+# 3. Inference   
+You can simply use this project to infer or predict for unknown sequences.    
 
 ## 1) Prediction from one sample
 
@@ -1042,12 +1043,12 @@ As mentioned above.
 ## 3) Trained Model
 The trained model for RdRP identification is available at:    
 **Notice:** these files were already downloaded in this GitHub project, so you don't need to download them.         
-* logs            
+* logs    
   [logs](http://47.93.21.181/LucaProt/logs/)       
   copy to `LucaProt/logs/`   
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)        
 
-* models       
+* models         
   [models](http://47.93.21.181/LucaProt/models/)      
   copy to `LucaProt/models/`   
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)         

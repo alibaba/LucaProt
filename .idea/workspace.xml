@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: update readme">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -242,7 +243,7 @@
       <workItem from="1722483149930" duration="16000" />
       <workItem from="1722484291487" duration="15000" />
       <workItem from="1722484390083" duration="276000" />
-      <workItem from="1722488171192" duration="1646000" />
+      <workItem from="1722488171192" duration="1902000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -370,7 +371,14 @@
       <option name="project" value="LOCAL" />
       <updated>1722489985386</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="feature: update readme">
+      <created>1722490094541</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1722490094541</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
