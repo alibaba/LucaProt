@@ -1041,7 +1041,7 @@ As mentioned above.
 
 ## 3) Trained Model
 The trained model for RdRP identification is available at:    
-**Notice:** these files are already downloaded in this GitHub project, so you don't need to download them.         
+**Notice:** these files were already downloaded in this GitHub project, so you don't need to download them.         
 * logs            
   [logs](http://47.93.21.181/LucaProt/logs/)       
   copy to `LucaProt/logs/`   
