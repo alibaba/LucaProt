@@ -61,7 +61,8 @@ cd LucaProt
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple        
 ```
 
-# 3. Inference
+# 3. Inference   
+You can simply use this project to infer or predict for unknown sequences.    
 
 ## 1) Prediction from one sample
 
@@ -369,25 +370,25 @@ We constructed a data set with 235,413 samples for model building, which include
 
 * **Entire Dataset**     
   This file is `dataset/rdrp/all_dataset_with_pdb_emb.csv.zip`                                         
-  [all_dataset_with_pdb_emb.csv.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_with_pdb_emb.csv.zip) 
-  or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)      
+  [all_dataset_with_pdb_emb.csv.zip](http://47.93.21.181/LucaProt/data/rdrp/all_dataset_with_pdb_emb.csv.zip)       
+  or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)       
 
 
 * **Training set**        
   This file copy to `dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv`                 
-  [train_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)   
+  [train_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv)     
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)    
 
 
 * **Validation set**         
   This file copy to `dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv`                         
-  [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)   
+  [dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)    
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)   
 
 
 * **Testing set**         
   This file copy to `dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv`                          
-  [test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)   
+  [test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)     
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)       
 
 One row in all the above files represents one sample. All three files consist of 9 columns, including **prot_id**, **seq**, **seq_len**, **pdb_filename**, **ptm**, **mean_plddt**, **emb_filename**, **label**, and **source**. The details of these columns are as follows:
@@ -951,7 +952,8 @@ As mentioned above.
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)    
 
   [2) dev_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/dev_with_pdb_emb.csv)     
-  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`
+  copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`  
+  or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)    
 
   [3) test_with_pdb_emb.csv](http://47.93.21.181/LucaProt/dataset_for_model_building/dataset/rdrp_40_extend/protein/binary_class/test_with_pdb_emb.csv)   
   copy to `LucaProt/dataset/rdrp_40_extend/protein/binary_class/`   
@@ -1040,13 +1042,13 @@ As mentioned above.
 
 ## 3) Trained Model
 The trained model for RdRP identification is available at:    
-**Notice:** these files are already downloaded in this GitHub project, so you don't need to download them.         
-* logs            
+**Notice:** these files were already downloaded in this GitHub project, so you don't need to download them.         
+* logs    
   [logs](http://47.93.21.181/LucaProt/logs/)       
   copy to `LucaProt/logs/`   
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)        
 
-* models       
+* models         
   [models](http://47.93.21.181/LucaProt/models/)      
   copy to `LucaProt/models/`   
   or [LucaProt Figshare](https://doi.org/10.6084/m9.figshare.26298802.v13)         
