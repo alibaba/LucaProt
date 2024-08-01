@@ -134,7 +134,7 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
             assert isinstance(config.struct_hidden_size, list) and isinstance(config.struct_output_size, list)
             input_size = config.struct_embed_size
             output_size = None
-            assert len(config.struct_output_size) == len(config.struct_output_size)
+            assert len(config.struct_hidden_size) == len(config.struct_output_size)
             for idx in range(len(config.struct_output_size)):
                 layer = GAT(feature_size=input_size,
                             hidden_size=config.struct_hidden_size[idx],
@@ -156,7 +156,7 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
                 self.struct_linear.append(create_activate(config.activate_func))
                 input_size = config.struct_fc_size[idx]
             self.struct_linear = nn.ModuleList(self.struct_linear)
-
+        # includes embedding encoder
         if args.has_embedding_encoder:
             self.embedding_pooler = create_pooler(pooler_type="embedding", config=config, args=args)
             assert isinstance(config.embedding_fc_size, list)
@@ -169,7 +169,8 @@ class SequenceAndStructureFusionNetwork(BertPreTrainedModel):
                 input_size = config.embedding_fc_size[idx]
             self.embedding_linear = nn.ModuleList(self.embedding_linear)
 
-        # weight assignment for addition of sequence, structure, structural embedding representation vector, if none, concatenation, otherwise weighted sequence
+        # weight assignment for addition of sequence, structure, structural embedding representation vector,
+        # if none, concatenation, otherwise weighted sequence
         if args.has_seq_encoder and args.has_struct_encoder and args.has_embedding_encoder:
             if hasattr(config, "seq_weight") and hasattr(config, "struct_weight") and hasattr(config, "embedding_weight"):
                 self.seq_weight = config.seq_weight
