@@ -60,7 +60,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser("Model Building for LucaProt")
     parser.add_argument("--data_dir", default=None, type=str, required=True, help="the dataset dirpath.")
     parser.add_argument("--separate_file", action="store_true", help="load the entire dataset using memory, only the names of the pdb and embedding files are listed in the train/dev/test.csv")
     parser.add_argument("--filename_pattern", default=None, type=str, help="the dataset filename pattern，such as {}_with_pdb_emb.csv including train_with_pdb_emb.csv, dev_with_pdb_emb.csv, test_with_pdb_emb.csv in ${data_dir}")
@@ -102,6 +102,9 @@ def main():
     # embedding pooling_type
     parser.add_argument("--embedding_pooling_type",  type=str, default=None, choices=["none", "sum", "max", "avg", "attention", "context_attention", "weighted_attention", "value_attention", "transformer"],
                         help="pooling type for embedding encoder")
+    # activate function
+    parser.add_argument("--activate_func",  type=str, default=None, choices=["tanh", "relu", "leakyrelu", "gelu"],
+                        help="activate function type after pooling")
 
     parser.add_argument("--do_train", action="store_true", help="whether to run training.")
     parser.add_argument("--do_eval", action="store_true", help="whether to run eval on the dev set.")
@@ -273,6 +276,8 @@ def main():
     config.max_position_embeddings = int(args.seq_max_length)
     config.num_labels = num_labels
     config.embedding_pooling_type = args.embedding_pooling_type
+    if args.activate_func:
+        config.activate_func = args.activate_func
     if args.pos_weight:
         config.pos_weight = args.pos_weight
     # tokenization
