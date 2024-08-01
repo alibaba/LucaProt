@@ -14,7 +14,7 @@ See the **NOTICE** file for more information.
 
 ## 1) Model Introduction
 
-We developed a new deep learning model, namely, Deep Sequential and Structural Information Fusion Network for Proteins Function Prediction (DeepProtFunc/LucaProt), which takes into account protein sequence composition and structure to facilitate the accurate annotation of protein function.
+We developed a new deep learning model, namely, Deep Sequential and Structural Information Fusion Network for Proteins Function Prediction (DeepProtFunc/LucaProt), which takes into account protein sequence and structural information to facilitate the accurate annotation of protein function.
 
 Here, we applied LucaProt to identify viral RdRP.
 
