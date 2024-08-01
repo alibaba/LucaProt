@@ -8,7 +8,7 @@ See the **NOTICE** file for more information.
 **This project provides the Python dependency environment installation file, installation commands, and the running command of the trained LucaProt model for inference or prediction, which can be found in this repository. These models are compatible with Linux, Mac OS, and Windows systems, supporting both CPU and GPU configurations for inference tasks.**   
 
 # Introduction
-**LucaProt**: A novel deep learning framework that incorporates protein amino acid sequence and structure information to predict protein function.
+**LucaProt**: A novel deep learning framework that incorporates protein amino acid sequence and structural information to predict protein function.
 
 # 1. Model
 
