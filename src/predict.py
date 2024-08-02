@@ -499,6 +499,7 @@ parser.add_argument("--ground_truth_col_index",  default=None, type=int, help="t
 parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
 parser.add_argument("--batch_size",  default=16, type=int, help="batch size per GPU/CPU for evaluatio, default: 16.")
 parser.add_argument("--print_per_batch",  default=1000, type=int, help="how many batches are completed every time for printing progress information, default: 1000.")
+parser.add_argument("--gpu_id", default=None, type=int, help="the used gpu index, -1 for cpu")
 args = parser.parse_args()
 
 
@@ -533,7 +534,7 @@ if __name__ == "__main__":
         args.sigmoid = config["sigmoid"]
         args.loss_type = config["loss_type"]
         args.output_mode = config["output_mode"]
-        args.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+
         args.seq_vocab_path = config["seq_vocab_path"]
         args.seq_pooling_type = config["seq_pooling_type"]
         args.seq_max_length = config["seq_max_length"]
@@ -556,10 +557,21 @@ if __name__ == "__main__":
             args.sigmoid = True
         elif args.task_type in ["binary-class", "binary_class"]:
             args.sigmoid = True
+
+    if args.gpu_id == -1:
+        args.device = torch.device("cpu")
+    else:
+        args.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+
     print("-" * 25 + "args:" + "-" * 25)
     print(args.__dict__.items())
     print("-" * 25 + "model_dir list:" + "-" * 25)
     print(os.listdir(model_dir))
+
+    if args.device.type == 'cpu':
+        print("Running Device is CPU!")
+    else:
+        print("Running Device is GPU!")
 
     # Step2: loading the tokenizer and model
     config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = load_model(args, model_dir)

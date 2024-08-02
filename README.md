@@ -78,6 +78,7 @@ sh run_predict_one_sample.sh
 ```
 cd LucaProt/src/
 
+# using GPU(cuda=0)    
 export CUDA_VISIBLE_DEVICES=0
 
 python predict_one_sample.py \
@@ -92,6 +93,21 @@ python predict_one_sample.py \
     --time_str 20230201140320 \
     --step 100000 \
     --threshold 0.5
+  
+# using CPU(gpu_id=-1)    
+python predict_one_sample.py \
+    --protein_id protein_1 \
+    --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	\
+    --emb_dir ./emb/ \
+    --truncation_seq_length 4096 \
+    --dataset_name rdrp_40_extend \
+    --dataset_type protein \
+    --task_type binary_class \
+    --model_type sefn \
+    --time_str 20230201140320 \
+    --step 100000 \
+    --threshold 0.5 \
+    --gpu_id -1
 ```
 
 
@@ -128,6 +144,10 @@ python predict_one_sample.py \
 * **--threshold**    
   float, sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5.
 
+* gpu_id:
+  int, the gpu id to use(**-1 for cpu**).      
+
+
 ## 2) Prediction from many samples
 the samples are in *.fasta, sample by sample prediction.
 
@@ -138,7 +158,8 @@ the samples are in *.fasta, sample by sample prediction.
   str, file path, save the predicted results into the file.
 
 * **--print_per_number**   
-  int, print progress information for every number of samples completed, default: 100.
+  int, print progress information for every number of samples completed, default: 100.     
+
 
 ```shell
 cd LucaProt/src/prediction/   
@@ -150,6 +171,7 @@ sh run_predict_many_samples.sh
 ```shell
 cd LucaProt/src/
 
+# using GPU(cuda=0)   
 export CUDA_VISIBLE_DEVICES=0  
 
 python predict_many_samples.py \
@@ -164,7 +186,26 @@ python predict_many_samples.py \
 	--time_str 20230201140320   \
 	--step 100000  \
 	--threshold 0.5 \
-	--print_per_number 10 
+	--print_per_number 10   
+	
+
+# using CPU(gpu_id=-1)               
+export CUDA_VISIBLE_DEVICES=0  
+
+python predict_many_samples.py \
+	--fasta_file ../data/rdrp/test/test.fasta  \
+	--save_file ../result/rdrp/test/test_result.csv  \
+	--emb_dir ../emb/   \
+	--truncation_seq_length 4096  \
+	--dataset_name rdrp_40_extend  \
+	--dataset_type protein     \
+	--task_type binary_class     \
+	--model_type sefn     \
+	--time_str 20230201140320   \
+	--step 100000  \
+	--threshold 0.5 \
+	--print_per_number 10 \
+	--gpu_id -1
 ```
 
 
@@ -185,6 +226,7 @@ sh run_predict_from_file.sh
 ```
 cd LucaProt/src/
 
+# using GPU(cuda=0)   
 export CUDA_VISIBLE_DEVICES=0
 
 python predict.py \
@@ -199,7 +241,23 @@ python predict.py \
     --evaluate \
     --threshold 0.5 \
     --batch_size 16 \
-    --print_per_batch 2
+    --print_per_batch 100   
+    
+# using CPU(gpu_id=-1)          
+python predict.py \
+    --data_path ../data/rdrp/demo/demo.csv \
+    --emb_dir ../data/rdrp/demo/embs/esm2_t36_3B_UR50D \
+    --dataset_name rdrp_40_extend \
+    --dataset_type protein \
+    --task_type binary_class \
+    --model_type sefn \
+    --time_str 20230201140320 \
+    --step 100000 \
+    --evaluate \
+    --threshold 0.5 \
+    --batch_size 16 \
+    --print_per_batch 100 \
+    --gpu_id -1
 ```
 
 * **--data_path**    
@@ -240,6 +298,10 @@ python predict.py \
 
 * **--print_per_batch**      
   int,  how many batches are completed every time for printing progress information, default: 1000.
+
+* gpu_id:
+  int, the gpu id to use(**-1 for cpu**).     
+
 
 **Note:** the embedding matrices of all the proteins in this file need to prepare in advance(**$emb_dir**).
 
