@@ -496,7 +496,7 @@ parser.add_argument("--time_str", default=None, type=str, required=True, help="t
 parser.add_argument("--step", default=None, type=str, required=True, help="the training global step of model finalization.")
 parser.add_argument("--evaluate", action="store_true", help="whether to evaluate the predicted results.")
 parser.add_argument("--ground_truth_col_index",  default=None, type=int, help="the ground truth col inde of the ${data_path}, default: None.")
-parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
+parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5.")
 parser.add_argument("--batch_size",  default=16, type=int, help="batch size per GPU/CPU for evaluatio, default: 16.")
 parser.add_argument("--print_per_batch",  default=1000, type=int, help="how many batches are completed every time for printing progress information, default: 1000.")
 parser.add_argument("--gpu_id", default=None, type=int, help="the used gpu index, -1 for cpu")
