@@ -1,24 +1,24 @@
 # LucaProt
-**LucaProt(DeepProtFunc)** is a open source project developed by **Alibaba** and licensed under the **Apache License (Version 2.0)**.
+**LucaProt(DeepProtFunc)** is an open source project developed by **Alibaba** and licensed under the **Apache License (Version 2.0)**.     
 
-This product contains various third-party components under other open source licenses.
-See the **NOTICE** file for more information.   
+This product contains various third-party components under other open source licenses.     
+See the **NOTICE** file for more information.    
 
-**Notice:**   
+**Notice:**     
 **This project provides the Python dependency environment installation file, installation commands, and the running command of the trained LucaProt model for inference or prediction, which can be found in this repository. These models are compatible with Linux, Mac OS, and Windows systems, supporting both CPU and GPU configurations for inference tasks.**   
 
-# Introduction
+# Introduction    
 **LucaProt**: A novel deep learning framework that incorporates protein amino acid sequence and structural information to predict protein function.
 
-# 1. Model
+# 1. Model    
 
-## 1) Model Introduction
+## 1) Model Introduction     
 
 We developed a new deep learning model, namely, Deep Sequential and Structural Information Fusion Network for Proteins Function Prediction (DeepProtFunc/LucaProt), which takes into account protein sequence and structural information to facilitate the accurate annotation of protein function.
 
-Here, we applied LucaProt to identify viral RdRP.
+Here, we applied LucaProt to identify viral RdRP.      
 
-## 2) Model Architecture
+## 2) Model Architecture    
 
 We treat protein function prediction as a classification problem. For example, viral RdRP identification is a binary-class classification task, and protein general function annotation is a multi-label classification task. The model includes five modules: Input, Tokenizer, Encoder, Pooling, and Output. Its architecture is shown in Figure 1.
 
@@ -29,12 +29,12 @@ We treat protein function prediction as a classification problem. For example, v
 Figure 1 The Architecture of LucaProt
 </center>
 
-## 3) Model Input/Output
+## 3) Model Input/Output     
 
 Use the amino acid letter sequence as the input of our model. The model outputs the function label of the input protein, which is a single tag (binary-class classification or multi-class classification) or a set of tags (multi-label classification).
 
 
-# 2. Dependence
+# 2. Dependence       
 System: Ubuntu 20.04.5 LTS       
 Python: 3.9.13          
 Download anaconda: <a href="https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh" title="anaconda"> anaconda </a>       
@@ -61,10 +61,10 @@ cd LucaProt
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple        
 ```
 
-# 3. Inference   
+# 3. Inference          
 You can simply use this project to infer or predict for unknown sequences.    
 
-## 1) Prediction from one sample
+## 1) Prediction from one sample       
 
 ```
 cd LucaProt/src/prediction/ 
@@ -112,53 +112,53 @@ python predict_one_sample.py \
 
 
 * **--protein_id**    
-  str, the protein id.
+  str, the protein id.   
 
 * **--sequence**    
-  str, the protein sequence.
+  str, the protein sequence.   
 
 * **--truncation_seq_length**    
-  int, truncate sequences longer than the given value. Recommended values: 4096, 2048, 1984, 1792, 1534, 1280, 1152, 1024, defualt: 4096.
+  int, truncate sequences longer than the given value. Recommended values: 4096, 2048, 1984, 1792, 1534, 1280, 1152, 1024, default: 4096.    
 
 * **--emb_dir(optional)**        
-  path, the saved dirpath of the protein predicted embedding matrix or vector during prediction, optional.
+  path, the saved dirpath of the protein predicted embedding matrix or vector during prediction, optional.   
 
-* **--dataset_name**       
-  str, the dataset name for building of our trained model(**rdrp_40_extend**).
+* **--dataset_name**        
+  str, the dataset name for building of our trained model(**rdrp_40_extend**).   
 
 * **--dataset_type**       
-  str, the dataset type for building of our trained model(**protein**).
+  str, the dataset type for building of our trained model(**protein**).   
 
 * **--task_type**      
-  str, the task name for building of our trained model(**binary_class**).
+  str, the task type for building of our trained model(**binary_class**).   
 
 * **--model_type**      
-  str, the model name for building of our trained model(**sefn**).
+  str, the model name for building of our trained model(**sefn**).     
 
 * **--time_str**    
-  str, the running time string(yyyymmddHimiss) for building of our trained model(**20230201140320**).
+  str, the running time string(yyyymmddHimiss) for building of our trained model(**20230201140320**).    
 
 * **--step**      
-  int, the training global step of model finalization(**100000**).
+  int, the training global step of model finalization(**100000**).  
 
 * **--threshold**    
-  float, sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5.
+  float, sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: **0.5**.   
 
-* gpu_id:
-  int, the gpu id to use(**-1 for cpu**).      
+* **--gpu_id**:
+  int, the gpu id to use(**-1 for cpu**).         
 
 
-## 2) Prediction from many samples
-the samples are in *.fasta, sample by sample prediction.
+## 2) Prediction from many samples       
+the samples are in *.fasta, sample by sample prediction.     
 
 * **--fasta_file**    
-  str, the samples fasta file
+  str, the samples fasta file.     
 
 * **--save_file**    
-  str, file path, save the predicted results into the file.
+  str, file path, save the predicted results into the file.    
 
 * **--print_per_number**   
-  int, print progress information for every number of samples completed, default: 100.     
+  int, print progress information for every number of samples completed, default: **100**.       
 
 
 ```shell
@@ -209,7 +209,7 @@ python predict_many_samples.py \
 ```
 
 
-## 3) Prediction from the file
+## 3) Prediction from the file       
 
 The test data (small and real) is in [demo.csv](./data/rdrp/demo/demo.csv), where the 7th column of each line is the filename of the structural embedding information prepared in advance.   
 And the structural embedding files store in [embs](./data/rdrp/demo/embs).
@@ -478,6 +478,7 @@ One row in all the above files represents one sample. All three files consist of
 **Note:** if using strategy one in structure encoder, the pdb_filename, the ptm, and the mean_plddt can be null.
 
 # 8. Supported Task Types
+You can use this project to train models for other tasks, not just the viral RdRP identification tasks.     
 
 * **binary-class classification**    
   The label is 0 or 1 for binary-class classification, such as viral RdRP identification.
@@ -490,7 +491,7 @@ One row in all the above files represents one sample. All three files consist of
 * **multi-label classification**   
   The labels form a list of 0~N-1 for multi-label classification, such as Gene Ontology annotation for proteins.
 
-# 9. Building Your Model
+# 9. Building Your Model(for re-training or training with new datasets)    
 
 ## 1) Prediction of protein 3D-structure(Optional)
 
@@ -658,7 +659,7 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
 ## 4) Training the model
 
 * **run.py**   
-  the main script for building model.
+  the main script for model building.
 
 * **Parameters**
   - **data_dir**: path, the dataset dirpath
@@ -682,9 +683,9 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
   - **config_path**: path, the configuration filepath of the model.
   - **seq_vocab_path**: path, the vocab filepath of sequence tokenizer
   - **struct_vocab_path**: path, the vocab filepath of 3D-structure node (Structural Encoder Strategy 2)
-  - **seq_pooling_type**: choices=["none", "max", "value_attention"], the sequence representaion matrix pooling type, "none" represents that \<bos> vector is used.
-  - **struct_pooling_type**: choices=["max", "value_attention"], the 3D-structure representaion matrix pooling type.
-  - **embedding_pooling_type**: choices=["none", "max", "value_attention"], the structual embedding representaion matrix pooling type, "none" represents that \<bos> vector is used.
+  - **seq_pooling_type**: choices=["none", "max", "value_attention"], the sequence representation matrix pooling type, "none" represents that [CLS] vector is used.
+  - **struct_pooling_type**: choices=["max", "value_attention"], the 3D-structure representation matrix pooling type.
+  - **embedding_pooling_type**: choices=["none", "max", "value_attention"], the structural embedding representation matrix pooling type, "none" represents that [CLS] vector is used.
   - **evaluate_during_training**: store_true, whether to evaluate the validation set and the testing set during training.
   - **do_eval**: store_true, whether to use the best saved model to evaluate the validation set.
   - **do_predict**: store_true, whether to use the best saved model to evaluate the testing set.
@@ -692,15 +693,15 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
   - **per_gpu_train_batch_size**: int, batch size per GPU/CPU for training, default: 16
   - **per_gpu_eval_batch_size**: int, batch size per GPU/CPU for evaluation, default: 16
   - **gradient_accumulation_steps**: int, number of updates steps to accumulate before performing a backward/update pass, default: 1.
-  - **learning_rate**: float, the initial learning rate for Adam, defaul: 1e-4.
-  - **num_train_epochs**: int, the total number of training epochs to perform, default: 50,.
+  - **learning_rate**: float, the initial learning rate for Adam, default: 1e-4.
+  - **num_train_epochs**: int, the total number of training epochs to perform, default: 50.
   - **logging_steps**: log every X updates steps, default: 1000.
   - **loss_type**: choices=["focal_loss", "bce", "multilabel_cce", "asl", "cce"], loss-function type of model training, default: "bce".
   - **max_metric_type**: choices=["acc", "jaccard", "prec", "recall", "f1", "fmax", "roc_auc", "pr_auc"], which metric is used for model finalization, default: "f1".
   - **pos_weight**: float, positive samples weight for "bce".
   - **focal_loss_alpha**: float, alpha for focal loss, default: 0.7.
   - **focal_loss_gamma**: float, gamma for focal loss, default:2.0.
-  - **focal_loss_reduce**: store_true, "mean" for one sample when in multi-label classifcation, default:"sum".
+  - **focal_loss_reduce**: store_true, "mean" for one sample when in multi-label classification, default:"sum".
   - **asl_gamma_neg**: float, negative gamma for asl, default: 4.0.
   - **asl_gamma_pos**: float, positive gamma for asl, default: 1.0.
   - **seq_max_length**: int, the length of input sequence more than max length will be truncated, shorter will be padded, default: 2048.
@@ -709,7 +710,7 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
   - **no_position_embeddings**: store_true, whether not use position embedding for the sequence.
   - **no_token_type_embeddings**: store_true, whether not use token type embedding for the sequence.
   - **embedding_input_size**: int, the dim of the structural embedding vector/matrix, default: 2560， {"esm2_t30_150M_UR50D": 640, "esm2_t33_650M_UR50D": 1280, "esm2_t36_3B_UR50D": 2560, "esm2_t48_15B_UR50D": 5120}.
-  - **embedding_type**: choices=[None, "contacts", "bos", "matrix"], the type of the structural embedding info, default: "matrix.
+  - **embedding_type**: choices=[None, "contacts", "bos", "matrix"], the type of the structural embedding info, default: "matrix".
   - **embedding_max_length**: int, the length of input embedding matrix more than max length will be truncated, shorter will be padded, default: 2048.
   - **save_all**: store_true, the model for each evaluation is saved.
   - **delete_old**: store_true, only save the best metric (${max_metric_type}) model of all evaluation on testing set during training.
@@ -865,7 +866,7 @@ Figure 2: The File List in Checkpoint Dir Path
 The metrics are recorded in "tb-logs/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str}/events.out.tfevents.xxxxx.xxxxx"
 
 run:
-tensorboard --logdir=tb-logs/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str --bind_all
+tensorboard --logdir=tb-logs/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str} --bind_all
 
 ### predicts
 The predicted results is saved in "predicts/${dataset_name}/${dataset_type}/${task_type}/${model_type}/${time_str}/checkpoint-${global_step}", including:
@@ -1121,7 +1122,8 @@ The trained model for RdRP identification is available at:
 
 # 13. FTP
 **FTP:** The all data of LucaProt is available at the website: <a href="http://47.93.21.181" title="Open Resources"> Open Resources </a>           
-**Figshare:** https://doi.org/10.6084/m9.figshare.26298802.v13
+**Figshare:** https://doi.org/10.6084/m9.figshare.26298802.v13   
+
 # 14. Citation
 the pre-print version:
 
