@@ -685,7 +685,7 @@ use "src/data_process/data_preprocess_into_tfrecords_for_rdrp.py" to convert the
   - **struct_vocab_path**: path, the vocab filepath of 3D-structure node (Structural Encoder Strategy 2)
   - **seq_pooling_type**: choices=["none", "max", "value_attention"], the sequence representation matrix pooling type, "none" represents that [CLS] vector is used.
   - **struct_pooling_type**: choices=["max", "value_attention"], the 3D-structure representation matrix pooling type.
-  - **embedding_pooling_type**: choices=["none", "max", "value_attention"], the structural embedding representation matrix pooling type, "none" represents that [CLS]vector is used.
+  - **embedding_pooling_type**: choices=["none", "max", "value_attention"], the structural embedding representation matrix pooling type, "none" represents that [CLS] vector is used.
   - **evaluate_during_training**: store_true, whether to evaluate the validation set and the testing set during training.
   - **do_eval**: store_true, whether to use the best saved model to evaluate the validation set.
   - **do_predict**: store_true, whether to use the best saved model to evaluate the testing set.
