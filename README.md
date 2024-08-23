@@ -79,8 +79,7 @@ sh run_predict_one_sample.sh
 cd LucaProt/src/
 
 # using GPU(cuda=0)    
-export CUDA_VISIBLE_DEVICES=0
-
+export CUDA_VISIBLE_DEVICES="0,1,2,3"
 python predict_one_sample.py \
     --protein_id protein_1 \
     --sequence MTTSTAFTGKTLMITGGTGSFGNTVLKHFVHTDLAEIRIFSRDEKKQDDMRHRLQEKSPELADKVRFFIGDVRNLQSVRDAMHGVDYIFHAAALKQVPSCEFFPMEAVRTNVLGTDNVLHAAIDEGVDRVVCLSTDKAAYPINAMGKSKAMMESIIYANARNGAGRTTICCTRYGNVMCSRGSVIPLFIDRIRKGEPLTVTDPNMTRFLMNLDEAVDLVQFAFEHANPGDLFIQKAPASTIGDLAEAVQEVFGRVGTQVIGTRHGEKLYETLMTCEERLRAEDMGDYFRVACDSRDLNYDKFVVNGEVTTMADEAYTSHNTSRLDVAGTVEKIKTAEYVQLALEGREYEAVQ	\
@@ -92,7 +91,8 @@ python predict_one_sample.py \
     --model_type sefn \
     --time_str 20230201140320 \
     --step 100000 \
-    --threshold 0.5
+    --threshold 0.5 \
+    --gpu_id 0
   
 # using CPU(gpu_id=-1)    
 python predict_one_sample.py \
@@ -172,8 +172,7 @@ sh run_predict_many_samples.sh
 cd LucaProt/src/
 
 # using GPU(cuda=0)   
-export CUDA_VISIBLE_DEVICES=0  
-
+export CUDA_VISIBLE_DEVICES="0,1,2,3"  
 python predict_many_samples.py \
 	--fasta_file ../data/rdrp/test/test.fasta  \
 	--save_file ../result/rdrp/test/test_result.csv  \
@@ -186,12 +185,11 @@ python predict_many_samples.py \
 	--time_str 20230201140320   \
 	--step 100000  \
 	--threshold 0.5 \
-	--print_per_number 10   
+	--print_per_number 10 \
+	--gpu_id 0
 	
 
 # using CPU(gpu_id=-1)               
-export CUDA_VISIBLE_DEVICES=0  
-
 python predict_many_samples.py \
 	--fasta_file ../data/rdrp/test/test.fasta  \
 	--save_file ../result/rdrp/test/test_result.csv  \
@@ -227,8 +225,7 @@ sh run_predict_from_file.sh
 cd LucaProt/src/
 
 # using GPU(cuda=0)   
-export CUDA_VISIBLE_DEVICES=0
-
+export CUDA_VISIBLE_DEVICES="0,1,2,3"
 python predict.py \
     --data_path ../data/rdrp/demo/demo.csv \
     --emb_dir ../data/rdrp/demo/embs/esm2_t36_3B_UR50D \
@@ -241,7 +238,8 @@ python predict.py \
     --evaluate \
     --threshold 0.5 \
     --batch_size 16 \
-    --print_per_batch 100   
+    --print_per_batch 100 \
+    --gpu_id 0 
     
 # using CPU(gpu_id=-1)          
 python predict.py \
