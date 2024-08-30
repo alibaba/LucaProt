@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: update readme">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SSFN/pooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/pooling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/predict_many_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_many_samples.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/predict_one_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_one_sample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +263,11 @@
       <workItem from="1724222621699" duration="28000" />
       <workItem from="1724228919907" duration="16000" />
       <workItem from="1724231753853" duration="11000" />
-      <workItem from="1724389838868" duration="313000" />
+      <workItem from="1724389838868" duration="542000" />
+      <workItem from="1724741793514" duration="34000" />
+      <workItem from="1725005683213" duration="1491000" />
+      <workItem from="1725008962749" duration="79000" />
+      <workItem from="1725009073329" duration="1122000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -458,7 +465,14 @@
       <option name="project" value="LOCAL" />
       <updated>1723712253016</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="feature: update readme">
+      <created>1724390196778</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1724390196778</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

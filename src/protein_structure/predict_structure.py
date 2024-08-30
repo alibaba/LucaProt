@@ -157,7 +157,7 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
 model, alphabet = None, None
 
 
-def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], truncation_seq_length=4094):
+def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], truncation_seq_length=4094, device=None):
     '''
     use sequence to predict protein embedding matrix or vector(bos)
     :param sample: [protein_id, protein_sequence]
@@ -165,6 +165,7 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
     :param embedding_type: bos or representations
     :param repr_layers: [-1]
     :param truncation_seq_length: [4094,2046,1982,1790,1534,1278,1150,1022]
+    :param device:
     :return: embedding, processed_seq_len
     '''
     global model, alphabet
@@ -180,14 +181,23 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
     assert all(-(model.num_layers + 1) <= i <= model.num_layers for i in repr_layers)
     repr_layers = [(i + model.num_layers + 1) % (model.num_layers + 1) for i in repr_layers]
     model.eval()
+    if device is None:
+        device = next(model.parameters()).device
+    else:
+        model_device = next(model.parameters()).device
+        if device != model_device:
+            model = model.to(device)
+    """
     if torch.cuda.is_available():
         model = model.cuda()
         # print("Transferred model to GPU")
+    """
     converter = BatchConverter(alphabet, truncation_seq_length)
     protein_ids, raw_seqs, tokens = converter([[protein_id, protein_seq]])
     with torch.no_grad():
-        if torch.cuda.is_available():
-            tokens = tokens.to(device="cuda", non_blocking=True)
+        # if torch.cuda.is_available():
+        # tokens = tokens.to(device="cuda", non_blocking=True)
+        tokens = tokens.to(device=device, non_blocking=True)
         try:
             out = model(tokens, repr_layers=repr_layers, return_contacts=False)
             truncate_len = min(truncation_seq_length, len(raw_seqs[0]))

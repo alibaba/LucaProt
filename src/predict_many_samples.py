@@ -280,7 +280,12 @@ def transform_sample_2_feature(args,
 
     if args.embedding_type:
         # for embedding
-        embedding_info, processed_seq = predict_embedding([prot_id, protein_seq], args.trunc_type, "representations" if args.embedding_type == "matrix" else args.embedding_type , repr_layers=[-1], truncation_seq_length=args.truncation_seq_length-2)
+        embedding_info, processed_seq = predict_embedding([prot_id, protein_seq],
+                                                          args.trunc_type,
+                                                          "representations" if args.embedding_type == "matrix" else args.embedding_type,
+                                                          repr_layers=[-1],
+                                                          truncation_seq_length=args.truncation_seq_length - 2,
+                                                          device=args.device)
         if args.emb_dir:
             if not os.path.exists(args.emb_dir):
                 os.makedirs(args.emb_dir)
