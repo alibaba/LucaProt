@@ -9,12 +9,13 @@ See the **NOTICE** file for more information.
 
 
 ## TimeLine   
-* 2024/09/24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />: A free CPU version of `LucaProt Server` is available online (http://lucaprot.org). The GPU version will come soon. Limit inference to a maximum of 100 sequences at a time.    
+* 2024/09/24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />: A free CPU version of `LucaProt Server` is available online (http://lucaprot.org).
 * 2024/09/01: Optimize inference and prediction code to run on GPU with small graphics memory, such as A10.    
 
 ## LucaProt Server<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />        
 LucaProt Server(CPU) is available at: http://lucaprot.org.     
-The GPU version will come soon. Limit inference to a maximum of 100 sequences at a time.     
+Limit inference to a maximum of 100 sequences at a time.     
+The GPU version will come soon.    
 <center>
 <img src="pics/lucaprot_server.png" alt="LucaProt Server" width="50%" height="50%"/>
 

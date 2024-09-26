@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: optimized inference code">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: lucaprot server">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pics/lucaprot_server.png" beforeDir="false" afterPath="$PROJECT_DIR$/pics/lucaprot_server.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,7 +274,7 @@
       <workItem from="1727268294072" duration="1421000" />
       <workItem from="1727269772705" duration="1094000" />
       <workItem from="1727274429910" duration="1065000" />
-      <workItem from="1727314664695" duration="6397000" />
+      <workItem from="1727314664695" duration="6904000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -502,7 +500,14 @@
       <option name="project" value="LOCAL" />
       <updated>1727322280691</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="feature: lucaprot server">
+      <created>1727322693966</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1727322693966</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -525,7 +530,8 @@
     <MESSAGE value="feature: optimized code" />
     <MESSAGE value="feature: update readme" />
     <MESSAGE value="feature: optimized inference code" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: optimized inference code" />
+    <MESSAGE value="feature: lucaprot server" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature: lucaprot server" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/LucaProt$test.coverage" NAME="test Coverage Results" MODIFIED="1681466342540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models/rdrp_40_append/protein/binary_class/sefn/20230201140320/checkpoint-100000/sequence" />
