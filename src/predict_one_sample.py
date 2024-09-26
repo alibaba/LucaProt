@@ -88,7 +88,10 @@ def load_args(log_dir):
     return {}
 
 
-def load_model(args, model_dir):
+def load_model(
+        args,
+        model_dir
+):
     '''
     load the model
     :param args:
@@ -104,7 +107,8 @@ def load_model(args, model_dir):
     # for sequence
     subword = None
     if args.has_seq_encoder:
-        seq_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "sequence"), do_lower_case=args.do_lower_case)
+        seq_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "sequence"),
+                                                        do_lower_case=args.do_lower_case)
         if args.subword:
             bpe_codes_prot = codecs.open(args.codes_file)
             subword = BPE(bpe_codes_prot, merges=-1, separator='')
@@ -112,7 +116,8 @@ def load_model(args, model_dir):
         seq_tokenizer = None
 
     if args.has_struct_encoder:
-        struct_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "struct"), do_lower_case=args.do_lower_case)
+        struct_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "struct"),
+                                                           do_lower_case=args.do_lower_case)
     else:
         struct_tokenizer = None
 
@@ -140,15 +145,17 @@ def load_model(args, model_dir):
     return config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id
 
 
-def transform_sample_2_feature(args,
-                               row,
-                               seq_tokenizer,
-                               subword,
-                               struct_tokenizer,
-                               pad_on_left=False,
-                               pad_token=0,
-                               pad_token_segment_id=0,
-                               mask_padding_with_zero=True):
+def transform_sample_2_feature(
+        args,
+        row,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        pad_on_left=False,
+        pad_token=0,
+        pad_token_segment_id=0,
+        mask_padding_with_zero=True
+):
     '''
     batch sample transform to batch input
     :param args:
@@ -279,13 +286,25 @@ def transform_sample_2_feature(args,
 
     if args.embedding_type:
         # for embedding
-        embedding_info, processed_seq = predict_embedding([prot_id, protein_seq],
-                                                          args.trunc_type,
-                                                          "representations" if args.embedding_type == "matrix" else args.embedding_type,
-                                                          repr_layers=[-1],
-                                                          truncation_seq_length=args.truncation_seq_length - 2,
-                                                          device=args.device
-                                                          )
+        embedding_info, processed_seq = predict_embedding(
+            [prot_id, protein_seq],
+            args.trunc_type,
+            "representations" if args.embedding_type == "matrix" else args.embedding_type,
+            repr_layers=[-1],
+            truncation_seq_length=args.truncation_seq_length - 2,
+            device=args.device
+        )
+        # failure on GPU, the use CPU
+        if embedding_info is None:
+            # 失败,则调用cpu进行embedding推理
+            embedding_info, processed_seq = predict_embedding(
+                [prot_id, protein_seq],
+                args.trunc_type,
+                "representations" if args.embedding_type == "matrix" else args.embedding_type,
+                repr_layers=[-1],
+                truncation_seq_length=args.truncation_seq_length - 2,
+                device=torch.device("cpu")
+            )
         if args.emb_dir:
             if not os.path.exists(args.emb_dir):
                 os.makedirs(args.emb_dir)
@@ -330,6 +349,8 @@ def transform_sample_2_feature(args,
                         embedding_info = np.pad(embedding_info, [(0, embedding_padding_length), (0, 0)], mode='constant', constant_values=pad_token)
         elif args.embedding_type == "bos":
             embedding_attention_mask = None
+        else:
+            raise Exception("Not support arg: --embedding_type=%s" % args.embedding_type)
     else:
         embedding_info = None
         embedding_attention_mask = None
@@ -371,7 +392,14 @@ def transform_sample_2_feature(args,
     return batch_info, batch_input
 
 
-def predict_probs(args, seq_tokenizer, subword, struct_tokenizer, model, row):
+def predict_probs(
+        args,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        model,
+        row
+):
     '''
     prediction for one sample
     :param args:
@@ -386,7 +414,10 @@ def predict_probs(args, seq_tokenizer, subword, struct_tokenizer, model, row):
     label_list = processor.get_labels(label_filepath=args.label_filepath)
     label_map = {label: i for i, label in enumerate(label_list)}
     '''
+    # 为了embedding更长序列，先将下游模型to cpu
+    model.to(torch.device("cpu"))
     batch_info, batch_input = transform_sample_2_feature(args, row, seq_tokenizer, subword, struct_tokenizer)
+    model.to(args.device)
     if torch.cuda.is_available():
         probs = model(**batch_input)[1].detach().cpu().numpy()
     else:
@@ -394,7 +425,15 @@ def predict_probs(args, seq_tokenizer, subword, struct_tokenizer, model, row):
     return batch_info, probs
 
 
-def predict_binary_class(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row):
+def predict_binary_class(
+        args,
+        label_id_2_name,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        model,
+        row
+):
     '''
     predict positive or negative label for one sample
     :param args:
@@ -418,7 +457,15 @@ def predict_binary_class(args, label_id_2_name, seq_tokenizer, subword, struct_t
     return res
 
 
-def predict_multi_class(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row):
+def predict_multi_class(
+        args,
+        label_id_2_name,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        model,
+        row
+):
     '''
     predict multi-labels for one sample
     :param args:
@@ -442,7 +489,15 @@ def predict_multi_class(args, label_id_2_name, seq_tokenizer, subword, struct_to
     return res
 
 
-def predict_multi_label(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row):
+def predict_multi_label(
+        args,
+        label_id_2_name,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        model,
+        row
+):
     '''
     predict multi-labels for one sample
     :param args:
@@ -467,35 +522,56 @@ def predict_multi_label(args, label_id_2_name, seq_tokenizer, subword, struct_to
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Prediction")
-    parser.add_argument("--protein_id", default=None, type=str, required=True, help="the protein id")
-    parser.add_argument("--sequence", default=None, type=str, required=True, help="the protein sequence")
-    parser.add_argument("--truncation_seq_length", default=4096, type=int, required=True, help="truncation seq length")
-    parser.add_argument("--emb_dir", default=None, type=str, help="the structural embedding save dir. default: None")
-    parser.add_argument("--pdb_dir", default="protein", type=str, help="the 3d-structure pdb save dir. default: None")
-    parser.add_argument("--chain", default=None, type=str, help="pdb chain for contact map computing")
-    parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True, help="the dataset name for model buliding.")
-    parser.add_argument("--dataset_type", default="protein", type=str, required=True, help="the dataset type for model buliding.")
-    parser.add_argument("--task_type", default=None, type=str, required=True, choices=["multi_label", "multi_class", "binary_class"], help="the task type for model buliding.")
-    parser.add_argument("--model_type", default=None, type=str, required=True, help="model type.")
-    parser.add_argument("--time_str", default=None, type=str, required=True, help="the running time string(yyyymmddHimiss) of model building.")
-    parser.add_argument("--step", default=None, type=str, required=True, help="the training global step of model finalization.")
-    parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
-    parser.add_argument("--gpu_id", default=None, type=int, help="the used gpu index, -1 for cpu")
+    parser = argparse.ArgumentParser(description="Prediction RdRP")
+    parser.add_argument("--protein_id", default=None, type=str, required=True,
+                        help="the protein id")
+    parser.add_argument("--sequence", default=None, type=str, required=True,
+                        help="the protein sequence")
+    parser.add_argument("--truncation_seq_length", default=4096, type=int, required=True,
+                        help="truncation seq length")
+    parser.add_argument("--emb_dir", default=None, type=str,
+                        help="the llm embedding save dir. default: None")
+    parser.add_argument("--pdb_dir", default="protein", type=str,
+                        help="the 3d-structure pdb save dir. default: None")
+    parser.add_argument("--chain", default=None, type=str,
+                        help="pdb chain for contact map computing")
+    parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True,
+                        help="the dataset name for model building.")
+    parser.add_argument("--dataset_type", default="protein", type=str, required=True,
+                        help="the dataset type for model building.")
+    parser.add_argument("--task_type", default=None, type=str, required=True,
+                        choices=["multi_label", "multi_class", "binary_class"],
+                        help="the task type for model building.")
+    parser.add_argument("--model_type", default=None, type=str, required=True,
+                        help="model type.")
+    parser.add_argument("--time_str", default=None, type=str, required=True,
+                        help="the running time string(yyyymmddHimiss) of model building.")
+    parser.add_argument("--step", default=None, type=str, required=True,
+                        help="the training global step of model finalization.")
+    parser.add_argument("--threshold",  default=0.5, type=float,
+                        help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
+    parser.add_argument("--gpu_id", default=None, type=int,
+                        help="the used gpu index, -1 for cpu")
     args = parser.parse_args()
     return args
 
 
 if __name__ == "__main__":
     args = main()
-    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type, args.time_str, args.step if args.step == "best" else "checkpoint-{}".format(args.step))
-    config_dir = "../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type,  args.time_str)
-    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type, args.time_str, "checkpoint-{}".format(args.step))
+    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
+                                                 args.model_type, args.time_str,
+                                                 args.step if args.step == "best" else "checkpoint-{}".format(args.step))
+    config_dir = "../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
+                                             args.model_type,  args.time_str)
+    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
+                                                     args.model_type, args.time_str,
+                                                     args.step if args.step == "best" else "checkpoint-{}".format(args.step))
 
     # Step1: loading the model configuration
     config = load_args(config_dir)
     print("-" * 25 + "config:" + "-" * 25)
     print(config)
+    print("-" * 50)
     if config:
         args.dataset_name = config["dataset_name"]
         args.dataset_type = config["dataset_type"]
@@ -554,7 +630,8 @@ if __name__ == "__main__":
         print("Running Device is GPU!")
 
     # Step2: loading the tokenizer and model
-    config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = load_model(args, model_dir)
+    config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id =\
+        load_model(args=args, model_dir=model_dir)
     predict_func = None
     if args.task_type in ["multi-label", "multi_label"]:
         predict_func = predict_multi_label

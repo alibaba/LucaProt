@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: update readme">
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: optimized inference code">
+      <change afterPath="$PROJECT_DIR$/pics/lucaprot_server.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SSFN/pooling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SSFN/pooling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/deep_baselines/predict_deep_baselines.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/deep_baselines/predict_deep_baselines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/predict_many_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_many_samples.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/predict_one_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_one_sample.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" afterDir="false" />
@@ -267,7 +270,18 @@
       <workItem from="1724741793514" duration="34000" />
       <workItem from="1725005683213" duration="1491000" />
       <workItem from="1725008962749" duration="79000" />
-      <workItem from="1725009073329" duration="1122000" />
+      <workItem from="1725009073329" duration="1296000" />
+      <workItem from="1725368438554" duration="7000" />
+      <workItem from="1726749747756" duration="353000" />
+      <workItem from="1726750671963" duration="70000" />
+      <workItem from="1726750809975" duration="97000" />
+      <workItem from="1726750995934" duration="275000" />
+      <workItem from="1727151207511" duration="89000" />
+      <workItem from="1727264641125" duration="418000" />
+      <workItem from="1727268294072" duration="1421000" />
+      <workItem from="1727269772705" duration="1094000" />
+      <workItem from="1727274429910" duration="1065000" />
+      <workItem from="1727314664695" duration="5940000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -472,7 +486,14 @@
       <option name="project" value="LOCAL" />
       <updated>1724390196778</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="feature: update readme">
+      <created>1725010286673</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1725010286673</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -494,7 +515,8 @@
     <MESSAGE value="Update README.md" />
     <MESSAGE value="feature: optimized code" />
     <MESSAGE value="feature: update readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: update readme" />
+    <MESSAGE value="feature: optimized inference code" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature: optimized inference code" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/LucaProt$test.coverage" NAME="test Coverage Results" MODIFIED="1681466342540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models/rdrp_40_append/protein/binary_class/sefn/20230201140320/checkpoint-100000/sequence" />

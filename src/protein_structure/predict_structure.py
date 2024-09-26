@@ -138,10 +138,12 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
         cb[chain]['contact-map'] = ContactMap(pdb_filepath, None, chain=chain, c_atom_type="CB")
         return ca, cb
     else:
+        pdb_handle = None
         if os.path.exists(pdb_filepath): # from file
             pdb_handle = open(pdb_filepath, 'r')
             pdb_content = pdb_handle.read()
-        else: # input is pdb content
+        else:
+            # input is pdb content
             pdb_content = pdb_filepath
         structure_container = build_structure_container_for_pdb(pdb_content, chain).with_seqres(sequence)
         # structure_container.chains = {chain: structure_container.chains[chain]}
@@ -149,7 +151,8 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
         mapper = DistanceMapBuilder(atom="CA", glycine_hack=-1)  # start with CA distances
         ca = mapper.generate_map_for_pdb(structure_container)
         cb = mapper.set_atom("CB").generate_map_for_pdb(structure_container)
-        pdb_handle.close()
+        if pdb_handle:
+            pdb_handle.close()
 
         return ca.chains, cb.chains
 
@@ -210,8 +213,12 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
             if e.args[0].startswith("CUDA out of memory"):
                 print(f"Failed (CUDA out of memory) on sequence {sample[0]} of length {len(sample[1])}.")
                 print("Please reduce the 'truncation_seq_length'")
-            raise Exception(e)
-    return None, None
+            if device.type == "cpu":
+                # inufficient cpu memory
+                raise Exception(e)
+            else:
+                # failure in GPU, return None to continue using CPU
+                return None, None
 
 
 if __name__ == "__main__":

@@ -23,10 +23,7 @@
 
 import argparse, time
 import numpy as np
-import os, sys, csv, json, codecs
-from subword_nmt.apply_bpe import BPE
-from transformers.models.bert.configuration_bert import BertConfig
-from transformers.models.bert.tokenization_bert import BertTokenizer
+import os, sys, csv
 sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../../")
@@ -37,8 +34,8 @@ try:
     from deep_baselines.virhunter import VirHunter, seq_encode as virhunter_seq_encode, one_hot_encode as virhunter_seq_hot_encode
     from deep_baselines.virtifier import Virtifier, seq_encode as virtifier_seq_encode
     from deep_baselines.virseeker import VirSeeker, seq_encode as virseeker_seq_encode
-    from metrics import *
-    from multi_label_metrics import *
+    from common.metrics import *
+    from common.multi_label_metrics import *
     from utils import set_seed, plot_bins, csv_reader
 except ImportError:
     from src.deep_baselines.cheer import CatWCNN, WDCNN, WCNN, seq_encode as cheer_seq_encode
@@ -193,7 +190,12 @@ def transform_sample_2_feature(args, rows, token_2_int):
     return batch_info, {"x": torch.tensor(x, dtype=torch.long).to(args.device), "lengths": torch.tensor(lens, dtype=torch.long).to(args.device)}
 
 
-def predict_probs(args, model, token_2_int, rows):
+def predict_probs(
+        args,
+        model,
+        token_2_int,
+        rows
+):
     '''
     prediction
     :param args:
@@ -213,7 +215,13 @@ def predict_probs(args, model, token_2_int, rows):
     return batch_info, probs
 
 
-def predict_binary_class(args, label_id_2_name, token_2_int, model, rows):
+def predict_binary_class(
+        args,
+        label_id_2_name,
+        token_2_int,
+        model,
+        rows
+):
     '''
     predict positive or negative label for a batch
     :param args:
@@ -231,7 +239,13 @@ def predict_binary_class(args, label_id_2_name, token_2_int, model, rows):
     return res
 
 
-def predict_multi_class(args, label_id_2_name, token_2_int, model, rows):
+def predict_multi_class(
+        args,
+        label_id_2_name,
+        token_2_int,
+        model,
+        rows
+):
     '''
     predict a class for a batch
     :param args:
@@ -249,7 +263,13 @@ def predict_multi_class(args, label_id_2_name, token_2_int, model, rows):
     return res
 
 
-def predict_multi_label(args, label_id_2_name, token_2_int, model, rows):
+def predict_multi_label(
+        args,
+        label_id_2_name,
+        token_2_int,
+        model,
+        rows
+):
     '''
     predict multi-labels for a batch
     :param args:
@@ -269,26 +289,43 @@ def predict_multi_label(args, label_id_2_name, token_2_int, model, rows):
 
 
 parser = argparse.ArgumentParser(description="Prediction")
-parser.add_argument("--data_path", default=None, type=str, required=True, help="the data filepath(if it is csv format, Column 0 must be id, Colunm 1 must be seq.")
-parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True, help="the dataset name for model buliding.")
-parser.add_argument("--dataset_type", default="protein", type=str, required=True, help="the dataset type for model buliding.")
-parser.add_argument("--task_type", default=None, type=str, required=True, choices=["multi_label", "multi_class", "binary_class"], help="the task type for model buliding.")
-parser.add_argument("--model_type", default=None, type=str, required=True, help="the model type.")
-parser.add_argument("--time_str", default=None, type=str, required=True, help="the running time string(yyyymmddHimiss) of model building.")
-parser.add_argument("--step", default=None, type=str, required=True, help="the training global step of model finalization.")
-parser.add_argument("--evaluate", action="store_true", help="whether to evaluate the predicted results.")
-parser.add_argument("--ground_truth_col_index",  default=None, type=int, help="the ground truth col inde of the ${data_path}, default: None.")
-parser.add_argument("--threshold",  default=0.5, type=float, help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
-parser.add_argument("--batch_size",  default=16, type=int, help="batch size per GPU/CPU for evaluatio, default: 16.")
-parser.add_argument("--print_per_batch",  default=1000, type=int, help="how many batches are completed every time for printing progress information, default: 1000.")
+parser.add_argument("--data_path", default=None, type=str, required=True,
+                    help="the data filepath(if it is csv format, Column 0 must be id, Colunm 1 must be seq.")
+parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True,
+                    help="the dataset name for model building.")
+parser.add_argument("--dataset_type", default="protein", type=str, required=True,
+                    help="the dataset type for model building.")
+parser.add_argument("--task_type", default=None, type=str, required=True,
+                    choices=["multi_label", "multi_class", "binary_class"],
+                    help="the task type for model building.")
+parser.add_argument("--model_type", default=None, type=str, required=True,
+                    help="the model type.")
+parser.add_argument("--time_str", default=None, type=str, required=True,
+                    help="the running time string(yyyymmddHimiss) of model building.")
+parser.add_argument("--step", default=None, type=str, required=True,
+                    help="the training global step of model finalization.")
+parser.add_argument("--evaluate", action="store_true",
+                    help="whether to evaluate the predicted results.")
+parser.add_argument("--ground_truth_col_index",  default=None, type=int,
+                    help="the ground truth col index of the ${data_path}, default: None.")
+parser.add_argument("--threshold",  default=0.5, type=float,
+                    help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
+parser.add_argument("--batch_size",  default=16, type=int,
+                    help="batch size per GPU/CPU for evaluation, default: 16.")
+parser.add_argument("--print_per_batch",  default=1000, type=int,
+                    help="how many batches are completed every time for printing progress information, default: 1000.")
 args = parser.parse_args()
 
 
 if __name__ == "__main__":
-    model_dir = "../../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type, args.time_str,
-                                                 args.step if args.step == "best" else "checkpoint-{}".format(args.step))
-    config_dir = "../../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type,  args.time_str)
-    predict_dir = "../../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, args.model_type, args.time_str, "checkpoint-{}".format(args.step))
+    model_dir = "../../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
+                                                    args.model_type, args.time_str,
+                                                    args.step if args.step == "best" else "checkpoint-{}".format(args.step))
+    config_dir = "../../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
+                                                args.model_type,  args.time_str)
+    predict_dir = "../../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
+                                                        args.model_type, args.time_str,
+                                                        "checkpoint-{}".format(args.step))
 
     # Step1: loading the model configuration
     config = load_args(model_dir)
