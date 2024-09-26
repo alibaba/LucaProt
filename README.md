@@ -18,7 +18,7 @@ The GPU version will come soon. Limit inference to a maximum of 100 sequences at
 <center>
 <img src="pics/lucaprot_server.png"/>
 
-LucaProtServer
+LucaProt Server
 </center>
 
 # Introduction    
