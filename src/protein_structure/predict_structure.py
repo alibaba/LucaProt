@@ -138,10 +138,12 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
         cb[chain]['contact-map'] = ContactMap(pdb_filepath, None, chain=chain, c_atom_type="CB")
         return ca, cb
     else:
+        pdb_handle = None
         if os.path.exists(pdb_filepath): # from file
             pdb_handle = open(pdb_filepath, 'r')
             pdb_content = pdb_handle.read()
-        else: # input is pdb content
+        else:
+            # input is pdb content
             pdb_content = pdb_filepath
         structure_container = build_structure_container_for_pdb(pdb_content, chain).with_seqres(sequence)
         # structure_container.chains = {chain: structure_container.chains[chain]}
@@ -149,7 +151,8 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
         mapper = DistanceMapBuilder(atom="CA", glycine_hack=-1)  # start with CA distances
         ca = mapper.generate_map_for_pdb(structure_container)
         cb = mapper.set_atom("CB").generate_map_for_pdb(structure_container)
-        pdb_handle.close()
+        if pdb_handle:
+            pdb_handle.close()
 
         return ca.chains, cb.chains
 
@@ -157,7 +160,7 @@ def calc_distance_maps(pdb_filepath, chain, sequence):
 model, alphabet = None, None
 
 
-def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], truncation_seq_length=4094):
+def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], truncation_seq_length=4094, device=None):
     '''
     use sequence to predict protein embedding matrix or vector(bos)
     :param sample: [protein_id, protein_sequence]
@@ -165,6 +168,7 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
     :param embedding_type: bos or representations
     :param repr_layers: [-1]
     :param truncation_seq_length: [4094,2046,1982,1790,1534,1278,1150,1022]
+    :param device:
     :return: embedding, processed_seq_len
     '''
     global model, alphabet
@@ -180,14 +184,23 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
     assert all(-(model.num_layers + 1) <= i <= model.num_layers for i in repr_layers)
     repr_layers = [(i + model.num_layers + 1) % (model.num_layers + 1) for i in repr_layers]
     model.eval()
+    if device is None:
+        device = next(model.parameters()).device
+    else:
+        model_device = next(model.parameters()).device
+        if device != model_device:
+            model = model.to(device)
+    """
     if torch.cuda.is_available():
         model = model.cuda()
         # print("Transferred model to GPU")
+    """
     converter = BatchConverter(alphabet, truncation_seq_length)
     protein_ids, raw_seqs, tokens = converter([[protein_id, protein_seq]])
     with torch.no_grad():
-        if torch.cuda.is_available():
-            tokens = tokens.to(device="cuda", non_blocking=True)
+        # if torch.cuda.is_available():
+        # tokens = tokens.to(device="cuda", non_blocking=True)
+        tokens = tokens.to(device=device, non_blocking=True)
         try:
             out = model(tokens, repr_layers=repr_layers, return_contacts=False)
             truncate_len = min(truncation_seq_length, len(raw_seqs[0]))
@@ -200,8 +213,12 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
             if e.args[0].startswith("CUDA out of memory"):
                 print(f"Failed (CUDA out of memory) on sequence {sample[0]} of length {len(sample[1])}.")
                 print("Please reduce the 'truncation_seq_length'")
-            raise Exception(e)
-    return None, None
+            if device.type == "cpu":
+                # inufficient cpu memory
+                raise Exception(e)
+            else:
+                # failure in GPU, return None to continue using CPU
+                return None, None
 
 
 if __name__ == "__main__":

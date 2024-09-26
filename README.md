@@ -1,11 +1,25 @@
-# LucaProt
-**LucaProt(DeepProtFunc)** is an open source project developed by **Alibaba** and licensed under the **Apache License (Version 2.0)**.     
+# LucaProt   
+**LucaProt(DeepProtFunc)** is an open source project developed by **Alibaba** and licensed under the **Apache License (Version 2.0)**.
 
 This product contains various third-party components under other open source licenses.     
-See the **NOTICE** file for more information.    
+See the **NOTICE** file for more information.
 
 **Notice:**     
-**This project provides the Python dependency environment installation file, installation commands, and the running command of the trained LucaProt model for inference or prediction, which can be found in this repository. These models are compatible with Linux, Mac OS, and Windows systems, supporting both CPU and GPU configurations for inference tasks.**   
+**This project provides the Python dependency environment installation file, installation commands, and the running command of the trained LucaProt model for inference or prediction, which can be found in this repository. These models are compatible with Linux, Mac OS, and Windows systems, supporting both CPU and GPU configurations for inference tasks.**
+
+
+## TimeLine   
+* 2024/09/24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />: A free CPU version of `LucaProt Server` is available online (http://lucaprot.org). The GPU version will come soon. Limit inference to a maximum of 100 sequences at a time.    
+* 2024/09/01: Optimize inference and prediction code to run on GPU with small graphics memory, such as A10.    
+
+# LucaProt Server<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />        
+LucaProt Server(CPU) is available at: http://lucaprot.org.     
+The GPU version will come soon. Limit inference to a maximum of 100 sequences at a time.     
+<center>
+<img src="pics/lucaprot_server.png"/>
+
+LucaProt Server
+</center>
 
 # Introduction    
 **LucaProt**: A novel deep learning framework that incorporates protein amino acid sequence and structural information to predict protein function.
@@ -207,7 +221,7 @@ python predict_many_samples.py \
 ```
 
 
-## 3) Prediction from the file       
+## 3) Prediction from the file(embedding file exists in advance)       
 
 The test data (small and real) is in [demo.csv](./data/rdrp/demo/demo.csv), where the 7th column of each line is the filename of the structural embedding information prepared in advance.   
 And the structural embedding files store in [embs](./data/rdrp/demo/embs).
@@ -1116,7 +1130,7 @@ The trained model for RdRP identification is available at:
 
 # 12. Contributor
 <a href="http://lucalab.tech/" title="LucaTeam">LucaTeam:</a>    
-<a href="https://scholar.google.com.hk/citations?user=RDbqGTcAAAAJ&hl=en" title="Yong He">Yong He</a>,  <a href="https://scholar.google.com/citations?user=lT3nelQAAAAJ&hl=en" title="Zhaorong Li">Zhaorong Li</a>,  <a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=zA310LMAAAAJ" title="Xin Hou">Xin Hou</a>,  <a href="https://scholar.google.com/citations?user=1KJOH7YAAAAJ&hl=zh-CN&oi=ao" title="Mang Shi">Mang Shi</a>,  <a href="https://scholar.google.com/citations?user=ODcOX4AAAAAJ&hl=zh-CN" title="Mang Shi">Pan Fang</a>
+<a href="https://scholar.google.com.hk/citations?user=RDbqGTcAAAAJ&hl=en" title="Yong He">Yong He</a>,  <a href="https://scholar.google.com/citations?user=lT3nelQAAAAJ&hl=en" title="Zhaorong Li">Zhaorong Li</a>,  <a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=zA310LMAAAAJ" title="Xin Hou">Xin Hou</a>,  <a href="https://scholar.google.com/citations?user=1KJOH7YAAAAJ&hl=zh-CN&oi=ao" title="Mang Shi">Mang Shi</a>
 
 # 13. FTP
 **FTP:** The all data of LucaProt is available at the website: <a href="http://47.93.21.181" title="Open Resources"> Open Resources </a>           
