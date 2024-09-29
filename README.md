@@ -1138,17 +1138,18 @@ The trained model for RdRP identification is available at:
 **Figshare:** https://doi.org/10.6084/m9.figshare.26298802.v13   
 
 # 14. Citation
-the pre-print version:
+the pre-print version:     
+https://www.biorxiv.org/content/10.1101/2023.04.18.537342v3
 
-@article { lucaprot,     
+@article {lucaprot,     
 author = {Xin Hou and Yong He and Pan Fang and Shi-Qiang Mei and Zan Xu and Wei-Chen Wu and Jun-Hua Tian and Shun Zhang and Zhen-Yu Zeng and Qin-Yu Gou and Gen-Yang Xin and Shi-Jia Le and Yin-Yue Xia and Yu-Lan Zhou and Feng-Ming Hui and Yuan-Fei Pan and John-Sebastian Eden and Zhao-Hui Yang and Chong Han and Yue-Long Shu and Deyin Guo and Jun Li and Edward C Holmes and Zhao-Rong Li and Mang Shi},        
-title = {Artificial intelligence redefines RNA virus discovery},      
+title = {Using artificial intelligence to document the hidden RNA virosphere},      
 elocation-id = {2023.04.18.537342},    
 year = {2023},     
 doi = {10.1101/2023.04.18.537342},      
 publisher = {Cold Spring Harbor Laboratory},
-URL = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342 },    
-eprint = {https://www.biorxiv.org/content/early/2023/04/18/2023.04.18.537342.full.pdf },       
+URL = {https://www.biorxiv.org/content/early/2024/08/27/2023.04.18.537342},
+eprint = {https://www.biorxiv.org/content/early/2024/08/27/2023.04.18.537342.full.pdf}, 
 journal = {bioRxiv}        
 }
 
