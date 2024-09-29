@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: lucaprot server">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -274,7 +274,11 @@
       <workItem from="1727268294072" duration="1421000" />
       <workItem from="1727269772705" duration="1094000" />
       <workItem from="1727274429910" duration="1065000" />
-      <workItem from="1727314664695" duration="6904000" />
+      <workItem from="1727314664695" duration="7438000" />
+      <workItem from="1727324101433" duration="356000" />
+      <workItem from="1727510669522" duration="2133000" />
+      <workItem from="1727513458601" duration="841000" />
+      <workItem from="1727575086753" duration="444000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -507,7 +511,14 @@
       <option name="project" value="LOCAL" />
       <updated>1727322693966</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="feature: lucaprot server">
+      <created>1727323225127</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1727323225127</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
