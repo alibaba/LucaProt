@@ -13,7 +13,7 @@ See the **NOTICE** file for more information.
 * 2024/09/01: Optimize inference and prediction code to run on GPU with small graphics memory, such as A10.    
 
 ## LucaProt Server<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />        
-LucaProt Server(CPU) is available at: http://lucaprot.org.     
+LucaProt Server(CPU) is available at: https://lucaprot.org.     
 Limit inference to a maximum of 100 sequences at a time.     
 The GPU version will come soon.    
 <center>
