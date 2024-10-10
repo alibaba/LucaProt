@@ -1131,26 +1131,32 @@ The trained model for RdRP identification is available at:
 
 # 12. Contributor
 <a href="http://lucalab.tech/" title="LucaTeam">LucaTeam:</a>    
-<a href="https://scholar.google.com.hk/citations?user=RDbqGTcAAAAJ&hl=en" title="Yong He">Yong He</a>,  <a href="https://scholar.google.com/citations?user=lT3nelQAAAAJ&hl=en" title="Zhaorong Li">Zhaorong Li</a>,  <a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=zA310LMAAAAJ" title="Xin Hou">Xin Hou</a>,  <a href="https://scholar.google.com/citations?user=1KJOH7YAAAAJ&hl=zh-CN&oi=ao" title="Mang Shi">Mang Shi</a>
+<a href="https://scholar.google.com.hk/citations?user=RDbqGTcAAAAJ&hl=en" title="Yong He">Yong He</a>,
+<a href="https://scholar.google.com/citations?user=lT3nelQAAAAJ&hl=en" title="Zhaorong Li">Zhaorong Li</a>,
+<a href="https://scholar.google.com/citations?view_op=list_works&hl=zh-CN&user=zA310LMAAAAJ" title="Xin Hou">Xin Hou</a>,
+<a href="https://scholar.google.com/citations?user=1KJOH7YAAAAJ&hl=zh-CN&oi=ao" title="Mang Shi">Mang Shi</a>,
+<a href="https://scholar.google.com/citations?user=ODcOX4AAAAAJ&hl=zh-CN" title="Pan Fang">Pan Fang</a> 
+
+
 
 # 13. FTP
 **FTP:** The all data of LucaProt is available at the website: <a href="http://47.93.21.181" title="Open Resources"> Open Resources </a>           
 **Figshare:** https://doi.org/10.6084/m9.figshare.26298802.v13   
 
 # 14. Citation
-the pre-print version:     
-https://www.biorxiv.org/content/10.1101/2023.04.18.537342v3
+Cell:     
+<a href="https://www.cell.com/cell/fulltext/S0092-8674(24)01085-7">https://www.cell.com/cell/fulltext/S0092-8674(24)01085-7</a>
 
-@article {lucaprot,     
-author = {Xin Hou and Yong He and Pan Fang and Shi-Qiang Mei and Zan Xu and Wei-Chen Wu and Jun-Hua Tian and Shun Zhang and Zhen-Yu Zeng and Qin-Yu Gou and Gen-Yang Xin and Shi-Jia Le and Yin-Yue Xia and Yu-Lan Zhou and Feng-Ming Hui and Yuan-Fei Pan and John-Sebastian Eden and Zhao-Hui Yang and Chong Han and Yue-Long Shu and Deyin Guo and Jun Li and Edward C Holmes and Zhao-Rong Li and Mang Shi},        
-title = {Using artificial intelligence to document the hidden RNA virosphere},      
-elocation-id = {2023.04.18.537342},    
-year = {2023},     
-doi = {10.1101/2023.04.18.537342},      
-publisher = {Cold Spring Harbor Laboratory},
-URL = {https://www.biorxiv.org/content/early/2024/08/27/2023.04.18.537342},
-eprint = {https://www.biorxiv.org/content/early/2024/08/27/2023.04.18.537342.full.pdf}, 
-journal = {bioRxiv}        
+@article {LucaProt,     
+author = {Xin Hou, Yong He, Pan Fang, Shi-Qiang Mei, Zan Xu, Wei-Chen Wu, Jun-Hua Tian,  Shun Zhang, Zhen-Yu Zeng, Qin-Yu Gou, Gen-Yang Xin, Shi-Jia Le, Yin-Yue Xia, Yu-Lan Zhou, Feng-Ming Hui, Yuan-Fei Pan,
+          John-Sebastian Eden, Zhao-Hui Yang, Chong Han, Yue-Long Shu, Deyin Guo, Jun Li, Edward C Holmes, Zhao-Rong Li and Mang Shi},        
+title = {Using artificial intelligence to document the hidden RNA virosphere},         
+year = {2024},       
+doi = {10.1016/j.cell.2024.09.027},         
+publisher = {Cell Press},   
+URL = {https://doi.org/10.1016/j.cell.2024.09.027},   
+eprint = {https://www.cell.com/cell/fulltext/S0092-8674(24)01085-7},    
+journal = {Cell}            
 }
 
 
