@@ -214,7 +214,7 @@ def predict_embedding(sample, trunc_type, embedding_type, repr_layers=[-1], trun
                 print(f"Failed (CUDA out of memory) on sequence {sample[0]} of length {len(sample[1])}.")
                 print("Please reduce the 'truncation_seq_length'")
             if device.type == "cpu":
-                # inufficient cpu memory
+                # insufficient cpu memory
                 raise Exception(e)
             else:
                 # failure in GPU, return None to continue using CPU
