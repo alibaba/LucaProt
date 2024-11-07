@@ -79,7 +79,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 # 3. Inference          
 You can simply use this project to infer or predict for unknown sequences.    
 
-## 1) Prediction from one sample       
+## 1) Prediction from one sequence        
 
 ```
 cd LucaProt/src/prediction/ 
@@ -162,8 +162,12 @@ python predict_one_sample.py \
 * **--gpu_id**:
   int, the gpu id to use(**-1 for cpu**).         
 
+* **--torch_hub_dir(optional)**:    
+  str, the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)
 
-## 2) Prediction from many samples       
+
+
+## 2) Prediction from many sequences        
 the samples are in *.fasta, sample by sample prediction.     
 
 * **--fasta_file**    
@@ -312,9 +316,11 @@ python predict.py \
 * **--print_per_batch**      
   int,  how many batches are completed every time for printing progress information, default: 1000.
 
-* gpu_id:
+* **--gpu_id**:
   int, the gpu id to use(**-1 for cpu**).     
 
+* **--torch_hub_dir(optional)**:    
+  str, he torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)  
 
 **Note:** the embedding matrices of all the proteins in this file need to prepare in advance(**$emb_dir**).
 

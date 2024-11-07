@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: update readme">
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: add &quot;specifies where the llm is stored&quot;">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/predict_structure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/predict_many_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_many_samples.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/predict_one_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_one_sample.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,7 +295,14 @@
       <workItem from="1730082208292" duration="26000" />
       <workItem from="1730082669247" duration="42000" />
       <workItem from="1730094621822" duration="29000" />
-      <workItem from="1730444245927" duration="21000" />
+      <workItem from="1730444245927" duration="173000" />
+      <workItem from="1730455416686" duration="777000" />
+      <workItem from="1730706542493" duration="866000" />
+      <workItem from="1730897582995" duration="597000" />
+      <workItem from="1730900303518" duration="2000" />
+      <workItem from="1730900362240" duration="90000" />
+      <workItem from="1730901896647" duration="690000" />
+      <workItem from="1730944974658" duration="4814000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -560,7 +570,14 @@
       <option name="project" value="LOCAL" />
       <updated>1728561794928</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="feature: update readme">
+      <created>1730444280584</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1730444280584</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -584,7 +601,8 @@
     <MESSAGE value="feature: optimized inference code" />
     <MESSAGE value="feature: lucaprot server" />
     <MESSAGE value="feature: update readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature: update readme" />
+    <MESSAGE value="feature: add &quot;specifies where the llm is stored&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature: add &quot;specifies where the llm is stored&quot;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/LucaProt$test.coverage" NAME="test Coverage Results" MODIFIED="1681466342540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models/rdrp_40_append/protein/binary_class/sefn/20230201140320/checkpoint-100000/sequence" />

@@ -77,7 +77,9 @@ def load_args(log_dir):
     :param log_dir:
     :return: config
     '''
-    print("log dir: ", log_dir)
+    print("-" * 25 + "log dir: " + "-" * 25)
+    print(log_dir)
+    print("-" * 60)
     log_filepath = os.path.join(log_dir, "logs.txt")
     if not os.path.exists(log_filepath):
         raise Exception("%s not exists" % log_filepath)
@@ -137,10 +139,12 @@ def load_model(args, model_dir):
             label_name = line.strip()
             label_id_2_name[len(label_id_2_name)] = label_name
             label_name_2_id[label_name] = len(label_name_2_id)
-    print("-----------label_id_2_name:------------")
+
+    print("-" * 25 + "label_id_2_name: " + "-" * 25)
     if len(label_id_2_name) < 20:
         print(label_id_2_name)
     print("label size: ", len(label_id_2_name))
+    print("-" * 60)
 
     return config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id
 
@@ -330,10 +334,12 @@ def transform_sample_2_feature(
                     if embedding_padding_length > 0:
                         if pad_on_left:
                             embedding_attention_mask = [0 if mask_padding_with_zero else 1] * embedding_padding_length + embedding_attention_mask
-                            embedding_info = np.pad(embedding_info, [(embedding_padding_length, 0), (0, 0)], mode='constant', constant_values=pad_token)
+                            embedding_info = np.pad(embedding_info, [(embedding_padding_length, 0), (0, 0)], mode='constant',
+                                                    constant_values=pad_token)
                         else:
                             embedding_attention_mask = embedding_attention_mask + [0 if mask_padding_with_zero else 1] * embedding_padding_length
-                            embedding_info = np.pad(embedding_info, [(0, embedding_padding_length), (0, 0)], mode='constant', constant_values=pad_token)
+                            embedding_info = np.pad(embedding_info, [(0, embedding_padding_length), (0, 0)], mode='constant',
+                                                    constant_values=pad_token)
             elif args.embedding_type == "bos":
                 embedding_info = embedding["bos_representations"][36].numpy()
                 embedding_attention_mask = None
@@ -396,9 +402,11 @@ def transform_sample_2_feature(
             }
         )
     if args.embedding_type:
-        batch_input["embedding_info"] = torch.tensor(np.array([f.embedding_info for f in features], dtype=np.float32), dtype=torch.float32).to(args.device)
+        batch_input["embedding_info"] = torch.tensor(np.array([f.embedding_info for f in features], dtype=np.float32),
+                                                     dtype=torch.float32).to(args.device)
         if args.embedding_type != "bos":
-            batch_input["embedding_attention_mask"] = torch.tensor([f.embedding_attention_mask for f in features], dtype=torch.long).to(args.device)
+            batch_input["embedding_attention_mask"] = torch.tensor([f.embedding_attention_mask for f in features],
+                                                                   dtype=torch.long).to(args.device)
 
     return batch_info, batch_input
 
@@ -516,12 +524,19 @@ def predict_multi_label(
     preds = relevant_indexes((probs >= args.threshold).astype(int))
     res = []
     for idx, info in enumerate(batch_info):
-        res.append([info[0], info[1], [float(probs[idx][label_index]) for label_index in preds[idx]],
-                    [label_id_2_name[label_index] for label_index in preds[idx]], *info[2:]])
+        res.append(
+            [
+                info[0], info[1],
+                [float(probs[idx][label_index]) for label_index in preds[idx]],
+                [label_id_2_name[label_index] for label_index in preds[idx]], *info[2:]
+            ]
+        )
     return res
 
 
 parser = argparse.ArgumentParser(description="Prediction for RdRP(embedding in advance)")
+parser.add_argument("--torch_hub_dir", default=None, type=str,
+                    help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)")
 parser.add_argument("--data_path", default=None, type=str, required=True,
                     help="the data filepath(if it is csv format, Column 0 must be id, Colunm 1 must be seq.")
 parser.add_argument("--emb_dir", default=None, type=str,
@@ -550,27 +565,38 @@ parser.add_argument("--threshold",  default=0.5, type=float,
 parser.add_argument("--batch_size",  default=16, type=int,
                     help="batch size per GPU/CPU for evaluatio, default: 16.")
 parser.add_argument("--print_per_batch",  default=1000,
-                    type=int, help="how many batches are completed every time for printing progress information, default: 1000.")
+                    type=int,
+                    help="how many batches are completed every time for printing progress information, default: 1000.")
 parser.add_argument("--gpu_id", default=None, type=int,
                     help="the used gpu index, -1 for cpu")
 args = parser.parse_args()
 
+if args.torch_hub_dir is not None:
+    if not os.path.exists(args.torch_hub_dir):
+        os.makedirs(args.torch_hub_dir)
+    os.environ['TORCH_HOME'] = args.torch_hub_dir
 
 if __name__ == "__main__":
-    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                                 args.model_type, args.time_str,
-                                                 args.step if args.step == "best" else "checkpoint-{}".format(args.step))
-    config_dir = "../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                             args.model_type,  args.time_str)
-    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                                     args.model_type, args.time_str,
-                                                     args.step if args.step == "best" else "checkpoint-{}".format(args.step))
+    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type, args.time_str,
+        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
+    )
+    config_dir = "../logs/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type,  args.time_str
+    )
+    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type, args.time_str,
+        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
+    )
 
     # Step1: loading the model configuration
     config = load_args(config_dir)
     print("-" * 25 + "config:" + "-" * 25)
     print(config)
-    print("-" * 50)
+    print("-" * 60)
     if config:
         args.dataset_name = config["dataset_name"]
         args.dataset_type = config["dataset_type"]
@@ -623,13 +649,16 @@ if __name__ == "__main__":
 
     print("-" * 25 + "args:" + "-" * 25)
     print(args.__dict__.items())
+    print("-" * 60)
     print("-" * 25 + "model_dir list:" + "-" * 25)
     print(os.listdir(model_dir))
+    print("-" * 60)
 
     if args.device.type == 'cpu':
         print("Running Device is CPU!")
     else:
         print("Running Device is GPU!")
+    print("-" * 60)
 
     # Step2: loading the tokenizer and model
     config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = \
@@ -701,7 +730,12 @@ if __name__ == "__main__":
         raise Exception("not csv file.")
     # total batch number
     total_batch_num = (total_cnt + args.batch_size - 1 - had_done_cnt)//args.batch_size
-    print("total num: %d, had done num: %d, batch size: %d, batch_num: %d" %(total_cnt, had_done_cnt, args.batch_size, total_batch_num))
+    print("total num: %d, had done num: %d, batch size: %d, batch_num: %d" % (
+        total_cnt,
+        had_done_cnt,
+        args.batch_size,
+        total_batch_num
+    ))
     # Step 3: prediction
     with open(pred_result_path,  write_mode) as wfp:
         writer = csv.writer(wfp)
@@ -764,10 +798,12 @@ if __name__ == "__main__":
                 done_batch_num += 1
                 if done_batch_num % args.print_per_batch == 0:
                     llprint("batch: %10d, done rate: %0.2f%%" % (done_batch_num, done_batch_num * 100/total_batch_num))
-                    print("done total: %d, p: %d, n: %d, per batch use time: %f" % (done_batch_num * args.batch_size + had_done_cnt,
-                                                            predict_stats["1"] if "1" in predict_stats else (predict_stats[1] if 1 in predict_stats else 0),
-                                                            predict_stats["0"] if "0" in predict_stats else (predict_stats[0] if 0in predict_stats else 0),
-                                                            use_time/done_batch_num))
+                    print("done total: %d, p: %d, n: %d, per batch use time: %f" % (
+                        done_batch_num * args.batch_size + had_done_cnt,
+                        predict_stats["1"] if "1" in predict_stats else (predict_stats[1] if 1 in predict_stats else 0),
+                        predict_stats["0"] if "0" in predict_stats else (predict_stats[0] if 0in predict_stats else 0),
+                        use_time/done_batch_num
+                    ))
         if len(row_batch) > 0:
             begin_time = time.time()
             res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row_batch)
@@ -789,10 +825,12 @@ if __name__ == "__main__":
                 writer.writerow(item)
             done_batch_num += 1
             llprint("batch: %10d, done rate: %0.2f%%" %(done_batch_num, done_batch_num*100/total_batch_num))
-            print("done total: %d, p: %d, n: %d, per batch use time: %f" % (total_cnt,
-                                                   predict_stats["1"] if "1" in predict_stats else (predict_stats[1] if 1 in predict_stats else 0),
-                                                   predict_stats["0"] if "0" in predict_stats else (predict_stats[0] if 0in predict_stats else 0),
-                                                                            use_time/done_batch_num))
+            print("done total: %d, p: %d, n: %d, per batch use time: %f" % (
+                total_cnt,
+                predict_stats["1"] if "1" in predict_stats else (predict_stats[1] if 1 in predict_stats else 0),
+                predict_stats["0"] if "0" in predict_stats else (predict_stats[0] if 0in predict_stats else 0),
+                use_time/done_batch_num
+            ))
         print("prediction done. total batch: %d, use time: %f." % (done_batch_num, use_time))
 
     # plot the Sequence Length Distribution
@@ -802,7 +840,13 @@ if __name__ == "__main__":
     seq_len_list = []
     for item in seq_len_stats.items():
         seq_len_list.extend([item[0]] * item[1])
-    plot_bins(seq_len_list, xlabel="sequence length", ylabel="distribution", bins=40, filepath=seq_length_distribution_pic_savepath)
+    plot_bins(
+        seq_len_list,
+        xlabel="sequence length",
+        ylabel="distribution",
+        bins=40,
+        filepath=seq_length_distribution_pic_savepath
+    )
 
     # calc metrics
     evaluate_metrics = None
@@ -842,7 +886,11 @@ if __name__ == "__main__":
                     predict_pred_list.append(predict_label_id)
                     ground_truth_list.append(ground_truth_id)
 
-        evaluate_metrics = evaluate_func(np.array(ground_truth_list), np.array(predict_pred_list), savepath=confusion_matrix_savepath)
+        evaluate_metrics = evaluate_func(
+            np.array(ground_truth_list),
+            np.array(predict_pred_list),
+            savepath=confusion_matrix_savepath
+        )
         print("predict metrics: ")
         print(evaluate_metrics)
     with open(predict_metrics_savepath, "w") as wfp:
@@ -878,11 +926,11 @@ if __name__ == "__main__":
 
         wfp.write("ground truth statistics:\n")
         for item in sorted(ground_truth_stats.items(), key=lambda x:x[0]):
-            wfp.write("%s=%s\n" %(item[0], item[1]))
+            wfp.write("%s=%s\n" % (item[0], item[1]))
         wfp.write("#" * 50 + "\n")
         wfp.write("prediction statistics:\n")
         for item in sorted(predict_stats.items(), key=lambda x:x[0]):
-            wfp.write("%s=%s\n" %(item[0], item[1]))
+            wfp.write("%s=%s\n" % (item[0], item[1]))
     print("-" * 25 + "predict stats:" + "-" * 25)
     print("ground truth: ")
     print(ground_truth_stats)
