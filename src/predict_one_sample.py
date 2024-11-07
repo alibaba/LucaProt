@@ -76,7 +76,9 @@ def load_args(log_dir):
     :param log_dir:
     :return: config
     '''
-    print("log dir: ", log_dir)
+    print("-" * 25 + "log dir: " + "-" * 25)
+    print(log_dir)
+    print("-" * 60)
     log_filepath = os.path.join(log_dir, "logs.txt")
     if not os.path.exists(log_filepath):
         raise Exception("%s not exists" % log_filepath)
@@ -137,10 +139,12 @@ def load_model(
             label_name = line.strip()
             label_id_2_name[len(label_id_2_name)] = label_name
             label_name_2_id[label_name] = len(label_name_2_id)
-    print("-----------label_id_2_name:------------")
+
+    print("-" * 25 + "label_id_2_name: " + "-" * 25)
     if len(label_id_2_name) < 20:
         print(label_id_2_name)
     print("label size: ", len(label_id_2_name))
+    print("-" * 60)
 
     return config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id
 
@@ -245,7 +249,14 @@ def transform_sample_2_feature(
         struct_input_ids = inputs["input_ids"]
         real_struct_node_size = len(struct_input_ids)
         padding_length = args.struct_max_length - real_struct_node_size if real_struct_node_size < args.struct_max_length else 0
-        pdb, mean_plddt, ptm, processed_seq = predict_pdb([prot_id, protein_seq], args.trunc_type, num_recycles=4, truncation_seq_length=args.truncation_seq_length, chunk_size=64, cpu_type="cpu-offload")
+        pdb, mean_plddt, ptm, processed_seq = predict_pdb(
+            [prot_id, protein_seq],
+            args.trunc_type,
+            num_recycles=4,
+            truncation_seq_length=args.truncation_seq_length,
+            chunk_size=64,
+            cpu_type="cpu-offload"
+        )
         # if the savepath not exists, create it
         if args.pdb_dir:
             if not os.path.exists(args.pdb_dir):
@@ -355,17 +366,18 @@ def transform_sample_2_feature(
         embedding_info = None
         embedding_attention_mask = None
     features.append(
-        InputFeatures(input_ids=input_ids,
-                      attention_mask=attention_mask,
-                      token_type_ids=token_type_ids,
-                      real_token_len=real_token_len,
-                      struct_input_ids=struct_input_ids,
-                      struct_contact_map=struct_contact_map,
-                      real_struct_node_size=real_struct_node_size,
-                      embedding_info=embedding_info,
-                      embedding_attention_mask=embedding_attention_mask,
-                      label=None
-                      )
+        InputFeatures(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            real_token_len=real_token_len,
+            struct_input_ids=struct_input_ids,
+            struct_contact_map=struct_contact_map,
+            real_struct_node_size=real_struct_node_size,
+            embedding_info=embedding_info,
+            embedding_attention_mask=embedding_attention_mask,
+            label=None
+        )
     )
     batch_input = {}
     # "labels": torch.tensor([f.label for f in features], dtype=torch.long).to(args.device),
@@ -523,6 +535,8 @@ def predict_multi_label(
 
 def main():
     parser = argparse.ArgumentParser(description="Prediction RdRP")
+    parser.add_argument("--torch_hub_dir", default=None, type=str,
+                        help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)")
     parser.add_argument("--protein_id", default=None, type=str, required=True,
                         help="the protein id")
     parser.add_argument("--sequence", default=None, type=str, required=True,
@@ -552,26 +566,36 @@ def main():
                         help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
     parser.add_argument("--gpu_id", default=None, type=int,
                         help="the used gpu index, -1 for cpu")
-    args = parser.parse_args()
-    return args
+    input_args = parser.parse_args()
+    return input_args
 
 
 if __name__ == "__main__":
     args = main()
-    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                                 args.model_type, args.time_str,
-                                                 args.step if args.step == "best" else "checkpoint-{}".format(args.step))
-    config_dir = "../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                             args.model_type,  args.time_str)
-    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                                     args.model_type, args.time_str,
-                                                     args.step if args.step == "best" else "checkpoint-{}".format(args.step))
+    if args.torch_hub_dir is not None:
+        if not os.path.exists(args.torch_hub_dir):
+            os.makedirs(args.torch_hub_dir)
+        os.environ['TORCH_HOME'] = args.torch_hub_dir
+    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type, args.time_str,
+        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
+    )
+    config_dir = "../logs/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type,  args.time_str
+    )
+    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type, args.time_str,
+        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
+    )
 
     # Step1: loading the model configuration
     config = load_args(config_dir)
     print("-" * 25 + "config:" + "-" * 25)
     print(config)
-    print("-" * 50)
+    print("-" * 60)
     if config:
         args.dataset_name = config["dataset_name"]
         args.dataset_type = config["dataset_type"]
@@ -621,13 +645,16 @@ if __name__ == "__main__":
 
     print("-" * 25 + "args:" + "-" * 25)
     print(args.__dict__.items())
+    print("-" * 60)
     print("-" * 25 + "model_dir list:" + "-" * 25)
     print(os.listdir(model_dir))
+    print("-" * 60)
 
     if args.device.type == 'cpu':
         print("Running Device is CPU!")
     else:
         print("Running Device is GPU!")
+    print("-" * 60)
 
     # Step2: loading the tokenizer and model
     config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id =\
@@ -640,7 +667,7 @@ if __name__ == "__main__":
     elif args.task_type in ["multi-class", "multi_class"]:
         predict_func = predict_multi_class
     else:
-        raise Exception("Not Support Task Type: %s" %args.task_type)
+        raise Exception("Not Support Task Type: %s" % args.task_type)
     row = [args.protein_id, args.sequence]
     # Step 3: prediction
     res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)

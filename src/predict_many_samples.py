@@ -77,7 +77,9 @@ def load_args(log_dir):
     :param log_dir:
     :return: config
     '''
-    print("log dir: ", log_dir)
+    print("-" * 25 + "log dir: " + "-" * 25)
+    print(log_dir)
+    print("-" * 60)
     log_filepath = os.path.join(log_dir, "logs.txt")
     if not os.path.exists(log_filepath):
         raise Exception("%s not exists" % log_filepath)
@@ -105,8 +107,10 @@ def load_model(args, model_dir):
     # for sequence
     subword = None
     if args.has_seq_encoder:
-        seq_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "sequence"),
-                                                        do_lower_case=args.do_lower_case)
+        seq_tokenizer = tokenizer_class.from_pretrained(
+            os.path.join(model_dir, "sequence"),
+            do_lower_case=args.do_lower_case
+        )
         if args.subword:
             bpe_codes_prot = codecs.open(args.codes_file)
             subword = BPE(bpe_codes_prot, merges=-1, separator='')
@@ -114,8 +118,10 @@ def load_model(args, model_dir):
         seq_tokenizer = None
 
     if args.has_struct_encoder:
-        struct_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "struct"),
-                                                           do_lower_case=args.do_lower_case)
+        struct_tokenizer = tokenizer_class.from_pretrained(
+            os.path.join(model_dir, "struct"),
+            do_lower_case=args.do_lower_case
+        )
     else:
         struct_tokenizer = None
 
@@ -135,10 +141,12 @@ def load_model(args, model_dir):
             label_name = line.strip()
             label_id_2_name[len(label_id_2_name)] = label_name
             label_name_2_id[label_name] = len(label_name_2_id)
-    print("-----------label_id_2_name:------------")
+
+    print("-" * 25 + "label_id_2_name: " + "-" * 25)
     if len(label_id_2_name) < 20:
         print(label_id_2_name)
     print("label size: ", len(label_id_2_name))
+    print("-" * 60)
 
     return config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id
 
@@ -527,6 +535,8 @@ def predict_multi_label(
 
 def main():
     parser = argparse.ArgumentParser(description="Prediction RdRP")
+    parser.add_argument("--torch_hub_dir", default=None, type=str,
+                        help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)")
     parser.add_argument("--fasta_file", default=None, type=str, required=True,
                         help="fasta file path")
     parser.add_argument("--save_file", default=None, type=str, required=True,
@@ -557,12 +567,16 @@ def main():
     parser.add_argument("--print_per_number", default=100, type=int,
                         help="print per number")
     parser.add_argument("--gpu_id", default=None, type=int, help="the used gpu index, -1 for cpu")
-    args = parser.parse_args()
-    return args
+    input_args = parser.parse_args()
+    return input_args
 
 
 if __name__ == "__main__":
     args = main()
+    if args.torch_hub_dir is not None:
+        if not os.path.exists(args.torch_hub_dir):
+            os.makedirs(args.torch_hub_dir)
+        os.environ['TORCH_HOME'] = args.torch_hub_dir
     if not os.path.exists(args.fasta_file):
         print("the input fasta file: %s not exists!" % args.fasta_file)
     if os.path.exists(args.save_file):
@@ -571,20 +585,26 @@ if __name__ == "__main__":
         dirpath = os.path.dirname(args.save_file)
         if not os.path.exists(dirpath):
             os.makedirs(dirpath)
-    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                                 args.model_type, args.time_str,
-                                                 args.step if args.step == "best" else "checkpoint-{}".format(args.step))
-    config_dir = "../logs/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                             args.model_type,  args.time_str)
-    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type,
-                                                     args.model_type, args.time_str,
-                                                     args.step if args.step == "best" else "checkpoint-{}".format(args.step))
+    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type, args.time_str,
+        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
+    )
+    config_dir = "../logs/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type,  args.time_str
+    )
+    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (
+        args.dataset_name, args.dataset_type, args.task_type,
+        args.model_type, args.time_str,
+        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
+    )
 
     # Step1: loading the model configuration
     config = load_args(config_dir)
     print("-" * 25 + "config:" + "-" * 25)
     print(config)
-    print("-" * 50)
+    print("-" * 60)
     if config:
         args.dataset_name = config["dataset_name"]
         args.dataset_type = config["dataset_type"]
@@ -634,13 +654,16 @@ if __name__ == "__main__":
 
     print("-" * 25 + "args:" + "-" * 25)
     print(args.__dict__.items())
+    print("-" * 60)
     print("-" * 25 + "model_dir list:" + "-" * 25)
     print(os.listdir(model_dir))
+    print("-" * 60)
 
     if args.device.type == 'cpu':
         print("Running Device is CPU!")
     else:
         print("Running Device is GPU!")
+    print("-" * 60)
 
     # Step2: loading the tokenizer and model
     config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = \
@@ -653,7 +676,7 @@ if __name__ == "__main__":
     elif args.task_type in ["multi-class", "multi_class"]:
         predict_func = predict_multi_class
     else:
-        raise Exception("Not Support Task Type: %s" %args.task_type)
+        raise Exception("Not Support Task Type: %s" % args.task_type)
     done = 0
     with open(args.save_file, "w") as wfp:
         writer = csv.writer(wfp)
