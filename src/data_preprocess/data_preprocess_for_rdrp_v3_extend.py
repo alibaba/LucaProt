@@ -73,10 +73,16 @@ for idx, dataset_type in enumerate(["train.csv", "dev.csv", "test.csv"]):
             elif idx == 2:
                 test_dataset_protein_id_set.add(protein_id)
 print("positive_num: ", positive_num)
-print("train %d, dev: %d, test: %d" % (len(train_dataset_protein_id_set), len(dev_dataset_protein_id_set), len(test_dataset_protein_id_set)))
+print("train %d, dev: %d, test: %d" % (
+    len(train_dataset_protein_id_set),
+    len(dev_dataset_protein_id_set),
+    len(test_dataset_protein_id_set)
+))
 
 # append RT(reverse transcriptase) and DNA negative samples
-append_negative_rt_pfam_acc_list, append_negative_dna_pfam_acc_list = ['PF00078', 'PF07727', 'PF13456'], ['PF00940', 'PF00476', 'PF11772', 'PF11705']
+append_negative_rt_pfam_acc_list, append_negative_dna_pfam_acc_list = \
+    ['PF00078', 'PF07727', 'PF13456'], \
+    ['PF00940', 'PF00476', 'PF11772', 'PF11705']
 all_negative_fasta_filepath = "../data/rdrp/non_virus_sequence.fasta"
 all_negative_info_filepath = "../data/rdrp/non-virus.info.txt"
 
@@ -118,8 +124,10 @@ with open(all_negative_info_filepath, "r") as rfp:
                 rt_exists_num[2] += 1
                 continue
             seq = all_negative_fasta_info[uniprot_id][1]
-            rt_sequence_list.append(SeqRecord(Seq(seq, None),
-                                              id=protein_id[1:] if protein_id and protein_id[0] == ">" else protein_id, description=""))
+            rt_sequence_list.append(
+                SeqRecord(Seq(seq, None),
+                          id=protein_id[1:] if protein_id and protein_id[0] == ">" else protein_id, description="")
+            )
         elif pfam_acc in append_negative_dna_pfam_acc_list and uniprot_id in all_negative_fasta_info:
             protein_id = all_negative_fasta_info[uniprot_id][0]
             if protein_id in train_dataset_protein_id_set:
@@ -132,8 +140,10 @@ with open(all_negative_info_filepath, "r") as rfp:
                 dna_exists_num[2] += 1
                 continue
             seq = all_negative_fasta_info[uniprot_id][1]
-            dna_sequence_list.append(SeqRecord(Seq(seq, None),
-                                              id=protein_id[1:] if protein_id and protein_id[0] == ">" else protein_id, description=""))
+            dna_sequence_list.append(
+                SeqRecord(Seq(seq, None),
+                          id=protein_id[1:] if protein_id and protein_id[0] == ">" else protein_id, description="")
+            )
 print("rt exists: ", rt_exists_num)
 print("rt sequence number: %d" % len(rt_sequence_list))
 write_fasta(append_negative_rt_filepath, rt_sequence_list)

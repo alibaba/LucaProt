@@ -36,7 +36,15 @@ except ImportError:
 
 
 class GenerateTFRecord(object):
-    def __init__(self, prot_list, label_2_id, npz_dir, save_path, label_type, num_shards=30):
+    def __init__(
+            self,
+            prot_list,
+            label_2_id,
+            npz_dir,
+            save_path,
+            label_type,
+            num_shards=30
+    ):
         self.prot_list = prot_list
         self.label_2_id = label_2_id
         self.npz_dir = npz_dir
@@ -148,15 +156,55 @@ class GenerateTFRecord(object):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--dataset_type', type=str, default='train', choices=['train', 'dev', 'test'], help="dataset filepath")
-    parser.add_argument('--label_type', type=str, default='molecular_function', choices=['molecular_function', 'biological_process', 'cellular_component'], help="label filepath")
-    parser.add_argument('--label_path', type=str, default=None, help="label filepath")
-    parser.add_argument('--prot_id_path', type=str, default=None,
-                        help="Input file (*.txt) with a set of protein IDs with distMAps in npz_dir.")
-    parser.add_argument('--npz_dir', type=str, default=None, help="Directory with distance maps saved in *.npz format to be loaded.")
-    parser.add_argument('--num_threads', type=int, default=20, help="Number of threads (CPUs) to use in the computation.")
-    parser.add_argument('--num_shards', type=int, default=20, help="Number of tfrecord files per protein set.")
-    parser.add_argument('--save_path', type=str, default=None,  help="Directory with tfrecord files for model training.")
+    parser.add_argument('--dataset_type',
+                        type=str,
+                        default='train',
+                        choices=['train', 'dev', 'test'],
+                        help="dataset filepath"
+                        )
+    parser.add_argument(
+        '--label_type',
+        type=str,
+        default='molecular_function',
+        choices=['molecular_function', 'biological_process', 'cellular_component'],
+        help="label type"
+    )
+    parser.add_argument(
+        '--label_path',
+        type=str,
+        default=None,
+        help="label filepath"
+    )
+    parser.add_argument(
+        '--prot_id_path',
+        type=str,
+        default=None,
+        help="Input file (*.txt) with a set of protein IDs with distMAps in npz_dir."
+    )
+    parser.add_argument(
+        '--npz_dir',
+        type=str,
+        default=None,
+        help="Directory with distance maps saved in *.npz format to be loaded."
+    )
+    parser.add_argument(
+        '--num_threads',
+        type=int,
+        default=20,
+        help="Number of threads (CPUs) to use in the computation."
+    )
+    parser.add_argument(
+        '--num_shards',
+        type=int,
+        default=20,
+        help="Number of tfrecord files per protein set."
+    )
+    parser.add_argument(
+        '--save_path',
+        type=str,
+        default=None,
+        help="Directory with tfrecord files for model training."
+    )
     args = parser.parse_args()
 
     print("#" * 50)
@@ -167,9 +215,22 @@ if __name__ == "__main__":
     label_2_id = {v: idx for idx, v in enumerate(load_labels(args.label_path, header=True))}
 
     args.save_path = os.path.join(args.save_path, args.dataset_type, args.label_type)
-    tfr = GenerateTFRecord(prot_id_list, label_2_id, args.npz_dir, args.save_path, args.label_type, num_shards=args.num_shards)
-    tfr.run(num_threads=args.num_threads)
-    print("%s %s label size: %d" % (args.dataset_type, args.label_type, len(tfr.labels)))
+    tfr = GenerateTFRecord(
+        prot_id_list,
+        label_2_id,
+        args.npz_dir,
+        args.save_path,
+        args.label_type,
+        num_shards=args.num_shards
+    )
+    tfr.run(
+        num_threads=args.num_threads
+    )
+    print("%s %s label size: %d" % (
+        args.dataset_type,
+        args.label_type,
+        len(tfr.labels)
+    ))
 
     # python tf_records_generator.py --dataset_type train --label_type biological_process --label_path ../dataset/go/protein/multi_label/label_biological_process.txt --prot_id_path ../dataset/go/protein/multi_label/train.txt --npz_dir ../dataset/go/protein/multi_label/npz/ --save_path ../dataset/go/protein/multi_label/tfrecords --num_shards 1 --num_threads 1
     # python tf_records_generator.py --dataset_type dev --label_type biological_process --label_path ../dataset/go/protein/multi_label/label_biological_process.txt --prot_id_path ../dataset/go/protein/multi_label/dev.txt --npz_dir ../dataset/go/protein/multi_label/npz/ --save_path ../dataset/go/protein/multi_label/tfrecords --num_shards 1 --num_threads 1

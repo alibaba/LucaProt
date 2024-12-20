@@ -52,8 +52,8 @@ def get_args():
     '''For Tokenize '''
     parser.add_argument("--seq",  type=str, default=None, help="the sequence that want to tokenize")
 
-    args = parser.parse_args()
-    return args
+    run_args = parser.parse_args()
+    return run_args
 
 
 def read_fasta(filepath, exclude):
@@ -131,20 +131,32 @@ def fasta_to_corpus(input_filepath, save_filepath):
 
 
 def learn(args):
-    learn_bpe(infile=open(args.infile, "r"), outfile=open(args.outfile, "w"),
-              min_frequency=args.min_frequency, verbose=args.verbose,
-              is_dict=args.is_dict, num_symbols=args.num_symbols, num_workers=args.num_workers)
+    learn_bpe(
+        infile=open(args.infile, "r"),
+        outfile=open(args.outfile, "w"),
+        min_frequency=args.min_frequency,
+        verbose=args.verbose,
+        is_dict=args.is_dict,
+        num_symbols=args.num_symbols,
+        num_workers=args.num_workers
+    )
 
 
 def apply(args):
     bpe_codes_prot = codecs.open(args.codes_file)
     bpe = BPE(codes=bpe_codes_prot)
-    bpe.process_lines(args.infile, open(args.outfile, "w"), num_workers=args.num_workers)
+    bpe.process_lines(
+        args.infile,
+        open(args.outfile, "w"),
+        num_workers=args.num_workers
+    )
 
 
 def vocab(args):
-    get_vocab(open(args.infile, "r"),
-              open(args.outfile, "w"))
+    get_vocab(
+        open(args.infile, "r"),
+        open(args.outfile, "w")
+    )
 
 
 def subword_vocab_2_token_vocab(args):
@@ -172,58 +184,58 @@ def tokenize(args):
 
 
 if __name__ == "__main__":
-    args = get_args()
-    for attr, value in sorted(args.__dict__.items()):
+    input_args = get_args()
+    for attr, value in sorted(input_args.__dict__.items()):
         print("\t{}={}".format(attr, value))
-    if args.func != "tokenize":
-        dirpath = os.path.dirname(args.outfile)
-        if not os.path.exists(dirpath):
-            print("Warning: ouput dir %s not exists, created!" % dirpath)
-            os.makedirs(dirpath)
+    if input_args.func != "tokenize":
+        dir_path = os.path.dirname(input_args.outfile)
+        if not os.path.exists(dir_path):
+            print("Warning: ouput dir %s not exists, created!" % dir_path)
+            os.makedirs(dir_path)
 
-    if args.func == "learn_bpe":
+    if input_args.func == "learn_bpe":
         #  python subword.py --func learn_bpe --infile ../subword/rdrp/all_sequence.txt --outfile ../subword/rdrp/protein/binary_class/protein_codes_rdrp_1000.txt --verbose
         #  python subword.py --func learn_bpe --infile ../data/rdrp/all_rdrp_domain.fas --outfile ../subword/rdrp/protein/binary_class/all_rdrp_domain_codes_1000.txt --verbose --num_symbols 1000
         #  python subword.py --func learn_bpe --infile ../data/rdrp/all_rdrp_motifABC.fas --outfile ../subword/rdrp/protein/binary_class/all_rdrp_motif_codes_1000.txt --verbose --num_symbols 1000
         #  python subword.py --func learn_bpe --infile ../data/rdrp/RdRp20211115.fasta --outfile ../subword/rdrp/protein/binary_class/all_rdrp_codes_1000.txt --verbose --num_symbols 1000
-        if ".fas" in args.infile:
+        if ".fas" in input_args.infile:
             # transform fasta to corpus
             print('fasta convect to corpus txt')
-            savepath = os.path.join(os.path.dirname(args.infile), ".".join(os.path.basename(args.infile).split(".")[0:-1]) + ".txt")
+            savepath = os.path.join(os.path.dirname(input_args.infile), ".".join(os.path.basename(input_args.infile).split(".")[0:-1]) + ".txt")
             if os.path.exists(savepath):
                 raise Exception("Save path :%s exsits!" % savepath)
-            fasta_to_corpus(args.infile, savepath)
-            args.infile = savepath
-        learn(args)
-    elif args.func == "tokenize":
+            fasta_to_corpus(input_args.infile, savepath)
+            input_args.infile = savepath
+        learn(input_args)
+    elif input_args.func == "tokenize":
         #  python subword.py --func tokenize --seq IPKIDNPEFASQYRPISCCNIFYKCISKMFCSRLKAVVLHLVAENQAAFVQGSQARGGAMDRITTTTRKFE --codes_file ../subword/rdrp/protein_codes_rdrp_1000.txt
         print("input seq:")
-        print(args.seq)
+        print(input_args.seq)
         print("input seq size:")
-        print(len(args.seq))
-        token = tokenize(args)
+        print(len(input_args.seq))
+        token = tokenize(input_args)
         print("seq tokenize output:")
         print(token)
         print("seq tokenize size:")
         print(len(token))
-    elif args.func == "apply_bpe":
+    elif input_args.func == "apply_bpe":
         #  python subword.py --func apply_bpe --infile ../subword/rdrp/all_sequence.txt --codes_file ../subword/rdrp/protein/binary_class/protein_codes_rdrp_1000.txt --outfile ../subword/rdrp/protein/binary_class/all_sequence_token_1000.txt
         #  python subword.py --func apply_bpe --infile ../data/rdrp/all_rdrp_domain.txt --codes_file ../subword/rdrp/protein/binary_class/all_rdrp_domain_codes_1000.txt --outfile ../subword/rdrp/protein/binary_class/all_rdrp_domain_token_1000.txt
         #  python subword.py --func apply_bpe --infile ../data/rdrp/all_rdrp_motifABC.txt --codes_file ../subword/rdrp/protein/binary_class/all_rdrp_motif_codes_1000.txt --outfile ../subword/rdrp/protein/binary_class/all_rdrp_motif_token_1000.txt
         #  python subword.py --func apply_bpe --infile ../data/rdrp/RdRp20211115.txt --codes_file ../subword/rdrp/protein/binary_class/all_rdrp_codes_1000.txt --outfile ../subword/rdrp/protein/binary_class/RdRp20211115_token_1000.txt
-        if ".fas" in args.infile:
+        if ".fas" in input_args.infile:
             # fasta，not sequence tokenization corpus
             raise Exception("the input file is fasta，not sequence tokenization corpus")
-        apply(args)
-    elif args.func == "get_vocab":
+        apply(input_args)
+    elif input_args.func == "get_vocab":
         #  python subword.py --func get_vocab --infile ../subword/rdrp/protein/binary_class/all_sequence_token_1000.txt --outfile ../subword/rdrp/protein/binary_class/subword_vocab_1000.txt
         #  python subword.py --func get_vocab --infile ../subword/rdrp/protein/binary_class/all_rdrp_domain_token_1000.txt --outfile ../subword/rdrp/protein/binary_class/all_rdrp_domain_vocab_1000.txt
         #  python subword.py --func get_vocab --infile ../subword/rdrp/protein/binary_class/all_rdrp_motif_token_1000.txt --outfile ../subword/rdrp/protein/binary_class/all_rdrp_motif_vocab_1000.txt
         #  python subword.py --func get_vocab --infile ../subword/rdrp/protein/binary_class/RdRp20211115_token_1000.txt --outfile ../subword/rdrp/protein/binary_class/RdRp20211115_vocab_1000.txt
-        vocab(args)
-    elif args.func == "subword_vocab_2_token_vocab":
+        vocab(input_args)
+    elif input_args.func == "subword_vocab_2_token_vocab":
         #  python subword.py --func subword_vocab_2_token_vocab --infile ../subword/rdrp/protein/binary_class/subword_vocab_1000.tx --outfile ../vocab/rdrp/protein/binary_class/subword_vocab_1000.txt
         #  python subword.py --func subword_vocab_2_token_vocab --infile ../subword/rdrp/protein/binary_class/all_rdrp_domain_vocab_1000.txt --outfile ../vocab/rdrp/aprotein/binary_class/ll_rdrp_domain_vocab_1000.txt
         #  python subword.py --func subword_vocab_2_token_vocab --infile ../subword/rdrp/protein/binary_class/all_rdrp_motif_vocab_1000.txt --outfile ../vocab/rdrp/protein/binary_class/all_rdrp_motif_vocab_1000.txt
         #  python subword.py --func subword_vocab_2_token_vocab --infile ../subword/rdrp/protein/binary_class/RdRp20211115_vocab_1000.txt --outfile ../vocab/rdrp/protein/binary_class/RdRp20211115_vocab_1000.txt
-        subword_vocab_2_token_vocab(args)
+        subword_vocab_2_token_vocab(input_args)

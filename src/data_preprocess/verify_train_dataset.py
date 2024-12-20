@@ -24,7 +24,9 @@
 '''
 
 import os, csv, torch
-reader = csv.reader(open("../../dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv"))
+reader = csv.reader(
+    open("../../dataset/rdrp_40_extend/protein/binary_class/train_with_pdb_emb.csv")
+)
 statistics = {}
 cnt = 0
 for row in reader:
@@ -32,9 +34,15 @@ for row in reader:
     if cnt == 1:
         continue
     prot_id,seq,seq_len,pdb_filename,ptm,mean_plddt,emb_filename,label,source = row
-    emb_filepath = os.path.join("../../dataset/rdrp_40_extend/protein/binary_class/embs", emb_filename)
+    emb_filepath = os.path.join(
+        "../../dataset/rdrp_40_extend/protein/binary_class/embs",
+        emb_filename
+    )
     if not os.path.exists(emb_filepath):
-        emb_filepath = os.path.join("../../dataset/rdrp_40/protein/binary_class/embs", emb_filename)
+        emb_filepath = os.path.join(
+            "../../dataset/rdrp_40/protein/binary_class/embs",
+            emb_filename
+        )
     embedding = torch.load(emb_filepath)
     assert prot_id == embedding["protein_id"]
     label = int(label)

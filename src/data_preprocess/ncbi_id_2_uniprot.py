@@ -299,6 +299,7 @@ if __name__ == "__main__":
                         elif idx == 2:
                             uniprot_id = extract_id_for_rdrp(uuid, type="non_virus")
                             writer.writerow([uuid, None, uniprot_id])
+
     data = {}
     all_ids = []
     with open("../data/rdrp/RdRp20211115_id.csv", "r") as rfp:
@@ -320,6 +321,7 @@ if __name__ == "__main__":
         if len(ids) > 0:
             all_ids.extend(ids)
             data = get_from_api(ids, data, update_idx=-1)
+
     total = 0
     with open("../data/rdrp/RdRp20211115_id.csv", "w") as wfp:
         writer = csv.writer(wfp)
@@ -331,32 +333,30 @@ if __name__ == "__main__":
         print("unfound num: %d" %total)
 
 
-
-'''
-job_id = submit_id_mapping(
-    to_db="RefSeq_Protein", from_db="UniProtKB_AC-ID", ids=["B6QWN5", "A0A182G8Y9"]
-)
-job_id = submit_id_mapping(
-    to_db="RefSeq_Protein", from_db="UniProtKB-Swiss-Prot", ids=["A0A182G8Y9"]
-)
-if check_id_mapping_results_ready(job_id):
-    link = get_id_mapping_results_link(job_id)
-    results = get_id_mapping_results_search(link)
-    # Equivalently using the stream endpoint which is more demanding
-    # on the API and so is less stable:
-    # results = get_id_mapping_results_stream(link)
-
-print(results)
-# {'results': [{'from': 'P05067', 'to': 'CHEMBL2487'}], 'failedIds': ['P12345']}
-'''
-job_id = submit_id_mapping(
-    from_db="RefSeq_Protein", to_db="UniProtKB", ids=["NP_056758", "NP_044727", "B6QWN5"]
-)
-if check_id_mapping_results_ready(job_id):
-    link = get_id_mapping_results_link(job_id)
-    results = get_id_mapping_results_search(link)
-    # Equivalently using the stream endpoint which is more demanding
-    # on the API and so is less stable:
-    # results = get_id_mapping_results_stream(link)
-
-print(results)
+    '''
+    job_id = submit_id_mapping(
+        to_db="RefSeq_Protein", from_db="UniProtKB_AC-ID", ids=["B6QWN5", "A0A182G8Y9"]
+    )
+    job_id = submit_id_mapping(
+        to_db="RefSeq_Protein", from_db="UniProtKB-Swiss-Prot", ids=["A0A182G8Y9"]
+    )
+    if check_id_mapping_results_ready(job_id):
+        link = get_id_mapping_results_link(job_id)
+        results = get_id_mapping_results_search(link)
+        # Equivalently using the stream endpoint which is more demanding
+        # on the API and so is less stable:
+        # results = get_id_mapping_results_stream(link)
+    
+    print(results)
+    # {'results': [{'from': 'P05067', 'to': 'CHEMBL2487'}], 'failedIds': ['P12345']}
+    '''
+    job_id = submit_id_mapping(
+        from_db="RefSeq_Protein", to_db="UniProtKB", ids=["NP_056758", "NP_044727", "B6QWN5"]
+    )
+    if check_id_mapping_results_ready(job_id):
+        link = get_id_mapping_results_link(job_id)
+        results = get_id_mapping_results_search(link)
+        # Equivalently using the stream endpoint which is more demanding
+        # on the API and so is less stable:
+        # results = get_id_mapping_results_stream(link)
+        print(results)

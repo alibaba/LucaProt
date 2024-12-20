@@ -22,16 +22,17 @@
 @file: utils
 @desc: utils
 '''
+import os
 import csv
-import io, textwrap, itertools
 import subprocess
-from Bio import SeqIO
 import torch
 import numpy as np
 import sys, random
+import io, textwrap, itertools
+from Bio import SeqIO
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
-
+from collections import OrderedDict
 plt.rcParams.update({'font.size': 18})
 plt.rcParams['axes.unicode_minus'] = False
 sys.path.append("..")
@@ -184,6 +185,7 @@ def fasta_reader(handle, width=None):
     handle = handle if isinstance(handle, io.TextIOWrapper) else open(handle, 'r')
     width = width if isinstance(width, int) and width > 0 else None
     try:
+        header = None
         for is_header, group in itertools.groupby(handle, lambda line: line.startswith(">")):
             if is_header:
                 header = group.__next__().strip()
@@ -389,4 +391,31 @@ def clean_seq(protein_id, seq):
         print("id: %s. Seq: %s" % (protein_id, seq))
         print("invalid char set:", invalid_char_set)
     return new_seq
+
+
+def load_trained_model(model_config, args, model_class, model_dirpath):
+    # load exists checkpoint
+    print("load pretrained model: %s" % model_dirpath)
+    try:
+        model = model_class.from_pretrained(model_dirpath, args=args)
+    except Exception as e:
+        model = model_class(model_config, args=args)
+        pretrained_net_dict = torch.load(os.path.join(args.model_dirpath, "pytorch.pth"),
+                                         map_location=torch.device("cpu"))
+        model_state_dict_keys = set()
+        for key in model.state_dict():
+            model_state_dict_keys.add(key)
+        new_state_dict = OrderedDict()
+        for k, v in pretrained_net_dict.items():
+            if k.startswith("module."):
+                # remove `module.`
+                name = k[7:]
+            else:
+                name = k
+            if name in model_state_dict_keys:
+                new_state_dict[name] = v
+        # print("diff:")
+        # print(model_state_dict_keys.difference(new_state_dict.keys()))
+        model.load_state_dict(new_state_dict)
+    return model
 

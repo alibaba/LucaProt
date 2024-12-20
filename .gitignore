@@ -3,3 +3,9 @@
 *.tmp
 .DS_Store
 __pycache__
+/.idea/
+.pytest_cache
+*.pyc*
+*__pycache__*
+*/__pycache__
+*.DS_Store

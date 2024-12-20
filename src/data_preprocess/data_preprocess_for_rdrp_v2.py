@@ -37,10 +37,17 @@ except ImportError:
 
 
 class GenerateTFRecord(object):
-    def __init__(self, dataset_filename, label_filepath,
-                 protein_2_embedding_index_filepath,  embedding_dir,
-                 protein_2_pdb_index_filepath, pdb_dir,
-                 save_path, num_shards=30):
+    def __init__(
+            self,
+            dataset_filename,
+            label_filepath,
+            protein_2_embedding_index_filepath,
+            embedding_dir,
+            protein_2_pdb_index_filepath,
+            pdb_dir,
+            save_path,
+            num_shards=30
+    ):
         self.protein_2_embedding_index_filepath = protein_2_embedding_index_filepath
         self.dataset_filename = dataset_filename
         self.embedding_dir = embedding_dir
@@ -54,12 +61,17 @@ class GenerateTFRecord(object):
             self.protein_2_embedding_idx = self.load_protein_2_idx(protein_2_embedding_index_filepath)
         else:
             self.protein_2_embedding_idx = None
+
         if protein_2_pdb_index_filepath:
             self.protein_2_pdb_idx = self.load_protein_2_idx(protein_2_pdb_index_filepath)
         else:
             self.protein_2_pdb_idx = None
+
         self.label_filepath = label_filepath
-        self.label_2_id = {label: idx for idx, label in enumerate(load_labels(self.label_filepath, header=True))}
+        self.label_2_id = {
+            label: idx for idx, label in enumerate(
+                load_labels(self.label_filepath, header=True)
+            )}
 
         shard_size = len(self.prot_list)//num_shards
         indices = [(i * shard_size, (i+1) * shard_size) for i in range(0, num_shards)]
@@ -72,7 +84,7 @@ class GenerateTFRecord(object):
         :return:
         '''
         protein_2_idx = {}
-        with open(self.protein_2_index_filepath, "r") as rfp:
+        with open(self.protein_2_embedding_index_filepath, "r") as rfp:
             reader = csv.reader(rfp)
             cnt = 0
             for row in reader:
@@ -214,7 +226,7 @@ class GenerateTFRecord(object):
                 assert protein_seq == embedding_obj["seq"]
 
             pdb_obj = None
-            if self.protein_2_pdfb_idx:
+            if self.protein_2_pdb_idx:
                 pdb_idx = self.protein_2_pdb_idx[protein_id]
                 pdb_file = os.path.join(self.pdb_dir, pdb_idx + '.npz')
                 cmap = np.load(pdb_file, allow_pickle=True)
@@ -232,13 +244,14 @@ class GenerateTFRecord(object):
                 continue
             writer.write(example)
 
-        print("label size: %d" % len(self.labels))
+        print("label size: %d" % len(self.label_2_id))
         print("Writing {} done!".format(tfrecord_fn))
 
     def run(self, num_threads):
         pool = multiprocessing.Pool(processes=num_threads)
         shards = [idx for idx in range(0, self.num_shards)]
         pool.map(self._convert_numpy_folder, shards)
+
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -253,17 +266,31 @@ if __name__ == "__main__":
     else:
         dataset_type_list = ["train", "dev", "test"]
     for dataset_type in dataset_type_list:
-        save_path = "../../dataset/%s/protein/binary_class/%s/" % (args.dataset_name, dataset_type)
-        dataset_filename = "../../dataset/%s/protein/binary_class/%.csv" % (args.dataset_name, dataset_type)
+        save_path = "../../dataset/%s/protein/binary_class/%s/" % (
+            args.dataset_name,
+            dataset_type
+        )
+        dataset_filename = "../../dataset/%s/protein/binary_class/%.csv" % (
+            args.dataset_name,
+            dataset_type
+        )
         label_filepath = "../../dataset/%s/protein/binary_class/label.txt" % args.dataset_name
-        protein_2_embedding_index_filepath = "../../dataset/%s/protein/binary_class/%s_embed_fasta_id_2_idx.csv" % (args.dataset_name, dataset_type)
-        embedding_dir = "../../dataset/%s/protein/binary_class/embeds/%s/esm2_t36_3B_UR50D" % (args.dataset_name, dataset_type)
+        protein_2_embedding_index_filepath = "../../dataset/%s/protein/binary_class/%s_embed_fasta_id_2_idx.csv" % (
+            args.dataset_name,
+            dataset_type
+        )
+        embedding_dir = "../../dataset/%s/protein/binary_class/embeds/%s/esm2_t36_3B_UR50D" % (
+            args.dataset_name,
+            dataset_type
+        )
         protein_2_pdb_index_filepath = None
         pdb_dir = None
-        tfr = GenerateTFRecord(dataset_filename, label_filepath,
-                               protein_2_embedding_index_filepath,  embedding_dir,
-                               protein_2_pdb_index_filepath, pdb_dir,
-                               save_path, num_shards=1)
+        tfr = GenerateTFRecord(
+            dataset_filename, label_filepath,
+            protein_2_embedding_index_filepath,  embedding_dir,
+            protein_2_pdb_index_filepath, pdb_dir,
+            save_path, num_shards=1
+        )
         tfr.run(num_threads=1)
 
 
