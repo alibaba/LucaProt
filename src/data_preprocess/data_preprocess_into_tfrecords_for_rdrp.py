@@ -229,7 +229,12 @@ class GenerateTFRecord(object):
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset_name", default="rdrp_extend_40", required=True, type=str, help="transform into tfrecords")
+parser.add_argument("--dataset_name",
+                    default="rdrp_extend_40",
+                    required=True,
+                    type=str,
+                    help="transform into tfrecords"
+                    )
 parser.add_argument("--train", action="store_true", help="the dataset type")
 args = parser.parse_args()
 

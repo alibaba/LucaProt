@@ -55,7 +55,11 @@ def k_mer(seq, k=1):
     return k_mer_set
 
 
-def generate_vocab_file(dataset_filepath, save_filepath, k=1):
+def generate_vocab_file(
+        dataset_filepath,
+        save_filepath,
+        k=1
+):
     '''
     building vocab
     :param dataset_filepath:
@@ -163,7 +167,12 @@ def read_fasta(filepath, exclude):
     return dataset
 
 
-def select_sequence_from_uniprot(protein_ids, filepaths, save_filepath, not_found_save_filepath):
+def select_sequence_from_uniprot(
+        protein_ids,
+        filepaths,
+        save_filepath,
+        not_found_save_filepath
+):
     '''
     get sequences by id from local uniprot files
     :param protein_ids: id lists
@@ -211,7 +220,15 @@ def select_sequence_from_uniprot(protein_ids, filepaths, save_filepath, not_foun
     return found_data, not_found_protein_ids
 
 
-def write_fasta_2_csv(dataset, filepath, mode, source, label=None, sampler_num=None, min_length=None):
+def write_fasta_2_csv(
+        dataset,
+        filepath,
+        mode,
+        source,
+        label=None,
+        sampler_num=None,
+        min_length=None
+):
     '''
     write dataset to file
     :param dataset:
@@ -251,7 +268,11 @@ def write_fasta_2_csv(dataset, filepath, mode, source, label=None, sampler_num=N
     return selected_dataset, removed_dataset
 
 
-def split_dataset(filepath, save_dir, rate=0.7):
+def split_dataset(
+        filepath,
+        save_dir,
+        rate=0.7
+):
     '''
     The dataset is randomly divided into training set/validation set/test set according to the specified ratio
     :param filepath:
@@ -438,13 +459,17 @@ def load_non_rdrp_from_api():
     Obtain the complete sequence through the api according to the id of uniprot, because the sequence of the negative sample in rdrp is not a complete protein sequence
     :return:
     '''
-    get_sequence_from_api("../../../biodata/20221204-to-Ali/other_virus_pro.info.txt",
-                          "../data/rdrp/other_virus_uniprot.fasta",
-                          "../data/rdrp/err_other_virus_pro.txt")
+    get_sequence_from_api(
+        "../../../biodata/20221204-to-Ali/other_virus_pro.info.txt",
+        "../data/rdrp/other_virus_uniprot.fasta",
+        "../data/rdrp/err_other_virus_pro.txt"
+    )
     print("done other_virus_pro")
-    get_sequence_from_api("../../../biodata/20221204-to-Ali/non-virus.info.txt",
-                          "../data/rdrp/non_virus_uniprot.fasta",
-                          "../data/rdrp/err_non_virus.txt")
+    get_sequence_from_api(
+        "../../../biodata/20221204-to-Ali/non-virus.info.txt",
+        "../data/rdrp/non_virus_uniprot.fasta",
+        "../data/rdrp/err_non_virus.txt"
+    )
     print("done non virus")
 
 
@@ -487,16 +512,24 @@ def load_non_rdrp_from_local_db():
     save_filepath = "../data/rdrp/non_virus_sequence.fasta"
     not_found_filepath = "../data/rdrp/non_virus_not_found_protein_ids.txt"
     found_data, not_found_protein_ids = select_sequence_from_uniprot(protein_ids, filepaths, save_filepath, not_found_filepath)
-    print("non virus: total: %d, found: %d, not unfound: %d" %(len(found_data) + len(not_found_protein_ids),
-                                                               len(found_data), len(not_found_protein_ids)))
+    print("non virus: total: %d, found: %d, not unfound: %d" %(
+        len(found_data) + len(not_found_protein_ids),
+        len(found_data),
+        len(not_found_protein_ids)
+    ))
 
 
-def preparing_file_for_prediction(filepath_list, save_path, ground_truth_col_index_list=None, label_list=None):
+def preparing_file_for_prediction(
+        filepath_list,
+        save_path,
+        ground_truth_col_index_list=None,
+        label_list=None
+):
     '''
     prepare file for prediction
     :param filepath_list: the input data filepath list, original file list
     :param save_path: prepared file savepath
-    :param ground_truth_col_index:
+    :param ground_truth_col_index_list:
     :param label_list:
     If ground_truth_col_index is null or -1, it means that there is no ground truth column in each file in the filepath_list, otherwise it means that there is a ground truth column in the original file.
     If the label_list is not null and not empty, it means that the original file has ground truth, and each file has the same label, corresponding to label_list index.
@@ -544,109 +577,8 @@ def preparing_file_for_prediction(filepath_list, save_path, ground_truth_col_ind
             writer.writerow(item)
 
 
-def ifearure(dataset, dataset_filepath, header, feature_types, PseKRAAC_types, save_dirpath):
-    '''
-    use iFeature to extract features of the sequence, reference:
-    https://github.com/Superzchen/iFeature
-    https://academic.oup.com/bioinformatics/article/34/14/2499/4924718?login=false
-    :param dataset:
-    :param dataset_filepath:
-    :return:
-    '''
-    assert dataset is not None or dataset_filepath is not None
-    if not os.path.exists(save_dirpath):
-        os.makedirs(save_dirpath)
-    if feature_types is None:
-        feature_types = ['AAC', 'EAAC', 'CKSAAP', 'DPC', 'DDE', 'TPC', 'BINARY',
-                         'GAAC', 'EGAAC', 'CKSAAGP', 'GDPC', 'GTPC',
-                         'AAINDEX', 'ZSCALE', 'BLOSUM62',
-                         'NMBroto', 'Moran', 'Geary',
-                         'CTDC', 'CTDT', 'CTDD',
-                         'CTriad', 'KSCTriad',
-                         'SOCNumber', 'QSOrder',
-                         'PAAC', 'APAAC',
-                         'KNNprotein', 'KNNpeptide',
-                         'PSSM', 'SSEC', 'SSEB', 'Disorder', 'DisorderC', 'DisorderB', 'ASA'
-                         ]
-    if dataset:
-        tmp_filename = "%d.fasta.tmp" % random.randint(10000, 10000000000)
-        fasta_filepath = os.path.join(save_dirpath, tmp_filename)
-        write_fasta(fasta_filepath, [SeqRecord(Seq(v[1]), str(v[0][1:] if v[0] and v[0][0] == ">" else v[0]), description="") for v in dataset])
-    else:
-        if dataset_filepath.lower().endswith(".fas") or dataset_filepath.lower().endswith(".fasta"):
-            fasta_filepath = dataset_filepath
-            tmp_filename = "%s.fasta.tmp" % os.path.basename(dataset_filepath)
-        else:
-            sequence_list = []
-            for item in file_reader(dataset_filepath, header=header, header_filter=True):
-                sequence_list.append(SeqRecord(Seq(item[1]), str(item[0][1:] if item[0] and item[0][0] == ">" else item[0]), description=""))
-            tmp_filename = "%s.fasta.tmp" % os.path.basename(dataset_filepath)
-            fasta_filepath = os.path.join(save_dirpath, tmp_filename)
-            write_fasta(fasta_filepath, sequence_list)
-    '''
-    for feature_type in feature_types:
-        output_filepath = os.path.join(save_dirpath, "%s.%s" % (tmp_filename, feature_type))
-        cmd = "python iFeature/iFeature.py --file %s --type %s --out %s" % (fasta_filepath, feature_type, output_filepath)
-        
-        print("cmd: ", cmd)
-        print(cmd)
-        output = subprocess_popen(cmd)
-        print("output: ", output)
-        print("#" * 100)
-        error = False
-        if os.path.exists(output_filepath):
-            with open(output_filepath, "r") as rfp:
-                content = ""
-                for line in rfp:
-                    content = line.strip()
-                    break
-                if content == "Descriptor calculation failed.":
-                    error = True
-            if error:
-                os.remove(output_filepath)
-    '''
-    cmd_filepath = os.path.join(os.path.dirname(save_dirpath), "ifeature.sh")
-    if os.path.exists(cmd_filepath):
-        mode = "a+"
-    else:
-        mode = "w"
-    with open(cmd_filepath, mode) as wfp:
-        for feature_type in feature_types:
-            output_filepath = os.path.join(save_dirpath, "%s.%s" % (tmp_filename, feature_type))
-            cmd = "python iFeature/iFeature.py --file %s --type %s --out %s" % (fasta_filepath, feature_type, output_filepath)
-            wfp.write("%s\n" %cmd)
-    if PseKRAAC_types is None:
-        PseKRAAC_types = ['type1', 'type2', 'type3A', 'type3B', 'type4', 'type5', 'type6A', 'type6B',
-                          'type6C', 'type7', 'type8', 'type9', 'type10', 'type11', 'type12', 'type13',
-                          'type14', 'type15', 'type16']
-    '''
-    for feature_type in PseKRAAC_types:
-        if not os.path.exists(os.path.join(save_dirpath, "PseKRAAC")):
-            os.makedirs(os.path.join(save_dirpath, "PseKRAAC"))
-        output_filepath = os.path.join(save_dirpath, "PseKRAAC", "%s.%s" % (tmp_filename, feature_type))
-        cmd = "python iFeature/iFeaturePseKRAAC.py --file %s --type %s --out %s" % (fasta_filepath, feature_type, output_filepath)
-        # print("cmd: ", cmd)
-        print(cmd)
-        output = subprocess_popen(cmd)
-        print("output: ", output)
-        print("#" * 100)
-    '''
-    cmd_filepath = os.path.join(os.path.dirname(save_dirpath), "ifeature_psekraac.sh")
-    if os.path.exists(cmd_filepath):
-        mode = "a+"
-    else:
-        mode = "w"
-    with open(cmd_filepath, mode) as wfp:
-        if not os.path.exists(os.path.join(save_dirpath, "PseKRAAC")):
-            os.makedirs(os.path.join(save_dirpath, "PseKRAAC"))
-        for feature_type in PseKRAAC_types:
-            output_filepath = os.path.join(save_dirpath, "PseKRAAC", "%s.%s" % (tmp_filename, feature_type))
-            cmd = "python iFeature/iFeaturePseKRAAC.py --file %s --type %s --raactype --out %s" % (fasta_filepath, feature_type, output_filepath)
-            wfp.write("%s\n" % cmd)
-
-
 # prepare the dataset
-if __name__ == "__main__1":
+if __name__ == "__main__":
     '''
     # btain the complete sequence through the api according to the uniprot id, because the sequence of the negative sample in rdrp dataset is not a complete protein sequence
     load_non_rdrp_from_api()
@@ -674,18 +606,23 @@ if __name__ == "__main__1":
     # write the positive samples into file
     if not os.path.exists("../dataset/%s/protein/binary_class/" % dataset_name):
         os.makedirs("../dataset/%s/protein/binary_class/" % dataset_name)
-    positive_selected_dataset, positive_removed_dataset = write_fasta_2_csv(positive_dataset,
-                                      "../dataset/%s/protein/binary_class/rdrp_dataset.csv" % dataset_name,
-                                      mode='w',
-                                      source="rdrp",
-                                      label=1)
+    positive_selected_dataset, positive_removed_dataset = write_fasta_2_csv(
+        positive_dataset,
+        "../dataset/%s/protein/binary_class/rdrp_dataset.csv" % dataset_name,
+        mode='w',
+        source="rdrp",
+        label=1
+    )
     print("rdrp positive dataset generate done.")
 
     '''
     other proteins of virus(negative samples)
     '''
     # read raw data(negative)
-    negative_dataset_1 = read_fasta(["../data/rdrp/other_virus_pro_sequence.fasta"], exclude=["../data/rdrp/other_virus_pro_sequence_exclude.fasta"])
+    negative_dataset_1 = read_fasta(
+        ["../data/rdrp/other_virus_pro_sequence.fasta"],
+        exclude=["../data/rdrp/other_virus_pro_sequence_exclude.fasta"]
+    )
     # statistics
     size_list = dataset_stats(negative_dataset_1)
     # plot sequence length distribution
@@ -693,13 +630,15 @@ if __name__ == "__main__1":
     plot_bins(size_list, xlabel="sequence length", ylabel="distribution", bins=40, filepath=pic_save_filepath)
     # write the negative samples into file
     # negative samples
-    negative_selected_dataset_1, negative_removed_dataset_1 = write_fasta_2_csv(negative_dataset_1,
-                      "../dataset/%s/protein/binary_class/other_virus_dataset.csv" % dataset_name,
-                      mode='w',
-                      source="other_virus",
-                      label=0,
-                      sampler_num=None,
-                      min_length=None)
+    negative_selected_dataset_1, negative_removed_dataset_1 = write_fasta_2_csv(
+        negative_dataset_1,
+        "../dataset/%s/protein/binary_class/other_virus_dataset.csv" % dataset_name,
+        mode='w',
+        source="other_virus",
+        label=0,
+        sampler_num=None,
+        min_length=None
+    )
     print("other virus negative dataset generate done.")
 
 
@@ -715,20 +654,25 @@ if __name__ == "__main__1":
     plot_bins(size_list, xlabel="sequence length", ylabel="distribution", bins=40, filepath=pic_save_filepath)
     # write the negative samples into file
     # negative samples
-    negative_selected_dataset_2, negative_removed_dataset_2 = write_fasta_2_csv(negative_dataset_2,
-                      "../dataset/%s/protein/binary_class/other_virus_domain_dataset.csv" % dataset_name,
-                      mode='w',
-                      source="other_virus_domain",
-                      label=0,
-                      sampler_num=None,
-                      min_length=None)
+    negative_selected_dataset_2, negative_removed_dataset_2 = write_fasta_2_csv(
+        negative_dataset_2,
+        "../dataset/%s/protein/binary_class/other_virus_domain_dataset.csv" % dataset_name,
+        mode='w',
+        source="other_virus_domain",
+        label=0,
+        sampler_num=None,
+        min_length=None
+    )
     print("other virus domain negative dataset generate done.")
 
     '''
     other proteins of non virus(negative samples)
     '''
     # read raw data(negative)
-    negative_dataset_3 = read_fasta(["../data/rdrp/non_virus_sequence.fasta"], exclude=["../data/rdrp/non_virus_sequence_exclude.fasta"])
+    negative_dataset_3 = read_fasta(
+        ["../data/rdrp/non_virus_sequence.fasta"],
+        exclude=["../data/rdrp/non_virus_sequence_exclude.fasta"]
+    )
     # statistics
     size_list = dataset_stats(negative_dataset_3)
     # plot sequence length distribution
@@ -736,13 +680,15 @@ if __name__ == "__main__1":
     plot_bins(size_list, xlabel="sequence length", ylabel="distribution", bins=40, filepath=pic_save_filepath)
     # write the negative samples into file
     # randomly sampling: N times positive sample dataset，Filter out those with sequence length less than 100
-    negative_selected_dataset_3, negative_removed_dataset_3 = write_fasta_2_csv(negative_dataset_3,
-                      "../dataset/%s/protein/binary_class/non_virus_dataset.csv" % dataset_name,
-                      mode='w',
-                      source="non_virus",
-                      label=0,
-                      sampler_num=times * len(positive_dataset),
-                      min_length=100)
+    negative_selected_dataset_3, negative_removed_dataset_3 = write_fasta_2_csv(
+        negative_dataset_3,
+        "../dataset/%s/protein/binary_class/non_virus_dataset.csv" % dataset_name,
+        mode='w',
+        source="non_virus",
+        label=0,
+        sampler_num=times * len(positive_dataset),
+        min_length=100
+    )
     print("non virus negative dataset generate done.")
 
     # generate label file
@@ -760,21 +706,25 @@ if __name__ == "__main__1":
     print("char-level vocabulary generate done.")
 
     # Randomly divide into training, validation, testing sets
-    split_dataset([
-        "../dataset/%s/protein/binary_class/rdrp_dataset.csv" % dataset_name,
-        "../dataset/%s/protein/binary_class/other_virus_dataset.csv" % dataset_name,
-        "../dataset/%s/protein/binary_class/other_virus_domain_dataset.csv" % dataset_name,
-        "../dataset/%s/protein/binary_class/non_virus_dataset.csv" % dataset_name
+    split_dataset(
+        [
+            "../dataset/%s/protein/binary_class/rdrp_dataset.csv" % dataset_name,
+            "../dataset/%s/protein/binary_class/other_virus_dataset.csv" % dataset_name,
+            "../dataset/%s/protein/binary_class/other_virus_domain_dataset.csv" % dataset_name,
+            "../dataset/%s/protein/binary_class/non_virus_dataset.csv" % dataset_name
         ],
         "../dataset/%s/protein/binary_class/" % dataset_name,
-         rate=0.8
+        rate=0.8
     )
     print("split dataset to train, dev and test done.")
 
     # generate subword corpus
     if not os.path.exists("../subword/%s/protein/binary_class/" % dataset_name):
         os.makedirs("../subword/%s/protein/binary_class/" % dataset_name)
-    generate_sequence_corpus(selected_dataset, save_filepath="../subword/%s/protein/binary_class/all_sequence.txt" % dataset_name)
+    generate_sequence_corpus(
+        selected_dataset,
+        save_filepath="../subword/%s/protein/binary_class/all_sequence.txt" % dataset_name
+    )
     print("sequence corpus generate done.")
 
     # run subword algorithms
@@ -782,77 +732,82 @@ if __name__ == "__main__1":
     # the vocab size of subword
     subword_num_list = [1000, 2000, 5000, 10000, 20000]
     for subword_num in subword_num_list:
-        learn_bpe(infile=open("../subword/%s/protein/binary_class/all_sequence.txt" % dataset_name, "r"),
-                  outfile=open("../subword/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num), "w"),
-                  min_frequency=2,
-                  verbose=True,
-                  is_dict=False,
-                  num_symbols=subword_num,
-                  num_workers=num_workers)
+        learn_bpe(
+            infile=open("../subword/%s/protein/binary_class/all_sequence.txt" % dataset_name, "r"),
+            outfile=open("../subword/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num), "w"),
+            min_frequency=2,
+            verbose=True,
+            is_dict=False,
+            num_symbols=subword_num,
+            num_workers=num_workers
+        )
         print("subword for size=%d train done." % subword_num)
 
         # apply subword results
         if not os.path.exists("../vocab/%s/protein/binary_class/" % dataset_name):
             os.makedirs("../vocab/%s/protein/binary_class/" % dataset_name)
-        shutil.copyfile("../subword/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num),
-                        "../vocab/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num))
-        bpe_codes_prot = codecs.open("../subword/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num))
+        shutil.copyfile(
+            "../subword/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num),
+            "../vocab/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num)
+        )
+        bpe_codes_prot = codecs.open(
+            "../subword/%s/protein/binary_class/protein_codes_rdrp_%d.txt" % (dataset_name, subword_num)
+        )
         bpe = BPE(codes=bpe_codes_prot)
-        bpe.process_lines("../subword/%s/protein/binary_class/all_sequence.txt" % dataset_name,
-                          open("../subword/%s/protein/binary_class/all_sequence_token_%d.txt" % (dataset_name, subword_num), "w"),
-                          num_workers=num_workers)
+        bpe.process_lines(
+            "../subword/%s/protein/binary_class/all_sequence.txt" % dataset_name,
+            open("../subword/%s/protein/binary_class/all_sequence_token_%d.txt" % (dataset_name, subword_num), "w"),
+            num_workers=num_workers
+        )
         print("subword for size=%d apply done." % subword_num)
 
         # generate subword vocabulary
-        get_vocab(open("../subword/%s/protein/binary_class/all_sequence_token_%d.txt" % (dataset_name, subword_num), "r"),
-                  open("../subword/%s/protein/binary_class/subword_vocab_%d.txt" % (dataset_name, subword_num), "w"))
+        get_vocab(
+            open("../subword/%s/protein/binary_class/all_sequence_token_%d.txt" % (dataset_name, subword_num), "r"),
+            open("../subword/%s/protein/binary_class/subword_vocab_%d.txt" % (dataset_name, subword_num), "w")
+        )
         if not os.path.exists("../vocab/%s/protein/binary_class/" % dataset_name):
             os.makedirs("../vocab/%s/protein/binary_class/" % dataset_name)
-        subword_vocab_2_token_vocab("../subword/%s/protein/binary_class/subword_vocab_%d.txt" % (dataset_name, subword_num),
-                                    "../vocab/%s/protein/binary_class/subword_vocab_%d.txt" % (dataset_name, subword_num))
+        subword_vocab_2_token_vocab(
+            "../subword/%s/protein/binary_class/subword_vocab_%d.txt" % (dataset_name, subword_num),
+            "../vocab/%s/protein/binary_class/subword_vocab_%d.txt" % (dataset_name, subword_num)
+        )
         print("subword-level for size=%d vocabulary done." % subword_num)
 
 
 # After the completion of model training, the preparation of prediction data
 if __name__ == "__main__1":
-    preparing_file_for_prediction(["../data/rdrp/test_data/non-rdrp.fas", "../data/rdrp/test_data/rdrp.fas"],
-                                  save_path="../data/rdrp/test_data/prediction_dataset_with_label.csv",
-                                  label_list=["0", "1"])
-    preparing_file_for_prediction(["../data/rdrp/test_data/all_novel_rdrp.fas"],
-                                  save_path="../data/rdrp/test_data/prediction_dataset_only_positive.csv",
-                                  label_list=["1"])
-    preparing_file_for_prediction(["../data/rdrp/test_data/uncertain.fas"],
-                                  save_path="../data/rdrp/test_data/prediction_dataset_wo_label.csv",
-                                  label_list=None)
-
-
-# extract features based on iFeature
-if __name__ == "__main__1":
-    dataset = None
-
-    feature_types = None
-    PseKRAAC_types = None
-    save_dirpath = "../dataset/rdrp_20/protein/binary_class/ifeature"
-    for dataset_type in ["train", "dev", "test"]:
-        dataset_filepath = "../dataset/rdrp_20/protein/binary_class/%s.csv" % dataset_type
-        ifearure(dataset, dataset_filepath, header=True, feature_types=feature_types, PseKRAAC_types=PseKRAAC_types, save_dirpath=save_dirpath)
-
+    preparing_file_for_prediction(
+        ["../data/rdrp/test_data/non-rdrp.fas", "../data/rdrp/test_data/rdrp.fas"],
+        save_path="../data/rdrp/test_data/prediction_dataset_with_label.csv",
+        label_list=["0", "1"]
+    )
+    preparing_file_for_prediction(
+        ["../data/rdrp/test_data/all_novel_rdrp.fas"],
+        save_path="../data/rdrp/test_data/prediction_dataset_only_positive.csv",
+        label_list=["1"]
+    )
+    preparing_file_for_prediction(
+        ["../data/rdrp/test_data/uncertain.fas"],
+        save_path="../data/rdrp/test_data/prediction_dataset_wo_label.csv",
+        label_list=None
+    )
 
 # Gets the full sequence according to the id of uniprot
-if __name__ == "__main__1":
+if __name__ == "__main__2":
     filepath = "../data/rdrp/RT.info.txt"
     save_filepath = "../data/rdrp/RT.info_api.fasta"
     err_filepath = "../data/rdrp/RT.info_api_not_found.txt"
     get_sequence_from_api(filepath, save_filepath, err_filepath)
 
 # Gets the sequence of RT(negative) from the local database
-if __name__ == "__main__1":
+if __name__ == "__main__3":
     filepath = "../data/rdrp/RT.info.txt"
     save_filepath = "../data/rdrp/RT.info_local.fasta"
     get_sequence_from_local_db(filepath, save_filepath, lib_filepaths=None)
 
 # Gets the sequence of RT(negative) from the API
-if __name__ == "__main__1":
+if __name__ == "__main__4":
     filepath = "../data/rdrp/RT.info_local_not_found_protein_ids.txt"
     save_filepath = "../data/rdrp/RT.info_local_not_found_protein_ids_api_found.fasta"
     err_filepath = "../data/rdrp/RT.info_local_not_found_protein_ids_api_not_found.txt"

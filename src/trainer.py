@@ -50,7 +50,15 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_fp=None):
+def train(
+        args,
+        model,
+        processor,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        log_fp=None
+):
     """ Train the model """
     if args.local_rank in [-1, 0]:
         tb_writer = SummaryWriter(log_dir=args.tb_log_dir)
@@ -58,16 +66,44 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
         log_fp = open(os.path.join(args.log_dir, "logs.txt"), "w")
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     if args.tfrecords:
-        train_dataset, train_dataset_total_num = load_and_cache_examples_for_tfrecords(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=False, predict=False, log_fp=log_fp)
-        train_dataloader = DataLoader(train_dataset, batch_size=args.train_batch_size)
+        train_dataset, train_dataset_total_num = load_and_cache_examples_for_tfrecords(
+            args,
+            processor,
+            seq_tokenizer,
+            subword,
+            struct_tokenizer,
+            evaluate=False,
+            predict=False,
+            log_fp=log_fp
+        )
+        train_dataloader = DataLoader(
+            train_dataset,
+            batch_size=args.train_batch_size
+        )
         train_batch_total_num = (train_dataset_total_num + args.train_batch_size - 1) // args.train_batch_size
     else:
-        train_dataset = load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=False, predict=False, log_fp=log_fp)
+        train_dataset = load_and_cache_examples(
+            args,
+            processor,
+            seq_tokenizer,
+            subword,
+            struct_tokenizer,
+            evaluate=False,
+            predict=False,
+            log_fp=log_fp
+        )
         train_dataset_total_num = len(train_dataset)
         train_sampler = RandomSampler(train_dataset) if args.local_rank == -1 else DistributedSampler(train_dataset)
-        train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=args.train_batch_size)
+        train_dataloader = DataLoader(
+            train_dataset,
+            sampler=train_sampler,
+            batch_size=args.train_batch_size
+        )
         train_batch_total_num = len(train_dataloader)
-    print("Train dataset len: %d, batch num: %d" % (train_dataset_total_num, train_batch_total_num))
+    print("Train dataset len: %d, batch num: %d" % (
+        train_dataset_total_num,
+        train_batch_total_num
+    ))
 
     if args.max_steps > 0:
         t_total = args.max_steps
@@ -83,7 +119,11 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
     ]
 
     optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total)
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer,
+        num_warmup_steps=args.warmup_steps,
+        num_training_steps=t_total
+    )
     if args.fp16:
         try:
             from apex import amp
@@ -97,9 +137,12 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
 
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank],
-                                                          output_device=args.local_rank,
-                                                          find_unused_parameters=True)
+        model = torch.nn.parallel.DistributedDataParallel(
+            model,
+            device_ids=[args.local_rank],
+            output_device=args.local_rank,
+            find_unused_parameters=True
+        )
 
     # Train
     log_fp.write("***** Running training *****\n")
@@ -110,8 +153,12 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
     logger.info("Train Dataset Num Epochs = %d" % args.num_train_epochs)
     log_fp.write("Train Dataset Instantaneous batch size per GPU = %d\n" % args.per_gpu_train_batch_size)
     logger.info("Train Dataset Instantaneous batch size per GPU = %d" % args.per_gpu_train_batch_size)
-    log_fp.write("Train Dataset Total train batch size (w. parallel, distributed & accumulation) = %d\n" % (args.train_batch_size * args.gradient_accumulation_steps * (torch.distributed.get_world_size() if args.local_rank != -1 else 1)))
-    logger.info("Train Dataset Total train batch size (w. parallel, distributed & accumulation) = %d" % (args.train_batch_size * args.gradient_accumulation_steps * (torch.distributed.get_world_size() if args.local_rank != -1 else 1)))
+    log_fp.write("Train Dataset Total train batch size (w. parallel, distributed & accumulation) = %d\n" % (
+            args.train_batch_size * args.gradient_accumulation_steps * (torch.distributed.get_world_size() if args.local_rank != -1 else 1)
+    ))
+    logger.info("Train Dataset Total train batch size (w. parallel, distributed & accumulation) = %d" % (
+            args.train_batch_size * args.gradient_accumulation_steps * (torch.distributed.get_world_size() if args.local_rank != -1 else 1)
+    ))
     log_fp.write("Train Dataset Gradient Accumulation steps = %d\n" % args.gradient_accumulation_steps)
     logger.info("Train Dataset Gradient Accumulation steps = %d" % args.gradient_accumulation_steps)
     log_fp.write("Train Dataset Total optimization steps = %d\n" % t_total)
@@ -122,8 +169,12 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
     global_step = 0
     tr_loss, logging_loss = 0.0, 0.0
     model.zero_grad()
-    train_iterator = trange(int(args.num_train_epochs), desc="Epoch", disable=args.local_rank not in [-1, 0])
-    set_seed(args)  # Added here for reproductibility (even between python 2 and 3)
+    train_iterator = trange(
+        int(args.num_train_epochs),
+        desc="Epoch",
+        disable=args.local_rank not in [-1, 0]
+    )
+    set_seed(args)  # Added here for reproducibility (even between python 2 and 3)
 
     max_metric_type = args.max_metric_type
     max_metric_value = 0
@@ -136,9 +187,18 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
 
     for epoch in train_iterator:
         if args.tfrecords:
-            epoch_iterator = tqdm(train_dataloader, total=train_batch_total_num, desc="Iteration", disable=args.local_rank not in [-1, 0])
+            epoch_iterator = tqdm(
+                train_dataloader,
+                total=train_batch_total_num,
+                desc="Iteration",
+                disable=args.local_rank not in [-1, 0]
+            )
         else:
-            epoch_iterator = tqdm(train_dataloader, desc="Iteration", disable=args.local_rank not in [-1, 0])
+            epoch_iterator = tqdm(
+                train_dataloader,
+                desc="Iteration",
+                disable=args.local_rank not in [-1, 0]
+            )
         for step, batch in enumerate(epoch_iterator):
             begin_time = time.time()
             model.train()
@@ -180,7 +240,12 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
                     "struct_contact_map": batch[5],
                     "labels": batch[-1],
                 }
-            outputs = model(**inputs)
+            else:
+                # to do
+                inputs = {}
+            outputs = model(
+                **inputs
+            )
             loss = outputs[0]
 
             if args.n_gpu > 1:
@@ -215,8 +280,18 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
                 update_flag = False
                 if args.local_rank in [-1, 0] and args.logging_steps > 0 and global_step % args.logging_steps == 0:
                     logs = {}
-                    if args.local_rank == -1 and args.evaluate_during_training:  # Only evaluate when single GPU otherwise metrics may not average well
-                        result = evaluate(args, model, processor, seq_tokenizer, subword, struct_tokenizer, prefix="checkpoint-{}".format(global_step), log_fp=log_fp)
+                    if args.local_rank == -1 and args.evaluate_during_training:
+                        # Only evaluate when single GPU otherwise metrics may not average well
+                        result = evaluate(
+                            args,
+                            model,
+                            processor,
+                            seq_tokenizer,
+                            subword,
+                            struct_tokenizer,
+                            prefix="checkpoint-{}".format(global_step),
+                            log_fp=log_fp
+                        )
                         # update_flag = False
                         for key, value in result.items():
                             eval_key = "eval_{}".format(key)
@@ -231,11 +306,22 @@ def train(args, model, processor, seq_tokenizer, subword, struct_tokenizer, log_
                         if update_flag:
                             max_metric_model_info.update({"epoch": epoch + 1, "global_step": global_step})
                             max_metric_model_info.update(logs)
-                        _, _, test_result = predict(args, model, processor, seq_tokenizer, subword, struct_tokenizer, "checkpoint-{}".format(global_step), log_fp=log_fp)
+                        _, _, test_result = predict(
+                            args,
+                            model,
+                            processor,
+                            seq_tokenizer,
+                            subword,
+                            struct_tokenizer,
+                            "checkpoint-{}".format(global_step), log_fp=log_fp
+                        )
                         for key, value in test_result.items():
                             eval_key = "test_{}".format(key)
                             logs[eval_key] = value
-                    avg_iter_time = round(use_time / (args.gradient_accumulation_steps * args.logging_steps), 2)
+                    avg_iter_time = round(
+                        use_time/(args.gradient_accumulation_steps * args.logging_steps),
+                        2
+                    )
                     logger.info("avg time per batch(s): %f\n" % avg_iter_time)
                     log_fp.write("avg time per batch (s): %f\n" % avg_iter_time)
                     use_time = 0
@@ -308,7 +394,8 @@ def save_check_point(args, model, seq_tokenizer, struct_tokenizer, output_dir):
     '''
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    model_to_save = model.module if hasattr(model, "module") else model  # Take care of distributed/parallel training
+    # Take care of distributed/parallel training
+    model_to_save = model.module if hasattr(model, "module") else model
     model_to_save.save_pretrained(output_dir)
     if seq_tokenizer:
         seq_tokenizer_dir = os.path.join(output_dir, "sequence")

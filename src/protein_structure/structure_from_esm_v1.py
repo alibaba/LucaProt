@@ -111,7 +111,12 @@ def create_batched_sequence_datasest(
         yield batch_headers, batch_sequences
 
 
-def prediction(args, all_sequences, save_dir, begin_uuid_index=0):
+def prediction(
+        args,
+        all_sequences,
+        save_dir,
+        begin_uuid_index=0
+):
     '''
     prediction
     :param args: running args
@@ -120,7 +125,12 @@ def prediction(args, all_sequences, save_dir, begin_uuid_index=0):
     :param begin_uuid_index: begin index for naming the pdb file
     :return:
     '''
-    batched_sequences = create_batched_sequence_datasest(all_sequences, args.max_tokens_per_batch, truncation_seq_length=args.truncation_seq_length, batch_size=args.batch_size)
+    batched_sequences = create_batched_sequence_datasest(
+        all_sequences,
+        args.max_tokens_per_batch,
+        truncation_seq_length=args.truncation_seq_length,
+        batch_size=args.batch_size
+    )
     use_time = 0
     total_seq_len = 0
     num_completed = 0
@@ -148,7 +158,10 @@ def prediction(args, all_sequences, save_dir, begin_uuid_index=0):
     for headers, sequences in batched_sequences:
         start = timer()
         try:
-            output = model.infer(sequences, num_recycles=args.num_recycles)
+            output = model.infer(
+                sequences,
+                num_recycles=args.num_recycles
+            )
         except RuntimeError as e:
             if e.args[0].startswith("CUDA out of memory"):
                 if len(sequences) > 1:
@@ -286,10 +299,15 @@ def predict_for_structure(args, filepath_list, sequence_list, reverse=False):
         all_sequences = sequence_list
 
     if args.try_failure:
-        done_set, begin_uuid_index = load_done_set(os.path.join(cur_save_dir, "result_info.csv"), None)
+        done_set, begin_uuid_index = load_done_set(
+            os.path.join(cur_save_dir, "result_info.csv"),
+            None
+        )
     else:
-        done_set, begin_uuid_index = load_done_set(os.path.join(cur_save_dir, "result_info.csv"),
-                                                   os.path.join(cur_save_dir, "uncompleted.txt"))
+        done_set, begin_uuid_index = load_done_set(
+            os.path.join(cur_save_dir, "result_info.csv"),
+            os.path.join(cur_save_dir, "uncompleted.txt")
+        )
     print("all number: %d" % len(all_sequences))
     print("done number: %d" % len(done_set))
     # exists
@@ -305,8 +323,18 @@ def predict_for_structure(args, filepath_list, sequence_list, reverse=False):
         print("reverse=True")
         all_sequences.reverse()
 
-    num_sequences, num_completed, avg_use_time, avg_total_seq_len = prediction(args, all_sequences, save_dir=cur_save_dir, begin_uuid_index=begin_uuid_index)
-    print("total protein num: %d, completed num: %d, use time per seq: %f, avg seq len: %f" %(num_sequences, num_completed, avg_use_time, avg_total_seq_len))
+    num_sequences, num_completed, avg_use_time, avg_total_seq_len = prediction(
+        args,
+        all_sequences,
+        save_dir=cur_save_dir,
+        begin_uuid_index=begin_uuid_index
+    )
+    print("total protein num: %d, completed num: %d, use time per seq: %f, avg seq len: %f" % (
+        num_sequences,
+        num_completed,
+        avg_use_time,
+        avg_total_seq_len
+    ))
     if filepath_list:
         print("filepath: %s done." % filepath_list)
     else:
@@ -335,13 +363,25 @@ if __name__ == "__main__":
         help="sequence.",
     )
     parser.add_argument(
-        "-o", "--save_dir", help="path to output PDB directory", type=Path, required=True
+        "-o",
+        "--save_dir",
+        help="path to output PDB directory",
+        type=Path,
+        required=True
     )
     parser.add_argument(
-        "-m", "--model_path", help="parent path to Pretrained ESM data directory. ", type=Path, default=None
+        "-m",
+        "--model_path",
+        help="parent path to Pretrained ESM data directory. ",
+        type=Path,
+        default=None
     )
     parser.add_argument(
-        "-bs", "--batch_size", help="batch Size. ", type=int, default=1
+        "-bs",
+        "--batch_size",
+        help="batch Size.",
+        type=int,
+        default=1
     )
     parser.add_argument(
         "--num-recycles",
@@ -374,15 +414,23 @@ if __name__ == "__main__":
              "Default: None.",
     )
     parser.add_argument(
-        "-e", "--exists_file", help="Path of exsits pdb list filepath", type=Path,
+        "-e", "--exists_file", help="Path of exists pdb list filepath", type=Path,
     )
     parser.add_argument(
         "--try_failure",
         action="store_true",
         help="when cuda out of memory, reduce its value"
     )
-    parser.add_argument("--cpu-only", help="CPU only", action="store_true")
-    parser.add_argument("--cpu-offload", help="enable CPU offloading", action="store_true")
+    parser.add_argument(
+        "--cpu-only",
+        help="CPU only",
+        action="store_true"
+    )
+    parser.add_argument(
+        "--cpu-offload",
+        help="enable CPU offloading",
+        action="store_true"
+    )
     args = parser.parse_args()
 
     assert esm_exists or args.model_path is not None and os.path.exists(args.model_path)
