@@ -822,6 +822,8 @@ def main():
     if args.local_rank in [-1, 0] and log_fp:
         log_fp.close()
 
+    torch.distributed.barrier()
+
 
 if __name__ == "__main__":
     main()
