@@ -4,31 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: optimized code">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SSFN/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/biotoolbox/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_for_rdrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_for_rdrp_v1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_for_rdrp2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_for_rdrp_v2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_for_rdrp_extend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_for_rdrp_v3_extend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_into_tfrecords_for_rdrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/data_preprocess_into_tfrecords_for_rdrp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/ncbi_id_2_uniprot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/ncbi_id_2_uniprot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_preprocess/subword.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_preprocess/subword.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/deep_baselines/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geo_map/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plot/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prediction/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/protein_structure/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/protein_structure/structure_from_esm_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/protein_structure/structure_from_esm_v1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/result_process/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/trainer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
-    </list>
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: optimized code" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -325,7 +301,7 @@
       <workItem from="1732370090117" duration="847000" />
       <workItem from="1732533151457" duration="287000" />
       <workItem from="1733198790072" duration="768000" />
-      <workItem from="1734666732132" duration="3398000" />
+      <workItem from="1734666732132" duration="3716000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -607,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1730950251156</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="feature: optimized code">
+      <created>1734670428894</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1734670428894</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
