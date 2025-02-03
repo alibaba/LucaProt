@@ -38,7 +38,7 @@ plt.rcParams['axes.unicode_minus'] = False
 sys.path.append("..")
 sys.path.append("../src")
 try:
-    from multi_label_metrics import prob_2_pred, relevant_indexes
+    from common.multi_label_metrics import prob_2_pred, relevant_indexes
 except ImportError:
     from src.common.multi_label_metrics import prob_2_pred, relevant_indexes
 
