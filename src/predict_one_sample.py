@@ -594,7 +594,6 @@ if __name__ == "__main__":
 
     # Step1: loading the model configuration
     config = load_args(config_dir)
-    config = load_args(config_dir)
     for key, value in config.items():
        try:
           if value.startswith("../"):
