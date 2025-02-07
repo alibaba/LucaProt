@@ -595,14 +595,13 @@ if __name__ == "__main__":
     # Step1: loading the model configuration
     config = load_args(config_dir)
     for key, value in config.items():
-       try:
-          if value.startswith("../"):
-             value = os.path.join(SCRIPT_DIR, value)
-       except AttributeError:
-          continue
-       print(f'My item {value} is labelled {key}')
-       config[key] = value
-
+        try:
+            if value.startswith("../"):
+                value = os.path.join(SCRIPT_DIR, value)
+        except AttributeError:
+            continue
+        print(f'My item {value} is labelled {key}')
+        config[key] = value
     print("-" * 25 + "config:" + "-" * 25)
     print(config)
     print("-" * 60)
