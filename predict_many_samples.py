@@ -17,12 +17,13 @@
 @author: Hey
 @email: sanyuan.**@**.com
 @tel: 137****6540
-@datetime: 2023/3/20 20:28
+@datetime: 2023/4/10 18:26
 @project: DeepProtFunc
-@file: predict one sample
-@desc: predict one sample from input
+@file: predict_many_samples
+@desc: predict many samples from file
 '''
 import argparse
+import csv
 import numpy as np
 import os, sys, json, codecs
 from subword_nmt.apply_bpe import BPE
@@ -34,13 +35,13 @@ sys.path.append("../src")
 try:
     from common.multi_label_metrics import *
     from protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
-    from utils import set_seed, plot_bins, csv_reader
+    from utils import set_seed, plot_bins, csv_reader, fasta_reader, clean_seq
     from SSFN.model import *
     from data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
 except ImportError:
     from src.common.multi_label_metrics import *
     from src.protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
-    from src.utils import set_seed, plot_bins, csv_reader
+    from src.utils import set_seed, plot_bins, csv_reader, fasta_reader, clean_seq
     from src.SSFN.model import *
     from src.data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
 
@@ -90,10 +91,7 @@ def load_args(log_dir):
     return {}
 
 
-def load_model(
-        args,
-        model_dir
-):
+def load_model(args, model_dir):
     '''
     load the model
     :param args:
@@ -109,8 +107,10 @@ def load_model(
     # for sequence
     subword = None
     if args.has_seq_encoder:
-        seq_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "sequence"),
-                                                        do_lower_case=args.do_lower_case)
+        seq_tokenizer = tokenizer_class.from_pretrained(
+            os.path.join(model_dir, "sequence"),
+            do_lower_case=args.do_lower_case
+        )
         if args.subword:
             bpe_codes_prot = codecs.open(args.codes_file)
             subword = BPE(bpe_codes_prot, merges=-1, separator='')
@@ -118,8 +118,10 @@ def load_model(
         seq_tokenizer = None
 
     if args.has_struct_encoder:
-        struct_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "struct"),
-                                                           do_lower_case=args.do_lower_case)
+        struct_tokenizer = tokenizer_class.from_pretrained(
+            os.path.join(model_dir, "struct"),
+            do_lower_case=args.do_lower_case
+        )
     else:
         struct_tokenizer = None
 
@@ -249,14 +251,7 @@ def transform_sample_2_feature(
         struct_input_ids = inputs["input_ids"]
         real_struct_node_size = len(struct_input_ids)
         padding_length = args.struct_max_length - real_struct_node_size if real_struct_node_size < args.struct_max_length else 0
-        pdb, mean_plddt, ptm, processed_seq = predict_pdb(
-            [prot_id, protein_seq],
-            args.trunc_type,
-            num_recycles=4,
-            truncation_seq_length=args.truncation_seq_length,
-            chunk_size=64,
-            cpu_type="cpu-offload"
-        )
+        pdb, mean_plddt, ptm, processed_seq = predict_pdb([prot_id, protein_seq], args.trunc_type, num_recycles=4, truncation_seq_length=args.truncation_seq_length, chunk_size=64, cpu_type="cpu-offload")
         # if the savepath not exists, create it
         if args.pdb_dir:
             if not os.path.exists(args.pdb_dir):
@@ -305,7 +300,7 @@ def transform_sample_2_feature(
             truncation_seq_length=args.truncation_seq_length - 2,
             device=args.device
         )
-        # failure on GPU, the use CPU
+        # failure on GPU, then using CPU for embedding
         if embedding_info is None:
             # 失败,则调用cpu进行embedding推理
             embedding_info, processed_seq = predict_embedding(
@@ -426,7 +421,7 @@ def predict_probs(
     label_list = processor.get_labels(label_filepath=args.label_filepath)
     label_map = {label: i for i, label in enumerate(label_list)}
     '''
-    # 为了embedding更长序列，先将下游模型to cpu
+    # in order to be able to embed longer sequences
     model.to(torch.device("cpu"))
     batch_info, batch_input = transform_sample_2_feature(args, row, seq_tokenizer, subword, struct_tokenizer)
     model.to(args.device)
@@ -526,7 +521,12 @@ def predict_multi_label(
     preds = relevant_indexes((probs >= args.threshold).astype(int))
     res = []
     for idx, info in enumerate(batch_info):
-        cur_res = [info[0], info[1], [float(probs[idx][label_index]) for label_index in preds[idx]], [label_id_2_name[label_index] for label_index in preds[idx]]]
+        cur_res = [
+            info[0],
+            info[1],
+            [float(probs[idx][label_index]) for label_index in preds[idx]],
+            [label_id_2_name[label_index] for label_index in preds[idx]]
+        ]
         if len(info) > 2:
             cur_res += info[2:]
         res.append(cur_res)
@@ -537,12 +537,12 @@ def main():
     parser = argparse.ArgumentParser(description="Prediction RdRP")
     parser.add_argument("--torch_hub_dir", default=None, type=str,
                         help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)")
-    parser.add_argument("--protein_id", default=None, type=str, required=True,
-                        help="the protein id")
-    parser.add_argument("--sequence", default=None, type=str, required=True,
-                        help="the protein sequence")
+    parser.add_argument("--fasta_file", default=None, type=str, required=True,
+                        help="fasta file path")
+    parser.add_argument("--save_file", default=None, type=str, required=True,
+                        help="the result file path")
     parser.add_argument("--truncation_seq_length", default=4096, type=int, required=True,
-                        help="truncation seq length")
+                        help="truncation seq length(include: [CLS] and [SEP]")
     parser.add_argument("--emb_dir", default=None, type=str,
                         help="the llm embedding save dir. default: None")
     parser.add_argument("--pdb_dir", default="protein", type=str,
@@ -564,8 +564,9 @@ def main():
                         help="the training global step of model finalization.")
     parser.add_argument("--threshold",  default=0.5, type=float,
                         help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
-    parser.add_argument("--gpu_id", default=None, type=int,
-                        help="the used gpu index, -1 for cpu")
+    parser.add_argument("--print_per_number", default=100, type=int,
+                        help="print per number")
+    parser.add_argument("--gpu_id", default=None, type=int, help="the used gpu index, -1 for cpu")
     input_args = parser.parse_args()
     return input_args
 
@@ -577,6 +578,14 @@ if __name__ == "__main__":
         if not os.path.exists(args.torch_hub_dir):
             os.makedirs(args.torch_hub_dir)
         os.environ['TORCH_HOME'] = args.torch_hub_dir
+    if not os.path.exists(args.fasta_file):
+        print("the input fasta file: %s not exists!" % args.fasta_file)
+    if os.path.exists(args.save_file):
+        print("the output file: %s exists!" % args.save_file)
+    else:
+        dirpath = os.path.dirname(args.save_file)
+        if not os.path.exists(dirpath):
+            os.makedirs(dirpath)
     model_dir = "%s/../models/%s/%s/%s/%s/%s/%s" % (
         SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
         args.model_type, args.time_str,
@@ -593,7 +602,6 @@ if __name__ == "__main__":
     )
 
     # Step1: loading the model configuration
-    config = load_args(config_dir)
     config = load_args(config_dir)
     for key, value in config.items():
        try:
@@ -668,7 +676,7 @@ if __name__ == "__main__":
     print("-" * 60)
 
     # Step2: loading the tokenizer and model
-    config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id =\
+    config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = \
         load_model(args=args, model_dir=model_dir)
     predict_func = None
     if args.task_type in ["multi-label", "multi_label"]:
@@ -679,10 +687,19 @@ if __name__ == "__main__":
         predict_func = predict_multi_class
     else:
         raise Exception("Not Support Task Type: %s" % args.task_type)
-    row = [args.protein_id, args.sequence]
-    # Step 3: prediction
-    res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)
-    print(res[0])
+    done = 0
+    with open(args.save_file, "w") as wfp:
+        writer = csv.writer(wfp)
+        writer.writerow(["protein_id", "seq", "prob", "label"])
+        for row in fasta_reader(args.fasta_file):
+            # Step 3: prediction
+            row = [row[0], clean_seq(row[0], row[1])]
+            res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)
+            writer.writerow(res[0])
+            done += 1
+            if done % args.print_per_number == 0:
+                print("done : %d" % done)
+    print("all done: %d" % done)
 
 
 

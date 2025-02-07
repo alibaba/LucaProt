@@ -29,10 +29,10 @@ sys.path.append("..")
 sys.path.append("../..")
 sys.path.append("../../src")
 try:
-    from pooling import *
-    from modeling_bert import BertModel, BertPreTrainedModel
-    from loss import AsymmetricLossOptimized, FocalLoss, MultiLabel_CCE
-    from gcn import *
+    from .pooling import *
+    from .modeling_bert import BertModel, BertPreTrainedModel
+    from common.loss import AsymmetricLossOptimized, FocalLoss, MultiLabel_CCE
+    from .gcn import *
 except ImportError:
     from src.SSFN.pooling import *
     from src.SSFN.modeling_bert import BertModel, BertPreTrainedModel
