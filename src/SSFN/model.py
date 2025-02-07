@@ -23,7 +23,6 @@
 @desc: our model(DeepProtFunc)
 '''
 import copy, sys
-
 sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../..")
@@ -31,7 +30,7 @@ sys.path.append("../../src")
 try:
     from pooling import *
     from modeling_bert import BertModel, BertPreTrainedModel
-    from loss import AsymmetricLossOptimized, FocalLoss, MultiLabel_CCE
+    from common.loss import AsymmetricLossOptimized, FocalLoss, MultiLabel_CCE
     from gcn import *
 except ImportError:
     from src.SSFN.pooling import *

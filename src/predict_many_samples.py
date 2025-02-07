@@ -573,6 +573,7 @@ def main():
 
 if __name__ == "__main__":
     args = main()
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
     if args.torch_hub_dir is not None:
         if not os.path.exists(args.torch_hub_dir):
             os.makedirs(args.torch_hub_dir)
@@ -585,23 +586,31 @@ if __name__ == "__main__":
         dirpath = os.path.dirname(args.save_file)
         if not os.path.exists(dirpath):
             os.makedirs(dirpath)
-    model_dir = "../models/%s/%s/%s/%s/%s/%s" % (
-        args.dataset_name, args.dataset_type, args.task_type,
+    model_dir = "%s/../models/%s/%s/%s/%s/%s/%s" % (
+        SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
         args.model_type, args.time_str,
         args.step if args.step == "best" else "checkpoint-{}".format(args.step)
     )
-    config_dir = "../logs/%s/%s/%s/%s/%s" % (
-        args.dataset_name, args.dataset_type, args.task_type,
+    config_dir = "%s/../logs/%s/%s/%s/%s/%s" % (
+        SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
         args.model_type,  args.time_str
     )
-    predict_dir = "../predicts/%s/%s/%s/%s/%s/%s" % (
-        args.dataset_name, args.dataset_type, args.task_type,
+    predict_dir = "%s/../predicts/%s/%s/%s/%s/%s/%s" % (
+        SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
         args.model_type, args.time_str,
         args.step if args.step == "best" else "checkpoint-{}".format(args.step)
     )
 
     # Step1: loading the model configuration
     config = load_args(config_dir)
+    for key, value in config.items():
+        try:
+            if value.startswith("../"):
+                value = os.path.join(SCRIPT_DIR, value)
+        except AttributeError:
+            continue
+        print(f'My item {value} is labelled {key}')
+        config[key] = value
     print("-" * 25 + "config:" + "-" * 25)
     print(config)
     print("-" * 60)
