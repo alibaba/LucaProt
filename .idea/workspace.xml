@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: optimized code">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: optimized code" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -306,6 +304,7 @@
       <workItem from="1734666732132" duration="4366000" />
       <workItem from="1734685066582" duration="92000" />
       <workItem from="1738927865028" duration="1274000" />
+      <workItem from="1738980936059" duration="326000" />
     </task>
     <task id="LOCAL-00001" summary="Update README.md">
       <created>1703067015212</created>
@@ -615,7 +614,14 @@
       <option name="project" value="LOCAL" />
       <updated>1738928370731</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="feature: optimized code">
+      <created>1738981015320</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1738981015320</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
