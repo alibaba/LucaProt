@@ -163,7 +163,7 @@ python predict_one_sample.py \
   int, the gpu id to use(**-1 for cpu**).         
 
 * **--torch_hub_dir(optional)**:    
-  str, the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)
+  str, the torch hub dir path for saving pretrained model(default: `~/.cache/torch/hub/`)
 
 
 
@@ -320,7 +320,7 @@ python predict.py \
   int, the gpu id to use(**-1 for cpu**).     
 
 * **--torch_hub_dir(optional)**:    
-  str, he torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)  
+  str, the torch hub dir path for saving pretrained model(default: `~/.cache/torch/hub/`)  
 
 **Note:** the embedding matrices of all the proteins in this file need to prepare in advance(**$emb_dir**).
 
