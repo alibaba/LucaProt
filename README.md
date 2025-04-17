@@ -8,9 +8,16 @@ See the **NOTICE** file for more information.
 **This project provides the Python dependency environment installation file, installation commands, and the running command of the trained LucaProt model for inference or prediction, which can be found in this repository. These models are compatible with Linux, Mac OS, and Windows systems, supporting both CPU and GPU configurations for inference tasks.**
 
 
-## TimeLine   
-* 2024/09/24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />: A free CPU version of `LucaProt Server` is available online (http://lucaprot.org).
-* 2024/09/01: Optimize inference and prediction code to run on GPU with small graphics memory, such as A10.    
+## TimeLine    
+* **2025-04-17:**    
+Add the post-processing workflow to classify the viral RdRPs predicted by LucaProt into our 180 supergroups or novel supergroups.     
+(**Guidance listed in `PostProcessingWorkflow.md` or `PostProcessingWorkflow_zh.md`of this project**).       
+
+* **2024-09-24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />:**    
+A free CPU version of `LucaProt Server` is available online (http://lucaprot.org).      
+
+* **2024-09-01**:       
+Optimize inference and prediction code to run on GPU with small graphics memory, such as `A10`.            
 
 ## LucaProt Server<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />        
 LucaProt Server(CPU) is available at: https://lucaprot.org.     
