@@ -422,9 +422,22 @@ with open(os.path.join(new_dataset_dir, protein_2_emb_filepath), "a+") as wfp:
             cur_embedding_file_idx += 1
             new_row = [protein_id, "embedding_%d.pt" % cur_embedding_file_idx]
             # prot_id,seq,seq_len,pdb_filename,ptm,mean_plddt,emb_filename,label,source
-            train_dataset.append([protein_id, seq_info[protein_id], len(seq_info[protein_id]), None, None, None, "embedding_%d.pt" % cur_embedding_file_idx, 1, "20230126_rdrp"])
+            train_dataset.append([
+                protein_id,
+                seq_info[protein_id],
+                len(seq_info[protein_id]),
+                None,
+                None,
+                None,
+                "embedding_%d.pt" % cur_embedding_file_idx,
+                1,
+                "20230126_rdrp"
+            ])
             writer.writerow(new_row)
-            shutil.copyfile(src=os.path.join(append_positive_rdrp_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx), dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx))
+            shutil.copyfile(
+                src=os.path.join(append_positive_rdrp_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx),
+                dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx)
+            )
 print("cur exists size: %d" % len(exists))
 print("cur train_dataset size: %d" % len(train_dataset))
 append_negative_rt_fasta_id_2_idx_filepath = "../data/rdrp/append_negative/append_negative_rt_embed_fasta_id_2_idx.csv"
@@ -455,8 +468,21 @@ with open(os.path.join(new_dataset_dir, protein_2_emb_filepath), "a+") as wfp:
             cur_embedding_file_idx += 1
             new_row = [protein_id, "embedding_%d.pt" % cur_embedding_file_idx]
             writer.writerow(new_row)
-            train_dataset.append([protein_id, seq_info[protein_id], len(seq_info[protein_id]), None, None, None, "embedding_%d.pt" % cur_embedding_file_idx, 0, "rt"])
-            shutil.copyfile(src=os.path.join(append_negative_rt_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx), dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx))
+            train_dataset.append([
+                protein_id,
+                seq_info[protein_id],
+                len(seq_info[protein_id]),
+                None,
+                None,
+                None,
+                "embedding_%d.pt" % cur_embedding_file_idx,
+                0,
+                "rt"
+            ])
+            shutil.copyfile(
+                src=os.path.join(append_negative_rt_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx),
+                dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx)
+            )
 print("cur exists size: %d" % len(exists))
 print("cur train_dataset size: %d" % len(train_dataset))
 append_negative_dna_fasta_id_2_idx_filepath = "../data/rdrp/append_negative/append_negative_dna_embed_fasta_id_2_idx.csv"
@@ -487,8 +513,21 @@ with open(os.path.join(new_dataset_dir, protein_2_emb_filepath), "a+") as wfp:
             cur_embedding_file_idx += 1
             new_row = [protein_id, "embedding_%d.pt" % cur_embedding_file_idx]
             writer.writerow(new_row)
-            train_dataset.append([protein_id, seq_info[protein_id], len(seq_info[protein_id]), None, None, None, "embedding_%d.pt" % cur_embedding_file_idx, 0, "dna"])
-            shutil.copyfile(src=os.path.join(append_negative_dna_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx), dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx))
+            train_dataset.append([
+                protein_id,
+                seq_info[protein_id],
+                len(seq_info[protein_id]),
+                None,
+                None,
+                None,
+                "embedding_%d.pt" % cur_embedding_file_idx,
+                0,
+                "dna"
+            ])
+            shutil.copyfile(
+                src=os.path.join(append_negative_dna_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx),
+                dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx)
+            )
 print("cur exists size: %d" % len(exists))
 print("cur train_dataset size: %d" % len(train_dataset))
 for _ in range(5):

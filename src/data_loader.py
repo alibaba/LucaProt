@@ -57,7 +57,7 @@ class DataProcessor(object):
 
     @classmethod
     def _read_file(cls, input_file, header=False,  filter_header=True):
-        if input_file.endswith(".csv"):
+        if input_file.endswith(".csv") or input_file.endswith(".tsv"):
             return cls._read_csv(input_file, header=header, filter_header=filter_header)
         else:
             return cls._read_txt(input_file, header=header, filter_header=filter_header)
@@ -65,7 +65,6 @@ class DataProcessor(object):
     @classmethod
     def _read_csv(cls, input_file, header=True, filter_header=True):
         with open(input_file, "r", encoding="utf-8-sig") as f:
-            # reader = csv.reader(f, delimiter=",", quotechar=quotechar)
             delimiter = ","
             if input_file.endswith(".tsv"):
                 delimiter = "\t"
@@ -93,9 +92,25 @@ class DataProcessor(object):
 
 class InputExample(object):
     '''
-    One Example Building，the inputs include: guid，seq，contact map matrix, structural embedding info, embedding_len, embedding_dim, label
+    One Example Building，the inputs include:
+    guid，
+    seq，
+    contact map matrix,
+    structural embedding info,
+    embedding_len,
+    embedding_dim,
+    label
     '''
-    def __init__(self, guid, seq, contact_map=None, embedding_info=None, embedding_len=None, embedding_dim=None, label=None):
+    def __init__(
+            self,
+            guid,
+            seq,
+            contact_map=None,
+            embedding_info=None,
+            embedding_len=None,
+            embedding_dim=None,
+            label=None
+    ):
         self.guid = guid
         self.seq = seq
         self.contact_map = contact_map
@@ -117,12 +132,31 @@ class InputExample(object):
 
 class InputFeatures(object):
     '''
-    Create the features of one example, the inputs include: token ids，seq attention mask，seq type ids,structure node ids，structure contact map, structure node size, structural embedding_info, structural embedding attention mask, label, global attention mask
+    Create the features of one example, the inputs include:
+    token ids，
+    seq attention mask，
+    seq type ids,
+    structure node ids，
+    structure contact map,
+    structure node size,
+    structural embedding_info,
+    structural embedding attention mask,
+    label, global attention mask
     '''
-    def __init__(self, input_ids, attention_mask, token_type_ids, real_token_len,
-                 struct_input_ids, struct_contact_map, real_struct_node_size,
-                 embedding_info, embedding_attention_mask,
-                 label, global_attention_mask=None):
+    def __init__(
+            self,
+            input_ids,
+            attention_mask,
+            token_type_ids,
+            real_token_len,
+            struct_input_ids,
+            struct_contact_map,
+            real_struct_node_size,
+            embedding_info,
+            embedding_attention_mask,
+            label,
+            global_attention_mask=None
+    ):
         self.input_ids = input_ids
         self.attention_mask = attention_mask
         self.token_type_ids = token_type_ids
@@ -156,7 +190,6 @@ class SequenceStructureProcessor(DataProcessor):
     test.txt no header, each row is an id
     label.txt label list file, exists header
     npz/${id}.npz: dict, the sample corresponding to the id, which includes multiple information fields, get the info by label_type
-
     '''
     def __init__(self, model_type, separate_file, filename_pattern=None):
         '''
@@ -170,19 +203,30 @@ class SequenceStructureProcessor(DataProcessor):
 
     def get_example_from_tensor_dict(self, tensor_dict):
         return InputExample(
-            uuid=tensor_dict['idx'].numpy(),
+            guid=tensor_dict['idx'].numpy(),
             seq=tensor_dict['seq'].numpy(),
             contact_map=tensor_dict['contact_map'].numpy(),
             embedding_info=tensor_dict['embedding_info'].numpy(),
-            label=str(tensor_dict['label'].numpy()))
+            label=str(tensor_dict['label'].numpy())
+        )
 
-    def get_train_examples(self, data_dir, cmap_type, cmap_thresh, embedding_type):
+    def get_train_examples(
+            self,
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type
+    ):
         if self.filename_pattern is not None and os.path.exists(os.path.join(data_dir, self.filename_pattern.format("train"))):
             filepath = os.path.join(data_dir, self.filename_pattern.format("train"))
             if filepath.endswith(".txt"):
                 header = False
             elif filepath.endswith(".csv"):
                 header = True
+            elif filepath.endswith(".tsv"):
+                header = True
+            else:
+                raise Exception("error file format %s(not .txt, .csv, or .tsv" % filepath)
         else:
             if os.path.exists(os.path.join(data_dir, "train.txt")):
                 filepath = os.path.join(data_dir, "train.txt")
@@ -190,10 +234,20 @@ class SequenceStructureProcessor(DataProcessor):
             elif os.path.exists(os.path.join(data_dir, "train.csv")):
                 filepath = os.path.join(data_dir, "train.csv")
                 header = True
+            elif os.path.exists(os.path.join(data_dir, "train.tsv")):
+                filepath = os.path.join(data_dir, "train.tsv")
+                header = True
             else:
                 raise Exception("not exists train.* in %s" % data_dir)
-        datasets = self._create_examples(self._read_file(filepath, header=header, filter_header=True), "train", data_dir,
-                                         cmap_type, cmap_thresh, embedding_type, self.separate_file)
+        datasets = self._create_examples(
+            self._read_file(filepath, header=header, filter_header=True),
+            "train",
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type,
+            self.separate_file
+        )
         # shuffle
         '''
         for _ in range(5):
@@ -201,7 +255,13 @@ class SequenceStructureProcessor(DataProcessor):
         '''
         return datasets
 
-    def get_dev_examples(self, data_dir, cmap_type, cmap_thresh, embedding_type):
+    def get_dev_examples(
+            self,
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type
+    ):
         if self.filename_pattern is not None and os.path.exists(os.path.join(data_dir, self.filename_pattern.format("dev"))):
             filepath = os.path.join(data_dir, self.filename_pattern.format("dev"))
             if filepath.endswith(".txt"):
@@ -217,10 +277,23 @@ class SequenceStructureProcessor(DataProcessor):
                 header = True
             else:
                 raise Exception("not exists dev.* in %s" % data_dir)
-        return self._create_examples(self._read_file(filepath, header=header, filter_header=True), "dev", data_dir,
-                                     cmap_type, cmap_thresh, embedding_type, self.separate_file)
+        return self._create_examples(
+            self._read_file(filepath, header=header, filter_header=True),
+            "dev",
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type,
+            self.separate_file
+        )
 
-    def get_test_examples(self, data_dir, cmap_type, cmap_thresh, embedding_type):
+    def get_test_examples(
+            self,
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type
+    ):
         if self.filename_pattern is not None and os.path.exists(os.path.join(data_dir, self.filename_pattern.format("test"))):
             filepath = os.path.join(data_dir, self.filename_pattern.format("test"))
             if filepath.endswith(".txt"):
@@ -236,8 +309,15 @@ class SequenceStructureProcessor(DataProcessor):
                 header = True
             else:
                 raise Exception("not exists test.* in %s" % data_dir)
-        return self._create_examples(self._read_file(filepath, header=header, filter_header=True), "test", data_dir,
-                                     cmap_type, cmap_thresh, embedding_type, self.separate_file)
+        return self._create_examples(
+            self._read_file(filepath, header=header, filter_header=True),
+            "test",
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type,
+            self.separate_file
+        )
 
     def get_labels(self, label_filepath):
         '''
@@ -306,24 +386,40 @@ class SequenceStructureProcessor(DataProcessor):
                             embedding_d = embedding_info.shape[0]
                     else:
                         raise Exception("%s not exists." % embedding_filepath)
-                examples.append(InputExample(guid=dataset_type + "#" + prot_id,
-                                             seq=seq,
-                                             contact_map=cmap,
-                                             embedding_info=embedding_info,
-                                             embedding_len=embedding_len,
-                                             embedding_dim=embedding_d,
-                                             label=label))
+                examples.append(InputExample(
+                    guid=dataset_type + "#" + prot_id,
+                    seq=seq,
+                    contact_map=cmap,
+                    embedding_info=embedding_info,
+                    embedding_len=embedding_len,
+                    embedding_dim=embedding_d,
+                    label=label
+                ))
         else:
             for row in lines:
                 prot_id = row[0]
                 seqres = row[1]
                 label = row[2]
-                examples.append(InputExample(guid=dataset_type + "#" + prot_id, seq=seqres, contact_map=None, embedding_info=None, label=label))
+                examples.append(InputExample(
+                    guid=dataset_type + "#" + prot_id,
+                    seq=seqres,
+                    contact_map=None,
+                    embedding_info=None,
+                    label=label
+                ))
         return examples
 
     @staticmethod
-    def _create_examples(lines, dataset_type, data_dir, cmap_type, cmap_thresh, embedding_type, separate_file):
-        examples = []
+    def _create_examples(
+            lines,
+            dataset_type,
+            data_dir,
+            cmap_type,
+            cmap_thresh,
+            embedding_type,
+            separate_file
+    ):
+        # examples = []
         if separate_file:
             for row in lines:
                 # prot_id, seq, pdb_index, embed_idx, label = row[0], row[1], row[2], row[3], row[4]
@@ -363,47 +459,59 @@ class SequenceStructureProcessor(DataProcessor):
                     else:
                         raise Exception("%s not exists." % embedding_filepath)
                 '''
-                examples.append(InputExample(guid=dataset_type + "#" + prot_id,
-                                             seq=seq,
-                                             contact_map=cmap,
-                                             embedding_info=embedding_info,
-                                             embedding_len=embedding_len,
-                                             embedding_dim=embedding_d,
-                                             label=label))
+                examples.append(InputExample(
+                    guid=dataset_type + "#" + prot_id,
+                    seq=seq,
+                    contact_map=cmap,
+                    embedding_info=embedding_info,
+                    embedding_len=embedding_len,
+                    embedding_dim=embedding_d,
+                    label=label
+                ))
                 '''
-                yield InputExample(guid=dataset_type + "#" + prot_id,
-                                   seq=seq,
-                                   contact_map=cmap,
-                                   embedding_info=embedding_info,
-                                   embedding_len=embedding_len,
-                                   embedding_dim=embedding_d,
-                                   label=label)
+                yield InputExample(
+                    guid=dataset_type + "#" + prot_id,
+                    seq=seq,
+                    contact_map=cmap,
+                    embedding_info=embedding_info,
+                    embedding_len=embedding_len,
+                    embedding_dim=embedding_d,
+                    label=label
+                )
         else:
             for row in lines:
                 prot_id = row[0]
                 seqres = row[1]
                 label = row[2]
                 # examples.append(InputExample(guid=dataset_type + "#" + prot_id, seq=seqres, contact_map=None, embedding_info=None, label=label))
-                yield InputExample(guid=dataset_type + "#" + prot_id, seq=seqres, contact_map=None, embedding_info=None, label=label)
+                yield InputExample(
+                    guid=dataset_type + "#" + prot_id,
+                    seq=seqres,
+                    contact_map=None,
+                    embedding_info=None,
+                    label=label
+                )
         # return examples
 
 
-def convert_examples_to_features(examples,
-                                 subword,
-                                 seq_tokenizer,
-                                 struct_tokenizer,
-                                 seq_max_length=512,
-                                 struct_max_length=512,
-                                 embedding_type=None,
-                                 embedding_max_length=512,
-                                 output_mode=None,
-                                 label_list=None,
-                                 label_filepath=None,
-                                 pad_on_left=False,
-                                 pad_token=0,
-                                 pad_token_segment_id=0,
-                                 mask_padding_with_zero=True,
-                                 trunc_type="right"):
+def convert_examples_to_features(
+        examples,
+        subword,
+        seq_tokenizer,
+        struct_tokenizer,
+        seq_max_length=512,
+        struct_max_length=512,
+        embedding_type=None,
+        embedding_max_length=512,
+        output_mode=None,
+        label_list=None,
+        label_filepath=None,
+        pad_on_left=False,
+        pad_token=0,
+        pad_token_segment_id=0,
+        mask_padding_with_zero=True,
+        trunc_type="right"
+):
     '''
     a sample to features
     :param examples:
@@ -592,36 +700,38 @@ def convert_examples_to_features(examples,
 
         # for label
         if output_mode in ["multi-class", "multi_class"]:
-            label_name = label_map[example.label]
+            label_idx = int(example.label)
+            label_name = label_list[label_idx]
             if isinstance(label_name, str):
                 label = label_map[label_name]
             else:
-                label = label_name
+                label = label_idx
         elif output_mode == "regression":
             label = float(example.label)
         elif output_mode in ["multi-label", "multi_label"]:
             if isinstance(example.label, str):
                 label = [0] * len(label_map)
-                for label_name in eval(example.label):
-                    if isinstance(label_name, str):
-                        label_id = label_map[label_name]
+                for v in eval(example.label):
+                    if isinstance(v, str):
+                        label_idx = label_map[v]
                     else:
-                        label_id = label_name
-                    label[label_id] = 1
+                        label_idx = v
+                    label[label_idx] = 1
             else:
                 label = [0] * len(label_map)
-                for label_name in example.label:
-                    if isinstance(label_name, str):
-                        label_id = label_map[label_name]
+                for v in example.label:
+                    if isinstance(v, str):
+                        label_idx = label_map[v]
                     else:
-                        label_id = label_name
-                    label[label_id] = 1
+                        label_idx = v
+                    label[label_idx] = 1
         elif output_mode in ["binary-class", "binary_class"]:
-            label_name = label_map[example.label]
+            label_idx = int(example.label)
+            label_name = label_list[label_idx]
             if isinstance(label_name, str):
                 label = label_map[label_name]
             else:
-                label = label_name
+                label = int(example.label)
         else:
             raise KeyError(output_mode)
 
@@ -653,22 +763,32 @@ def convert_examples_to_features(examples,
             else:
                 logger.info("label: %s (id = %d)" % (example.label, label))
         features.append(
-            InputFeatures(input_ids=input_ids,
-                          attention_mask=attention_mask,
-                          token_type_ids=token_type_ids,
-                          real_token_len=real_token_len,
-                          struct_input_ids=struct_input_ids,
-                          struct_contact_map=struct_contact_map,
-                          real_struct_node_size=real_struct_node_size,
-                          embedding_info=embedding_info,
-                          embedding_attention_mask=embedding_attention_mask,
-                          label=label
-                          )
+            InputFeatures(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                token_type_ids=token_type_ids,
+                real_token_len=real_token_len,
+                struct_input_ids=struct_input_ids,
+                struct_contact_map=struct_contact_map,
+                real_struct_node_size=real_struct_node_size,
+                embedding_info=embedding_info,
+                embedding_attention_mask=embedding_attention_mask,
+                label=label
+            )
         )
     return features, seq_len_list
 
 
-def load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=False, predict=False, log_fp=None):
+def load_and_cache_examples(
+        args,
+        processor,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        evaluate=False,
+        predict=False,
+        log_fp=None
+):
     """
     transform the dataset into features，and cache them into cached_features_file
     :param args.cmap_type: [C_alpha, C_beta]
@@ -715,7 +835,13 @@ def load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_toke
         label_list = processor.get_labels(label_filepath=args.label_filepath)
         if evaluate:
             examples = processor.get_dev_examples(args.data_dir, args.cmap_type, args.cmap_thresh, args.embedding_type)
-            seq_len_distribution_savepath = "../pics/%s/%s/%s/%s/%s_seq_len_distribution.png" %(args.dataset_name, args.dataset_type, args.task_type, args.model_type, "dev")
+            seq_len_distribution_savepath = "../pics/%s/%s/%s/%s/%s_seq_len_distribution.png" % (
+                args.dataset_name,
+                args.dataset_type,
+                args.task_type,
+                args.model_type,
+                "dev"
+            )
             '''
             if log_fp:
                 log_fp.write("dev examples num: %d\n" % len(examples))
@@ -724,7 +850,13 @@ def load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_toke
             '''
         elif predict:
             examples = processor.get_test_examples(args.data_dir, args.cmap_type, args.cmap_thresh, args.embedding_type)
-            seq_len_distribution_savepath = "../pics/%s/%s/%s/%s/%s_seq_len_distribution.png" %(args.dataset_name, args.dataset_type, args.task_type, args.model_type, "test")
+            seq_len_distribution_savepath = "../pics/%s/%s/%s/%s/%s_seq_len_distribution.png" % (
+                args.dataset_name,
+                args.dataset_type,
+                args.task_type,
+                args.model_type,
+                "test"
+            )
             '''
             if log_fp:
                 log_fp.write("dev examples num: %d\n" % len(examples))
@@ -733,7 +865,13 @@ def load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_toke
             '''
         else:
             examples = processor.get_train_examples(args.data_dir, args.cmap_type, args.cmap_thresh, args.embedding_type)
-            seq_len_distribution_savepath = "../pics/%s/%s/%s/%s/%s_seq_len_distribution.png" %(args.dataset_name, args.dataset_type, args.task_type, args.model_type, "train")
+            seq_len_distribution_savepath = "../pics/%s/%s/%s/%s/%s_seq_len_distribution.png" % (
+                args.dataset_name,
+                args.dataset_type,
+                args.task_type,
+                args.model_type,
+                "train"
+            )
             '''
             if log_fp:
                 log_fp.write("train examples num: %d\n" % len(examples))
@@ -742,23 +880,24 @@ def load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_toke
             '''
         if seq_tokenizer:
             logger.info("tokenizer vocab size: %d\n", seq_tokenizer.vocab_size)
-        features, seq_len_list = convert_examples_to_features(examples,
-                                                              subword=subword,
-                                                              seq_tokenizer=seq_tokenizer,
-                                                              struct_tokenizer=struct_tokenizer,
-                                                              seq_max_length=args.seq_max_length,
-                                                              struct_max_length=args.struct_max_length,
-                                                              embedding_type=args.embedding_type,
-                                                              embedding_max_length=args.embedding_max_length,
-                                                              output_mode=args.output_mode,
-                                                              label_list=label_list,
-                                                              label_filepath=args.label_filepath,
-                                                              pad_on_left=False,
-                                                              pad_token=seq_tokenizer.convert_tokens_to_ids([seq_tokenizer.pad_token])[0] if seq_tokenizer else 0,
-                                                              pad_token_segment_id=0,
-                                                              mask_padding_with_zero=True,
-                                                              trunc_type=args.trunc_type
-                                                              )
+        features, seq_len_list = convert_examples_to_features(
+            examples,
+            subword=subword,
+            seq_tokenizer=seq_tokenizer,
+            struct_tokenizer=struct_tokenizer,
+            seq_max_length=args.seq_max_length,
+            struct_max_length=args.struct_max_length,
+            embedding_type=args.embedding_type,
+            embedding_max_length=args.embedding_max_length,
+            output_mode=args.output_mode,
+            label_list=label_list,
+            label_filepath=args.label_filepath,
+            pad_on_left=False,
+            pad_token=seq_tokenizer.convert_tokens_to_ids([seq_tokenizer.pad_token])[0] if seq_tokenizer else 0,
+            pad_token_segment_id=0,
+            mask_padding_with_zero=True,
+            trunc_type=args.trunc_type
+        )
         del examples
         if not os.path.exists(os.path.dirname(seq_len_distribution_savepath)):
             os.makedirs(os.path.dirname(seq_len_distribution_savepath))
@@ -804,23 +943,25 @@ def load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_toke
     return dataset
 
 
-def convert_one_example_to_features(example,
-                                    subword,
-                                    seq_tokenizer,
-                                    struct_tokenizer,
-                                    seq_max_length=1024,
-                                    struct_max_length=1024,
-                                    embedding_type=None,
-                                    embedding_max_length=1024,
-                                    output_mode=None,
-                                    label_map=None,
-                                    label_list=None,
-                                    label_filepath=None,
-                                    pad_on_left=False,
-                                    pad_token=0,
-                                    pad_token_segment_id=0,
-                                    mask_padding_with_zero=True,
-                                    trunc_type="right"):
+def convert_one_example_to_features(
+        example,
+        subword,
+        seq_tokenizer,
+        struct_tokenizer,
+        seq_max_length=1024,
+        struct_max_length=1024,
+        embedding_type=None,
+        embedding_max_length=1024,
+        output_mode=None,
+        label_map=None,
+        label_list=None,
+        label_filepath=None,
+        pad_on_left=False,
+        pad_token=0,
+        pad_token_segment_id=0,
+        mask_padding_with_zero=True,
+        trunc_type="right"
+):
     '''
     convect one sample to features
     :param example:
@@ -992,57 +1133,85 @@ def convert_one_example_to_features(example,
 
     # for label
     if output_mode in ["multi-class", "multi_class"]:
-        label_name = example["label"]
-        if isinstance(label_name, str):
-            label = label_map[label_name]
+        label_v = example["label"]
+        if isinstance(label_v, str):
+            label = label_map[label_v]
         else:
-            label = label_name
+            label = int(label_v)
     elif output_mode == "regression":
         label = float(example["label"])
     elif output_mode in ["multi-label", "multi_label"]:
         if isinstance(example["label"], str):
             label = [0] * len(label_map)
-            for label_name in eval(example["label"]):
-                if isinstance(label_name, str):
-                    label_id = label_map[label_name]
+            for label_v in eval(example["label"]):
+                if isinstance(label_v, str):
+                    label_idx = label_map[label_v]
                 else:
-                    label_id = label_name
-                label[label_id] = 1
+                    label_idx = int(label_v)
+                label[label_idx] = 1
         else:
             label = [0] * len(label_map)
-            for label_name in example["label"]:
-                if isinstance(label_name, str):
-                    label_id = label_map[label_name]
+            for label_v in example["label"]:
+                if isinstance(label_v, str):
+                    label_idx = label_map[label_v]
                 else:
-                    label_id = label_name
-                label[label_id] = 1
+                    label_idx = int(label_v)
+                label[label_idx] = 1
     elif output_mode in ["binary-class", "binary_class"]:
-        label_name = example["label"]
-        if isinstance(label_name, str):
-            label = label_map[label_name]
+        label_v = example["label"]
+        if isinstance(label_v, str):
+            label = label_map[label_v]
         else:
-            label = label_name
+            label = int(label_v)
     else:
         raise KeyError(output_mode)
     res = []
     if seq_tokenizer:
-        res += [torch.tensor(input_ids, dtype=torch.long), torch.tensor(attention_mask, dtype=torch.long),
-                torch.tensor(token_type_ids, dtype=torch.long), torch.tensor([real_token_len], dtype=torch.long)]
+        res += [
+            torch.tensor(input_ids, dtype=torch.long),
+            torch.tensor(attention_mask, dtype=torch.long),
+            torch.tensor(token_type_ids, dtype=torch.long),
+            torch.tensor([real_token_len], dtype=torch.long)
+        ]
     if struct_tokenizer:
-        res += [torch.tensor(struct_input_ids, dtype=torch.long), torch.tensor(struct_contact_map, dtype=torch.long),
-                torch.tensor([struct_contact_map_len], dtype=torch.long)]
+        res += [
+            torch.tensor(struct_input_ids, dtype=torch.long),
+            torch.tensor(struct_contact_map, dtype=torch.long),
+            torch.tensor([struct_contact_map_len], dtype=torch.long)
+        ]
     if embedding_type:
         if embedding_type != "bos":
-            res += [torch.tensor(embedding_info, dtype=torch.float32), torch.tensor(embedding_attention_mask, dtype=torch.long)]
+            res += [
+                torch.tensor(embedding_info, dtype=torch.float32),
+                torch.tensor(embedding_attention_mask, dtype=torch.long)
+            ]
         else:
-            res += [torch.tensor(embedding_info, dtype=torch.float32)]
+            res += [
+                torch.tensor(embedding_info, dtype=torch.float32)
+            ]
     res += [torch.tensor(label, dtype=torch.long)]
     return tuple(res)
 
 
-def parse_tfrecord(single_record, subword, seq_tokenizer, struct_tokenizer, seq_max_length, struct_max_length,
-                   embedding_type, embedding_max_length,
-                   output_mode, label_map, pad_on_left, pad_token, pad_token_segment_id, mask_padding_with_zero, trunc_type, cmap_type, cmap_thresh):
+def parse_tfrecord(
+        single_record,
+        subword,
+        seq_tokenizer,
+        struct_tokenizer,
+        seq_max_length,
+        struct_max_length,
+        embedding_type,
+        embedding_max_length,
+        output_mode,
+        label_map,
+        pad_on_left,
+        pad_token,
+        pad_token_segment_id,
+        mask_padding_with_zero,
+        trunc_type,
+        cmap_type,
+        cmap_thresh
+):
     '''
     parse a tf-record
     :param single_record:
@@ -1114,17 +1283,18 @@ def parse_tfrecord(single_record, subword, seq_tokenizer, struct_tokenizer, seq_
 
     label = single_record["label"]
 
-    example = {'id': id,
-               'seq': seq,
-               'contacts': contacts,
-               "bos_representations": bos_representations,
-               "representations": representations,
-               "emb_l": embedding_len,
-               "emb_d": embedding_d,
-               'contact_map': contact_map,
-               "contact_map_shape": contact_map_shape,
-               "label": label
-               }
+    example = {
+        'id': id,
+        'seq': seq,
+        'contacts': contacts,
+        "bos_representations": bos_representations,
+        "representations": representations,
+        "emb_l": embedding_len,
+        "emb_d": embedding_d,
+        'contact_map': contact_map,
+        "contact_map_shape": contact_map_shape,
+        "label": label
+    }
     record = convert_one_example_to_features(
         example,
         subword,
@@ -1147,7 +1317,16 @@ def parse_tfrecord(single_record, subword, seq_tokenizer, struct_tokenizer, seq_
     return record
 
 
-def load_and_cache_examples_for_tfrecords(args, processor:DataProcessor, seq_tokenizer, subword, struct_tokenizer, evaluate=False, predict=False, log_fp=None):
+def load_and_cache_examples_for_tfrecords(
+        args,
+        processor:DataProcessor,
+        seq_tokenizer,
+        subword,
+        struct_tokenizer,
+        evaluate=False,
+        predict=False,
+        log_fp=None
+):
     '''
     load tfrecords
     :param args:
@@ -1218,42 +1397,57 @@ def load_and_cache_examples_for_tfrecords(args, processor:DataProcessor, seq_tok
     '''
     shuffle_queue_size = args.shuffle_queue_size
     if args.multi_tfrecords:
-        dataset = MultiTFRecordDataset(tfrecords_filepath, index_pattern=index_pattern, splits=None, description=None, shuffle_queue_size=shuffle_queue_size, transform=lambda x: parse_tfrecord(x,
-                                                                                                                                                                                                 subword=subword,
-                                                                                                                                                                                                 seq_tokenizer=seq_tokenizer,
-                                                                                                                                                                                                 struct_tokenizer=struct_tokenizer,
-                                                                                                                                                                                                 seq_max_length=args.seq_max_length,
-                                                                                                                                                                                                 struct_max_length=args.struct_max_length,
-                                                                                                                                                                                                 embedding_type=args.embedding_type,
-                                                                                                                                                                                                 embedding_max_length=args.embedding_max_length,
-                                                                                                                                                                                                 output_mode=args.output_mode,
-                                                                                                                                                                                                 label_map=label_map,
-                                                                                                                                                                                                 pad_on_left=False,
-                                                                                                                                                                                                 pad_token=0,
-                                                                                                                                                                                                 pad_token_segment_id=0,
-                                                                                                                                                                                                 mask_padding_with_zero=True,
-                                                                                                                                                                                                 trunc_type=args.trunc_type,
-                                                                                                                                                                                                 cmap_type=args.cmap_type,
-                                                                                                                                                                                                 cmap_thresh=args.cmap_thresh))
+        dataset = MultiTFRecordDataset(
+            tfrecords_filepath,
+            index_pattern=index_pattern,
+            splits=None,
+            description=None,
+            shuffle_queue_size=shuffle_queue_size,
+            transform=lambda x: parse_tfrecord(
+                x,
+                subword=subword,
+                seq_tokenizer=seq_tokenizer,
+                struct_tokenizer=struct_tokenizer,
+                seq_max_length=args.seq_max_length,
+                struct_max_length=args.struct_max_length,
+                embedding_type=args.embedding_type,
+                embedding_max_length=args.embedding_max_length,
+                output_mode=args.output_mode,
+                label_map=label_map,
+                pad_on_left=False,
+                pad_token=0,
+                pad_token_segment_id=0,
+                mask_padding_with_zero=True,
+                trunc_type=args.trunc_type,
+                cmap_type=args.cmap_type,
+                cmap_thresh=args.cmap_thresh
+            ))
     else:
-        dataset = TFRecordDataset(tfrecords_filepath, index_path=index_path, description=None, shuffle_queue_size=shuffle_queue_size,
-                                  transform=lambda x: parse_tfrecord(x,
-                                                                     subword=subword,
-                                                                     seq_tokenizer=seq_tokenizer,
-                                                                     struct_tokenizer=struct_tokenizer,
-                                                                     seq_max_length=args.seq_max_length,
-                                                                     struct_max_length=args.struct_max_length,
-                                                                     embedding_type=args.embedding_type,
-                                                                     embedding_max_length=args.embedding_max_length,
-                                                                     output_mode=args.output_mode,
-                                                                     label_map=label_map,
-                                                                     pad_on_left=False,
-                                                                     pad_token=0,
-                                                                     pad_token_segment_id=0,
-                                                                     mask_padding_with_zero=True,
-                                                                     trunc_type=args.trunc_type,
-                                                                     cmap_type=args.cmap_type,
-                                                                     cmap_thresh=args.cmap_thresh))
+        dataset = TFRecordDataset(
+            tfrecords_filepath,
+            index_path=index_path,
+            description=None,
+            shuffle_queue_size=shuffle_queue_size,
+            transform=lambda x: parse_tfrecord(
+                x,
+                subword=subword,
+                seq_tokenizer=seq_tokenizer,
+                struct_tokenizer=struct_tokenizer,
+                seq_max_length=args.seq_max_length,
+                struct_max_length=args.struct_max_length,
+                embedding_type=args.embedding_type,
+                embedding_max_length=args.embedding_max_length,
+                output_mode=args.output_mode,
+                label_map=label_map,
+                pad_on_left=False,
+                pad_token=0,
+                pad_token_segment_id=0,
+                mask_padding_with_zero=True,
+                trunc_type=args.trunc_type,
+                cmap_type=args.cmap_type,
+                cmap_thresh=args.cmap_thresh
+            )
+        )
     # return dataset and dataset size
     return dataset, dataset_total_num
 

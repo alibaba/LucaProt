@@ -62,11 +62,29 @@ def evaluate(args, model, processor, seq_tokenizer, subword, struct_tokenizer, p
     result = {}
     args.eval_batch_size = args.per_gpu_eval_batch_size * max(1, args.n_gpu)
     if args.tfrecords:
-        eval_dataset, eval_dataset_total_num = load_and_cache_examples_for_tfrecords(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=True, predict=False, log_fp=log_fp)
+        eval_dataset, eval_dataset_total_num = load_and_cache_examples_for_tfrecords(
+            args,
+            processor,
+            seq_tokenizer,
+            subword,
+            struct_tokenizer,
+            evaluate=True,
+            predict=False,
+            log_fp=log_fp
+        )
         eval_dataloader = DataLoader(eval_dataset, batch_size=args.train_batch_size)
         eval_batch_total_num = (eval_dataset_total_num + args.eval_batch_size - 1) // args.eval_batch_size
     else:
-        eval_dataset = load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=True, predict=False, log_fp=log_fp)
+        eval_dataset = load_and_cache_examples(
+            args,
+            processor,
+            seq_tokenizer,
+            subword,
+            struct_tokenizer,
+            evaluate=True,
+            predict=False,
+            log_fp=log_fp
+        )
         # Note that DistributedSampler samples randomly
         eval_sampler = SequentialSampler(eval_dataset)
         eval_dataset_total_num = len(eval_dataset)
@@ -147,18 +165,33 @@ def evaluate(args, model, processor, seq_tokenizer, subword, struct_tokenizer, p
             out_label_ids = inputs["labels"].detach().cpu().numpy()
         else:
             pred_scores = np.append(pred_scores, output.detach().cpu().numpy(), axis=0)
-            out_label_ids = np.append(out_label_ids, inputs["labels"].detach().cpu().numpy(), axis=0)
+            out_label_ids = np.append(
+                out_label_ids,
+                inputs["labels"].detach().cpu().numpy(),
+                axis=0
+            )
 
     eval_loss = eval_loss / nb_eval_steps
     if args.output_mode in ["multi-label", "multi_label"]:
-        result = metrics_multi_label(out_label_ids, pred_scores, threshold=0.5)
+        result = metrics_multi_label(
+            out_label_ids,
+            pred_scores,
+            threshold=0.5
+        )
     elif args.output_mode in ["multi-class", "multi_class"]:
-        result = metrics_multi_class(out_label_ids, pred_scores)
+        result = metrics_multi_class(
+            out_label_ids,
+            pred_scores
+        )
     elif args.output_mode == "regression":
         pass # to do
     elif args.output_mode in ["binary-class", "binary_class"]:
-        result = metrics_binary(out_label_ids, pred_scores, threshold=0.5,
-                                savepath=os.path.join(output_dir, "dev_confusion_matrix.png"))
+        result = metrics_binary(
+            out_label_ids,
+            pred_scores,
+            threshold=0.5,
+            savepath=os.path.join(output_dir, "dev_confusion_matrix.png")
+        )
 
     with open(os.path.join(output_dir, "dev_metrics.txt"), "w") as writer:
         logger.info("***** Eval Dev results {} *****".format(prefix))
