@@ -487,8 +487,20 @@ with open(os.path.join(new_dataset_dir, protein_2_emb_filepath), "a+") as wfp:
             cur_embedding_file_idx += 1
             new_row = [protein_id, "embedding_%d.pt" % cur_embedding_file_idx]
             writer.writerow(new_row)
-            train_dataset.append([protein_id, seq_info[protein_id], len(seq_info[protein_id]), None, None, None, "embedding_%d.pt" % cur_embedding_file_idx, 0, "dna"])
-            shutil.copyfile(src=os.path.join(append_negative_dna_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx), dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx))
+            train_dataset.append([
+                protein_id,
+                seq_info[protein_id],
+                len(seq_info[protein_id]),
+                None,
+                None,
+                None,
+                "embedding_%d.pt" % cur_embedding_file_idx,
+                0, "dna"
+            ])
+            shutil.copyfile(
+                src=os.path.join(append_negative_dna_emb_dir, "esm2_t36_3B_UR50D", "%d.pt" % idx),
+                dst=os.path.join(new_embs_dir, "embedding_%d.pt" % cur_embedding_file_idx)
+            )
 print("cur exists size: %d" % len(exists))
 print("cur train_dataset size: %d" % len(train_dataset))
 for _ in range(5):

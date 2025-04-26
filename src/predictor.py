@@ -63,15 +63,40 @@ def predict(args, model, processor, seq_tokenizer, subword, struct_tokenizer, pr
 
     args.test_batch_size = args.per_gpu_eval_batch_size * max(1, args.n_gpu)
     if args.tfrecords:
-        test_dataset, test_dataset_total_num = load_and_cache_examples_for_tfrecords(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=False, predict=True, log_fp=log_fp)
-        test_dataloader = DataLoader(test_dataset, batch_size=args.train_batch_size)
+        test_dataset, test_dataset_total_num = load_and_cache_examples_for_tfrecords(
+            args,
+            processor,
+            seq_tokenizer,
+            subword,
+            struct_tokenizer,
+            evaluate=False,
+            predict=True,
+            log_fp=log_fp
+        )
+        test_dataloader = DataLoader(
+            test_dataset,
+            batch_size=args.train_batch_size
+        )
         test_batch_total_num = (test_dataset_total_num + args.test_batch_size - 1) // args.test_batch_size
     else:
-        test_dataset = load_and_cache_examples(args, processor, seq_tokenizer, subword, struct_tokenizer, evaluate=False, predict=True, log_fp=log_fp)
+        test_dataset = load_and_cache_examples(
+            args,
+            processor,
+            seq_tokenizer,
+            subword,
+            struct_tokenizer,
+            evaluate=False,
+            predict=True,
+            log_fp=log_fp
+        )
         # Note that DistributedSampler samples randomly
         test_dataset_total_num = len(test_dataset)
         test_sampler = SequentialSampler(test_dataset)
-        test_dataloader = DataLoader(test_dataset, sampler=test_sampler, batch_size=args.test_batch_size)
+        test_dataloader = DataLoader(
+            test_dataset,
+            sampler=test_sampler,
+            batch_size=args.test_batch_size
+        )
         test_batch_total_num = len(test_dataloader)
     print("Test dataset len: %d, batch len: %d" % (test_dataset_total_num, test_batch_total_num))
 
@@ -145,40 +170,96 @@ def predict(args, model, processor, seq_tokenizer, subword, struct_tokenizer, pr
             pred_scores = output.detach().cpu().numpy()
             out_label_ids = inputs["labels"].detach().cpu().numpy()
         else:
-            pred_scores = np.append(pred_scores, output.detach().cpu().numpy(), axis=0)
-            out_label_ids = np.append(out_label_ids, inputs["labels"].detach().cpu().numpy(), axis=0)
+            pred_scores = np.append(
+                pred_scores,
+                output.detach().cpu().numpy(),
+                axis=0
+            )
+            out_label_ids = np.append(
+                out_label_ids,
+                inputs["labels"].detach().cpu().numpy(),
+                axis=0
+            )
 
     test_loss = test_loss / nb_test_steps
     if args.output_mode in ["multi_class", "multi-class"]:
-        label_list = processor.get_labels(label_filepath=args.label_filepath)
-        pred_label_names = label_id_2_label_name(args.output_mode, label_list=label_list, prob=pred_scores, threshold=0.5)
-        true_label_names = [label_list[idx] for idx in out_label_ids]
+        label_list = processor.get_labels(
+            label_filepath=args.label_filepath
+        )
+        pred_label_names = label_id_2_label_name(
+            args.output_mode,
+            label_list=label_list,
+            prob=pred_scores,
+            threshold=0.5
+        )
+        if out_label_ids.ndim == 2 and out_label_ids.shape[1] == 1:
+            out_label_ids = np.squeeze(out_label_ids, axis=1)
+        true_label_names = [
+            label_list[idx] for idx in out_label_ids
+        ]
     elif args.output_mode == "regression":
         preds = np.squeeze(pred_scores)
         pred_label_names = list(preds)
+        if out_label_ids.ndim == 2 and out_label_ids.shape[1] == 1:
+            out_label_ids = np.squeeze(out_label_ids, axis=1)
         true_label_names = list(out_label_ids)
     elif args.output_mode in ["multi_label", "multi-label"]:
         label_list = processor.get_labels(label_filepath=args.label_filepath)
-        pred_label_names = label_id_2_label_name(args.output_mode, label_list=label_list, prob=pred_scores, threshold=0.5)
-        true_label_names = label_id_2_label_name(args.output_mode, label_list=label_list, prob=out_label_ids, threshold=0.5)
+        pred_label_names = label_id_2_label_name(
+            args.output_mode,
+            label_list=label_list,
+            prob=pred_scores,
+            threshold=0.5
+        )
+        true_label_names = label_id_2_label_name(
+            args.output_mode,
+            label_list=label_list,
+            prob=out_label_ids,
+            threshold=0.5
+        )
     elif args.output_mode in ["binary_class", "binary-class"]:
-        label_list = processor.get_labels(label_filepath=args.label_filepath)
-        pred_label_names = label_id_2_label_name(args.output_mode, label_list=label_list, prob=pred_scores, threshold=0.5)
-        true_label_names = label_id_2_label_name(args.output_mode, label_list=label_list, prob=out_label_ids, threshold=0.5)
-
+        label_list = processor.get_labels(
+            label_filepath=args.label_filepath
+        )
+        pred_label_names = label_id_2_label_name(
+            args.output_mode,
+            label_list=label_list,
+            prob=pred_scores,
+            threshold=0.5
+        )
+        true_label_names = label_id_2_label_name(
+            args.output_mode,
+            label_list=label_list,
+            prob=out_label_ids,
+            threshold=0.5
+        )
     if args.output_mode in ["multi_class", "multi-class"]:
-        result = metrics_multi_class(out_label_ids, pred_scores)
+        result = metrics_multi_class(
+            out_label_ids,
+            pred_scores
+        )
     elif args.output_mode in ["multi_label", "multi-label"]:
-        result = metrics_multi_label(out_label_ids, pred_scores, threshold=0.5)
+        result = metrics_multi_label(
+            out_label_ids,
+            pred_scores,
+            threshold=0.5
+        )
     elif args.output_mode == "regression":
-        pass # to do
+        # to do
+        pass
     elif args.output_mode in ["binary_class", "binary-class"]:
-        result = metrics_binary(out_label_ids, pred_scores, threshold=0.5,
-                                savepath=os.path.join(output_dir, "test_confusion_matrix.png"))
+        result = metrics_binary(
+            out_label_ids,
+            pred_scores,
+            threshold=0.5,
+            savepath=os.path.join(output_dir, "test_confusion_matrix.png")
+        )
+    else:
+        raise Exception("Not support the output_mode=%s" % args.output_mode)
 
     with open(os.path.join(output_dir, "test_results.txt"), "w") as wfp:
         for idx in range(len(pred_label_names)):
-            wfp.write("%d,%s,%s\n" %(idx, str(pred_label_names[idx]), str(true_label_names[idx])))
+            wfp.write("%d,%s,%s\n" % (idx, str(pred_label_names[idx]), str(true_label_names[idx])))
 
     with open(os.path.join(output_dir, "test_metrics.txt"), "w") as wfp:
         logger.info("***** Eval Test results {} *****".format(prefix))
