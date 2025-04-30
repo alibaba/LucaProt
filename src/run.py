@@ -29,6 +29,8 @@ import logging
 import codecs
 import argparse
 import shutil
+
+import torch.distributed
 from subword_nmt.apply_bpe import BPE
 from transformers.models.bert.configuration_bert import BertConfig
 from transformers.models.bert.tokenization_bert import BertTokenizer
@@ -606,14 +608,20 @@ def main():
     log_fp.write("#" * 50 + "\n")
 
     # Setup CUDA, GPU & distributed training
-    if args.local_rank == -1 or args.no_cuda:
-        device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-        args.n_gpu = 1 if args.no_cuda else 0
-    else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
-        torch.cuda.set_device(args.local_rank)
-        device = torch.device("cuda", args.local_rank)
-        torch.distributed.init_process_group(backend="nccl")
+    if args.no_cuda or not torch.cuda.is_available():
+        device = torch.device("cpu")
+        args.n_gpu = 0
+    else:
         args.n_gpu = torch.cuda.device_count()
+        if args.n_gpu > 1:
+            torch.cuda.set_device(args.local_rank)
+            device = torch.device("cuda", args.local_rank)
+            torch.distributed.init_process_group(backend="nccl")
+            if args.local_rank == 0:
+                print('world size: %d' % torch.distributed.get_world_size())
+        else:
+            device = torch.device("cuda")
+
     args.device = device
 
     logger.info("#" * 50)
@@ -822,7 +830,8 @@ def main():
     if args.local_rank in [-1, 0] and log_fp:
         log_fp.close()
 
-    torch.distributed.barrier()
+    if args.n_gpu > 1:
+        torch.distributed.barrier()
 
 
 if __name__ == "__main__":
