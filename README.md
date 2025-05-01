@@ -9,12 +9,22 @@ See the **NOTICE** file for more information.
 
 
 ## TimeLine    
+* **2025-05-01**   
+Add the deployable web application (based on flask, in `src/app/`)      
+  Start the service on the server,       
+  ```shell 
+  cd LucaProt/src/app  
+  # modify the service port in app.py    
+  python app.py     
+  ```  
+  Then the service can be accessed using the browser on the client: **http://${server_ip}:8000**   
+
 * **2025-04-17:**    
 Add the post-processing workflow to classify the viral RdRPs predicted by LucaProt into our 180 supergroups or novel supergroups.     
 (**Guidance listed in `PostProcessingWorkflow.md` or `PostProcessingWorkflow_zh.md`of this project**).       
 
 * **2024-09-24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />:**    
-A free CPU version of `LucaProt Server` is available online (http://lucaprot.org).      
+A free CPU version of `LucaProt Server` is available online (https://lucaprot.org).      
 
 * **2024-09-01**:       
 Optimize inference and prediction code to run on GPU with small graphics memory, such as `A10`.            

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LucaProt: Virus RdRP Identification</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        label { display: block; margin-bottom: 0.5em; }
+        textarea {
+            margin-top: 0em;
+            width: 100%;
+            height: auto; /* 使高度自适应 */
+            min-height: 100px; /* 设置一个最小高度 */
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden; /* 隐藏滚动条 */
+        }
+        button {
+            margin-top: 1em; /* 与其他元素保持间距 */
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: green; /* 绿色 */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block; /* 确保按钮是块级元素, 在新行显示 */
+            width: 100%; /* 可选: 按钮宽度适应输入框宽度 */
+        }
+        button:hover {
+            background-color: darkgreen; /* 悬停变深绿色 */
+        }
+        #output {
+            margin-top: 1em;
+            display: none; /* 初始隐藏 */
+        }
+        input[type="number"] {
+            margin-top: 0em;
+            width: 100px; /* 设置为更窄的宽度，例如 100px */
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button:disabled {
+            background-color: gray; /* 灰色 */
+            cursor: not-allowed; /* 禁用状态的光标 */
+        }
+        select {
+            margin-top: 0em;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex-grow: 1; /* 让选择框填充剩余空间 */
+        }
+        .fasta {
+            font-family: monospace; /* 使用等宽字体 */
+            white-space: pre; /* 保留空白和换行 */
+            line-height: 1.5; /* 行高 */
+        }
+    </style>
+</head>
+<body>
+<h1>LucaProt: Virus RdRP Identification</h1>
+<label for="inputFasta">Enter Protein Fasta:</label>
+<textarea id="inputFasta" placeholder="e.g.
+>prot_01
+MSSFRWLLRSGWNPQRTPRHGRSVSKPSSRTHVPCGLLKPGLARLPFSLPMPLDGPTWSC
+PAYGLLDRGTLTAVVSRLSRKWHRLRESVFSRVPCDSPQSHVKGQLHMFWSARLDEAVEH
+RETYKLVQSLPETDRIRMAWKYLNRRKAQAAKARDDSSGSHLPRVQAAALWLVLDDFSLT
+PARATVLAHAEYRRKRFEKPERKIRTTEWVGGAPNPIALTSERQVSTKWKRAQSNAERLA
+ALCDDAPFPPTAVARLDGRLELPSGCRPQKFVLPGGPALEFIRERRPSLLKWLGPSDACV
+GGSWDTSKWSFEVACQPNKGSGHAGDLYRALSSGYKDLKLGRLPQPSIRALECVKVNGRA
+YPGIFSSRIGNNRKTAYGACVEIAKQHYLDARERFEPDLSLWACGGRGKPSQMVQVGDRL
+KSRLILMPETPSALLESAFAQPFTAMLSAVRGDIMIGASMTDRGFRRVLSPVEDAHHVKA
+FDWSGFDSRVREDMIVTAFGIVRACFKGDDAWLDNVFLRFISHFLVKRVVTPGGWLYTLA
+NGVPSGSPFTSIIDSLVNWLVITDLEICMGGLSAPTKNRRRVYGDDFMQAFFAPCLERDA
+YIALAFERWGFVAKPSAALEGVACANTADASLPFLSFRFPFGLPARPIQDALKIGLLPQK
+ARYSYSAQAARVCYLDHFAPYDPETIEYHREYFNWLQTKIPGMTWADGRPQPDLVSPWIH
+KAMVNFVAAGFAPGVVSLGEWFRQEDPRRWPDRWVPRRCGRLVPRAAWSQGKLQSALSTL
+RWGNCAESTFARLRWKTL
+>prot_02
+MLTLKSALASIRFDIVDGTGSKKRKRTLFSRFFVGTLRSMLDSEEHALQLTSLGRALPVG
+TAAVSKKALQRHKEAYRSDSDTPEHLVEACYEFVDDWIRAYCPPNTSEISFPSTSGAAIG
+YPRKKGGLAAYTHEVSSFVQQVRAPDQLLSAVQGPLVSGIGPDMTFSRRIGRARDVVLQT
+AVRENLFSRLSLLSEPYRAEVIPIAERGCKARVVTKSPPELVASSHYVRTVLFRGILRDP
+RTSEALQGDRTKAVLGLLRGYQPPGHWQVLSSDLTAASDLLPSDLIQAVVEAIVDSEILP
+PSFEPALRASVGVMKLVYPDGEEILSRRGILMGLPTTWTILSLIHLFIIEQAFNEVAFVG
+PRLYRICGDDLVAIAPKKVIDSYHRIASACGVKFSAGKHFVSHRYAVFTEVIAKVNRSVT
+DHRNLLGDDVYEKFVKQKRHRRLLLVRRADKGEVISSLSLVRYIPLKGLVKPDLIGGSFD
+PCPWWVSLGPSAASIAEQSRSPGRVRNIVKALFPFAWHWFASRGIPPNLPRELGGGGLPS
+KSGNPNRCYVDRWCRPAVRHYLYGRSFLSTSDLELPWVSLGSSGGPWALASQMADQRAVP
+RLMRVTGPKGSVRMKLIQQLVPVRSSKSMASPAVNYGGWRKAFREHIVATARKHFSSVGF
+RPGGGLLTSKPTRIASAWKRAVRHAPSWFRRDQGKRSFLRQEILDILTQQNNKRNLYWVT
+CYDKSDDLESIMDALGWLSSRDSQRAPRSE"></textarea>
+<label for="inputThreshold">Threshold:</label>
+<input type="number" id="inputThreshold" min=0 max=1 step=0.05 placeholder=0.5 value=0.5>
+<button id="generateButton" onclick="virusRdRPIdentification()">Run</button>
+
+<div id="output">
+    <h2 >Results:</h2>
+    <label id="results" class="fasta"></label>
+</div>
+
+<script>
+    async function virusRdRPIdentification() {
+        const inputFasta = document.getElementById("inputFasta").value;
+        const inputThreshold = document.getElementById("inputThreshold").value;
+        const generateButton = document.getElementById("generateButton");
+        // 检查输入框和选择项是否有效
+        if (!inputFasta) {
+            alert("请输入蛋白Fasta!");
+            return;
+        }
+        // 禁用按钮
+        generateButton.disabled = true;
+        // 改变按钮文本
+        generateButton.textContent = "Running...";
+        // 隐藏输出区域
+        document.getElementById("output").style.display = 'none';
+        try {
+            const response = await fetch("/generate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({input_fasta: inputFasta, threshold: inputThreshold})
+            });
+            const data = await response.json();
+            document.getElementById("results").innerHTML = data.results;
+            // 显示输出区域
+            document.getElementById("output").style.display = 'block';
+        } catch (error) {
+            console.error('Error:', error);
+            alert("Error, please retry.");
+        } finally {
+            // 恢复按钮状态
+            // 启用按钮
+            generateButton.disabled = false;
+            // 恢复原始文本
+            generateButton.textContent = "Run";
+        }
+    }
+</script>
+</body>
+</html>
+

@@ -1,51 +1,42 @@
 #!/usr/bin/env python
 # encoding: utf-8
-'''
-*Copyright (c) 2023, Alibaba Group;
-*Licensed under the Apache License, Version 2.0 (the "License");
-*you may not use this file except in compliance with the License.
-*You may obtain a copy of the License at
-
-*   http://www.apache.org/licenses/LICENSE-2.0
-
-*Unless required by applicable law or agreed to in writing, software
-*distributed under the License is distributed on an "AS IS" BASIS,
-*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*See the License for the specific language governing permissions and
-*limitations under the License.
-
+"""
+@license: (C) Copyright 2021, Hey.
 @author: Hey
-@email: sanyuan.**@**.com
+@email: sanyuan.hy@alibaba-inc.com
 @tel: 137****6540
-@datetime: 2023/3/20 20:28
-@project: DeepProtFunc
-@file: predict one sample
-@desc: predict one sample from input
-'''
-import argparse
-import numpy as np
+@datetime: 2025/4/30 16:52
+@project: LucaProtGen
+@file: app.py
+@desc: xxxx
+"""
 import os, sys, json, codecs
 from subword_nmt.apply_bpe import BPE
 from transformers.models.bert.configuration_bert import BertConfig
 from transformers.models.bert.tokenization_bert import BertTokenizer
 sys.path.append(".")
-sys.path.append("..")
-sys.path.append("../src")
+sys.path.append("../")
+sys.path.append("../..")
+sys.path.append("../../src")
 try:
+    from app.args import Args
     from common.multi_label_metrics import *
     from protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
-    from utils import set_seed, plot_bins, csv_reader
+    from utils import set_seed, plot_bins, csv_reade, fasta_reader, clean_seq, available_gpu_id
     from SSFN.model import *
     from data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
 except ImportError:
+    from src.app.args import Args
     from src.common.multi_label_metrics import *
     from src.protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
-    from src.utils import set_seed, plot_bins, csv_reader
+    from src.utils import set_seed, plot_bins, csv_reader, fasta_reader, clean_seq, available_gpu_id
     from src.SSFN.model import *
     from src.data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
-
 import logging
 logger = logging.getLogger(__name__)
+from flask import Flask, request, jsonify, render_template
+
+app = Flask(__name__)
 
 
 def llprint(message):
@@ -90,10 +81,7 @@ def load_args(log_dir):
     return {}
 
 
-def load_model(
-        args,
-        model_dir
-):
+def load_model(args, model_dir):
     '''
     load the model
     :param args:
@@ -253,14 +241,7 @@ def transform_sample_2_feature(
         struct_input_ids = inputs["input_ids"]
         real_struct_node_size = len(struct_input_ids)
         padding_length = args.struct_max_length - real_struct_node_size if real_struct_node_size < args.struct_max_length else 0
-        pdb, mean_plddt, ptm, processed_seq = predict_pdb(
-            [prot_id, protein_seq],
-            args.trunc_type,
-            num_recycles=4,
-            truncation_seq_length=args.truncation_seq_length,
-            chunk_size=64,
-            cpu_type="cpu-offload"
-        )
+        pdb, mean_plddt, ptm, processed_seq = predict_pdb([prot_id, protein_seq], args.trunc_type, num_recycles=4, truncation_seq_length=args.truncation_seq_length, chunk_size=64, cpu_type="cpu-offload")
         # if the savepath not exists, create it
         if args.pdb_dir:
             if not os.path.exists(args.pdb_dir):
@@ -309,7 +290,7 @@ def transform_sample_2_feature(
             truncation_seq_length=args.truncation_seq_length - 2,
             device=args.device
         )
-        # failure on GPU, the use CPU
+        # failure on GPU, then using CPU for embedding
         if embedding_info is None:
             # 失败,则调用cpu进行embedding推理
             embedding_info, processed_seq = predict_embedding(
@@ -430,7 +411,7 @@ def predict_probs(
     label_list = processor.get_labels(label_filepath=args.label_filepath)
     label_map = {label: i for i, label in enumerate(label_list)}
     '''
-    # 为了embedding更长序列，先将下游模型to cpu
+    # in order to be able to embed longer sequences
     model.to(torch.device("cpu"))
     batch_info, batch_input = transform_sample_2_feature(args, row, seq_tokenizer, subword, struct_tokenizer)
     model.to(args.device)
@@ -530,236 +511,196 @@ def predict_multi_label(
     preds = relevant_indexes((probs >= args.threshold).astype(int))
     res = []
     for idx, info in enumerate(batch_info):
-        cur_res = [info[0], info[1], [float(probs[idx][label_index]) for label_index in preds[idx]], [label_id_2_name[label_index] for label_index in preds[idx]]]
+        cur_res = [
+            info[0],
+            info[1],
+            [float(probs[idx][label_index]) for label_index in preds[idx]],
+            [label_id_2_name[label_index] for label_index in preds[idx]]
+        ]
         if len(info) > 2:
             cur_res += info[2:]
         res.append(cur_res)
     return res
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Prediction RdRP")
-    # for llm
-    parser.add_argument(
-        "--torch_hub_dir",
-        default=None,
-        type=str,
-        help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)"
-    )
-    # for input
-    parser.add_argument(
-        "--protein_id",
-        default=None,
-        type=str,
-        required=True,
-        help="the protein id"
-    )
-    parser.add_argument(
-        "--sequence",
-        default=None,
-        type=str,
-        required=True,
-        help="the protein sequence"
-    )
-    parser.add_argument(
-        "--truncation_seq_length",
-        default=4096,
-        type=int,
-        required=True,
-        help="truncation seq length"
-    )
-    parser.add_argument(
-        "--emb_dir",
-        default=None,
-        type=str,
-        help="the llm embedding save dir. default: None"
-    )
-    parser.add_argument(
-        "--pdb_dir",
-        default=None,
-        type=str,
-        help="the 3d-structure pdb save dir. default: None"
-    )
-
-    # for trained checkpoint
-    parser.add_argument(
-        "--chain",
-        default=None,
-        type=str,
-        help="pdb chain for contact map computing"
-    )
-    parser.add_argument(
-        "--dataset_name",
-        default="rdrp_40_extend",
-        type=str,
-        required=True,
-        help="the dataset name for model building."
-    )
-    parser.add_argument(
-        "--dataset_type",
-        default="protein",
-        type=str,
-        required=True,
-        help="the dataset type for model building."
-    )
-    parser.add_argument(
-        "--task_type",
-        default=None,
-        type=str,
-        required=True,
-        choices=["multi_label", "multi_class", "binary_class"],
-        help="the task type for model building."
-    )
-    parser.add_argument(
-        "--model_type",
-        default=None,
-        type=str,
-        required=True,
-        help="model type."
-    )
-    parser.add_argument(
-        "--time_str",
-        default=None,
-        type=str,
-        required=True,
-        help="the running time string(yyyymmddHimiss) of trained checkpoint building."
-    )
-    parser.add_argument(
-        "--step",
-        default=None,
-        type=str,
-        required=True,
-        help="the training global step of model finalization."
-    )
-    parser.add_argument(
-        "--threshold",
-        default=0.5,
-        type=float,
-        help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5."
-    )
-    parser.add_argument(
-        "--gpu_id",
-        default=None,
-        type=int,
-        help="the used gpu index, -1 for cpu"
-    )
-    input_args = parser.parse_args()
-    return input_args
+global_args, global_model_dir, global_config_dir, global_config = None, None, None, None
 
 
-if __name__ == "__main__":
-    args = main()
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    if args.torch_hub_dir is not None:
-        if not os.path.exists(args.torch_hub_dir):
-            os.makedirs(args.torch_hub_dir)
-        os.environ['TORCH_HOME'] = args.torch_hub_dir
-    model_dir = "%s/../models/%s/%s/%s/%s/%s/%s" % (
-        SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
-        args.model_type, args.time_str,
-        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
-    )
-    config_dir = "%s/../logs/%s/%s/%s/%s/%s" % (
-        SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
-        args.model_type, args.time_str
-    )
-    predict_dir = "%s/../predicts/%s/%s/%s/%s/%s/%s" % (
-        SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
-        args.model_type, args.time_str,
-        args.step if args.step == "best" else "checkpoint-{}".format(args.step)
-    )
+def virus_rdrp_identification(input_fasta, threshold):
+    if threshold < 0 or threshold > 1:
+        threshold = 0.5
+    SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    global global_args, global_model_dir, global_config_dir, global_config
 
-    # Step1: loading the model configuration
-    config = load_args(config_dir)
-    for key, value in config.items():
-        try:
-            if value.startswith("../"):
-                value = os.path.join(SCRIPT_DIR, value)
-        except AttributeError:
-            continue
-        print(f'My item {value} is labelled {key}')
-        config[key] = value
-    print("-" * 25 + "config:" + "-" * 25)
-    print(config)
-    print("-" * 60)
-    if config:
-        args.dataset_name = config["dataset_name"]
-        args.dataset_type = config["dataset_type"]
-        args.task_type = config["task_type"]
-        args.model_type = config["model_type"]
-        args.has_seq_encoder = config["has_seq_encoder"]
-        args.has_struct_encoder = config["has_struct_encoder"]
-        args.has_embedding_encoder = config["has_embedding_encoder"]
-        args.subword = config["subword"]
-        args.codes_file = config["codes_file"]
-        args.input_mode = config["input_mode"]
-        args.label_filepath = config["label_filepath"]
-        if not os.path.exists(args.label_filepath):
-            args.label_filepath = os.path.join(config_dir, "label.txt")
-        args.output_dir = config["output_dir"]
-        args.config_path = config["config_path"]
-
-        args.do_lower_case = config["do_lower_case"]
-        args.sigmoid = config["sigmoid"]
-        args.loss_type = config["loss_type"]
-        args.output_mode = config["output_mode"]
-
-        args.seq_vocab_path = config["seq_vocab_path"]
-        args.seq_pooling_type = config["seq_pooling_type"]
-        args.seq_max_length = config["seq_max_length"]
-        args.struct_vocab_path = config["struct_vocab_path"]
-        args.struct_max_length = config["struct_max_length"]
-        args.struct_pooling_type = config["struct_pooling_type"]
-        args.trunc_type = config["trunc_type"]
-        args.no_position_embeddings = config["no_position_embeddings"]
-        args.no_token_type_embeddings = config["no_token_type_embeddings"]
-        args.cmap_type = config["cmap_type"]
-        args.cmap_type = float(config["cmap_thresh"])
-        args.embedding_input_size = config["embedding_input_size"]
-        args.embedding_pooling_type = config["embedding_pooling_type"]
-        args.embedding_max_length = config["embedding_max_length"]
-        args.embedding_type = config["embedding_type"]
-        if args.task_type in ["multi-label", "multi_label"]:
-            args.sigmoid = True
-        elif args.task_type in ["binary-class", "binary_class"]:
-            args.sigmoid = True
-
-    if args.gpu_id <= -1:
-        args.device = torch.device("cpu")
+    if global_args is None or global_model_dir is None or global_config_dir is None or global_config is None:
+        global_args = Args()
+        global_args.emb_dir = None
+        global_args.pdb_dir = None
+        global_args.truncation_seq_length = 4096
+        global_args.dataset_name = "rdrp_40_extend"
+        global_args.dataset_type = "protein"
+        global_args.task_type = "binary_class"
+        global_args.model_type = "sefn"
+        global_args.time_str = "20230201140320"
+        global_args.step = 100000
+        global_args.threshold = threshold
+        global_model_dir = "%s/../models/%s/%s/%s/%s/%s/%s" % (
+            SCRIPT_DIR,
+            global_args.dataset_name,
+            global_args.dataset_type,
+            global_args.task_type,
+            global_args.model_type,
+            global_args.time_str,
+            global_args.step if global_args.step == "best" else "checkpoint-{}".format(global_args.step)
+        )
+        global_config_dir = "%s/../logs/%s/%s/%s/%s/%s" % (
+            SCRIPT_DIR,
+            global_args.dataset_name,
+            global_args.dataset_type,
+            global_args.task_type,
+            global_args.model_type,
+            global_args.time_str
+        )
+        # Step1: loading the model configuration
+        global_config = load_args(global_config_dir)
+        for key, value in global_config.items():
+            try:
+                if value.startswith("../"):
+                    value = os.path.join(SCRIPT_DIR, value)
+            except AttributeError:
+                continue
+            print(f'My item {value} is labelled {key}')
+            global_config[key] = value
+        print("-" * 25 + "config:" + "-" * 25)
+        print(global_config)
+        print("-" * 60)
+        global_args.dataset_name = global_config["dataset_name"]
+        global_args.dataset_type = global_config["dataset_type"]
+        global_args.task_type = global_config["task_type"]
+        global_args.model_type = global_config["model_type"]
+        global_args.has_seq_encoder = global_config["has_seq_encoder"]
+        global_args.has_struct_encoder = global_config["has_struct_encoder"]
+        global_args.has_embedding_encoder = global_config["has_embedding_encoder"]
+        global_args.subword = global_config["subword"]
+        global_args.codes_file = global_config["codes_file"]
+        global_args.input_mode = global_config["input_mode"]
+        global_args.label_filepath = global_config["label_filepath"]
+        if not os.path.exists(global_args.label_filepath):
+            global_args.label_filepath = os.path.join(global_config_dir, "label.txt")
+        global_args.output_dir = global_config["output_dir"]
+        global_args.config_path = global_config["config_path"]
+        global_args.do_lower_case = global_config["do_lower_case"]
+        global_args.sigmoid = global_config["sigmoid"]
+        global_args.loss_type = global_config["loss_type"]
+        global_args.output_mode = global_config["output_mode"]
+        global_args.seq_vocab_path = global_config["seq_vocab_path"]
+        global_args.seq_pooling_type = global_config["seq_pooling_type"]
+        global_args.seq_max_length = global_config["seq_max_length"]
+        global_args.struct_vocab_path = global_config["struct_vocab_path"]
+        global_args.struct_max_length = global_config["struct_max_length"]
+        global_args.struct_pooling_type = global_config["struct_pooling_type"]
+        global_args.trunc_type = global_config["trunc_type"]
+        global_args.no_position_embeddings = global_config["no_position_embeddings"]
+        global_args.no_token_type_embeddings = global_config["no_token_type_embeddings"]
+        global_args.cmap_type = global_config["cmap_type"]
+        global_args.cmap_type = float(global_config["cmap_thresh"])
+        global_args.embedding_input_size = global_config["embedding_input_size"]
+        global_args.embedding_pooling_type = global_config["embedding_pooling_type"]
+        global_args.embedding_max_length = global_config["embedding_max_length"]
+        global_args.embedding_type = global_config["embedding_type"]
+        if global_args.task_type in ["multi-label", "multi_label"]:
+            global_args.sigmoid = True
+        elif global_args.task_type in ["binary-class", "binary_class"]:
+            global_args.sigmoid = True
+    global_args.threshold = threshold
+    gpu_idx = available_gpu_id()
+    if gpu_idx > -1:
+        print("Use Device: GPU(%d)" % gpu_idx)
+        device = torch.device("cuda:%d" % gpu_idx)
     else:
-        args.device = torch.device("cuda:%d" % args.gpu_id) if torch.cuda.is_available() else torch.device("cpu")
+        print("Use Device: CPU")
+        device = torch.device("cpu")
+    global_args.device = device
 
     print("-" * 25 + "args:" + "-" * 25)
-    print(args.__dict__.items())
+    print(global_args.__dict__.items())
     print("-" * 60)
     '''
     print("-" * 25 + "model_dir list:" + "-" * 25)
-    print(os.listdir(model_dir))
+    print(os.listdir(global_model_dir))
     print("-" * 60)
     '''
 
-    if args.device.type == 'cpu':
-        print("Running Device is CPU!")
-    else:
-        print("Running Device is GPU(%d)!" % args.gpu_id)
-    print("-" * 60)
-
     # Step2: loading the tokenizer and model
-    config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id =\
-        load_model(args=args, model_dir=model_dir)
+    config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = load_model(
+        args=global_args,
+        model_dir=global_model_dir
+    )
     predict_func = None
-    if args.task_type in ["multi-label", "multi_label"]:
+    if global_args.task_type in ["multi-label", "multi_label"]:
         predict_func = predict_multi_label
-    elif args.task_type in ["binary-class", "binary_class"]:
+    elif global_args.task_type in ["binary-class", "binary_class"]:
         predict_func = predict_binary_class
-    elif args.task_type in ["multi-class", "multi_class"]:
+    elif global_args.task_type in ["multi-class", "multi_class"]:
         predict_func = predict_multi_class
     else:
-        raise Exception("Not Support Task Type: %s" % args.task_type)
-    row = [args.protein_id, args.sequence]
+        raise Exception("Not Support Task Type: %s" % global_args.task_type)
+
+    input_seqs = []
+    inputs = input_fasta.strip().split("\n")
+    seq_id = None
+    seq = None
+    for line in inputs:
+        if line.startswith(">"):
+            if seq_id is not None and seq is not None:
+                input_seqs.append([seq_id, seq])
+            seq_id = line.strip()[1:]
+            seq = ""
+        else:
+            seq += line.strip()
+    if seq_id and seq:
+        input_seqs.append([seq_id, seq])
+    print("input_seqs:")
+    print(input_seqs)
+
     # Step 3: prediction
-    res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)
-    print(res[0])
+    results = ""
+    for row in input_seqs:
+        row = [row[0], clean_seq(row[0], row[1])]
+        res = predict_func(global_args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)
+        results += "%s: [prob=%0.4f%%, label=%s, %s]<br><br>" % (
+            row[0],
+            res[0][2] * 100,
+            "viral-RdRP" if res[0][2] == 1 else "non-viral-RdRP",
+            "Yes" if res[0][2] == 1 else "No"
+        )
+    return results
 
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
+
+@app.route('/generate', methods=['POST'])
+def generate():
+    data = request.json
+    input_fasta = data.get("input_fasta", "")
+    print("input_fasta:")
+    print(input_fasta)
+    threshold = data.get("threshold", 0.5)
+    print("threshold:")
+    print(threshold)
+    results = virus_rdrp_identification(
+        input_fasta,
+        float(threshold)
+    )
+    print("results:")
+    print(results)
+    return jsonify({
+        "results": results
+    })
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000, debug=True)

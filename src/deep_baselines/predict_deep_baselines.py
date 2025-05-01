@@ -132,7 +132,7 @@ def load_model(args, model_dir):
             label_name = line.strip()
             label_id_2_name[len(label_id_2_name)] = label_name
             label_name_2_id[label_name] = len(label_name_2_id)
-    print("-----------label_id_2_name:------------")
+    print("-" * 25 + "label_id_2_name:" + "-" * 25)
     if len(label_id_2_name) < 20:
         print(label_id_2_name)
     print("label size: ", len(label_id_2_name))
