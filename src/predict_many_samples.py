@@ -62,9 +62,9 @@ def load_label_code_2_name(args, filename):
     :return:
     '''
     label_code_2_name = {}
-    filename = "../dataset/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, filename)
-    if filename and os.path.exists(filename):
-        with open(filename, "r") as rfp:
+    label_filepath = "../dataset/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, filename)
+    if label_filepath and os.path.exists(label_filepath):
+        with open(label_filepath, "r") as rfp:
             for line in rfp:
                 strs = line.strip().split("###")
                 label_code_2_name[strs[0]] = strs[1]
@@ -77,7 +77,7 @@ def load_args(log_dir):
     :param log_dir:
     :return: config
     '''
-    print("-" * 25 + "log dir: " + "-" * 25)
+    print("-" * 25 + "log dir:" + "-" * 25)
     print(log_dir)
     print("-" * 60)
     log_filepath = os.path.join(log_dir, "logs.txt")
@@ -142,7 +142,7 @@ def load_model(args, model_dir):
             label_id_2_name[len(label_id_2_name)] = label_name
             label_name_2_id[label_name] = len(label_name_2_id)
 
-    print("-" * 25 + "label_id_2_name: " + "-" * 25)
+    print("-" * 25 + "label_id_2_name:" + "-" * 25)
     if len(label_id_2_name) < 20:
         print(label_id_2_name)
     print("label size: ", len(label_id_2_name))
@@ -251,7 +251,13 @@ def transform_sample_2_feature(
         struct_input_ids = inputs["input_ids"]
         real_struct_node_size = len(struct_input_ids)
         padding_length = args.struct_max_length - real_struct_node_size if real_struct_node_size < args.struct_max_length else 0
-        pdb, mean_plddt, ptm, processed_seq = predict_pdb([prot_id, protein_seq], args.trunc_type, num_recycles=4, truncation_seq_length=args.truncation_seq_length, chunk_size=64, cpu_type="cpu-offload")
+        pdb, mean_plddt, ptm, processed_seq = predict_pdb(
+            [prot_id, protein_seq], args.trunc_type,
+            num_recycles=4,
+            truncation_seq_length=args.truncation_seq_length,
+            chunk_size=64,
+            cpu_type="cpu-offload"
+        )
         # if the savepath not exists, create it
         if args.pdb_dir:
             if not os.path.exists(args.pdb_dir):
@@ -535,38 +541,116 @@ def predict_multi_label(
 
 def main():
     parser = argparse.ArgumentParser(description="Prediction RdRP")
-    parser.add_argument("--torch_hub_dir", default=None, type=str,
-                        help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)")
-    parser.add_argument("--fasta_file", default=None, type=str, required=True,
-                        help="fasta file path")
-    parser.add_argument("--save_file", default=None, type=str, required=True,
-                        help="the result file path")
-    parser.add_argument("--truncation_seq_length", default=4096, type=int, required=True,
-                        help="truncation seq length(include: [CLS] and [SEP]")
-    parser.add_argument("--emb_dir", default=None, type=str,
-                        help="the llm embedding save dir. default: None")
-    parser.add_argument("--pdb_dir", default="protein", type=str,
-                        help="the 3d-structure pdb save dir. default: None")
-    parser.add_argument("--chain", default=None, type=str,
-                        help="pdb chain for contact map computing")
-    parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True,
-                        help="the dataset name for model building.")
-    parser.add_argument("--dataset_type", default="protein", type=str, required=True,
-                        help="the dataset type for model building.")
-    parser.add_argument("--task_type", default=None, type=str, required=True,
-                        choices=["multi_label", "multi_class", "binary_class"],
-                        help="the task type for model building.")
-    parser.add_argument("--model_type", default=None, type=str, required=True,
-                        help="model type.")
-    parser.add_argument("--time_str", default=None, type=str, required=True,
-                        help="the running time string(yyyymmddHimiss) of model building.")
-    parser.add_argument("--step", default=None, type=str, required=True,
-                        help="the training global step of model finalization.")
-    parser.add_argument("--threshold",  default=0.5, type=float,
-                        help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5.")
-    parser.add_argument("--print_per_number", default=100, type=int,
-                        help="print per number")
-    parser.add_argument("--gpu_id", default=None, type=int, help="the used gpu index, -1 for cpu")
+    # for llm
+    parser.add_argument(
+        "--torch_hub_dir",
+        default=None,
+        type=str,
+        help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)"
+    )
+    # for input
+    parser.add_argument(
+        "--fasta_file",
+        default=None,
+        type=str,
+        required=True,
+        help="fasta file path"
+    )
+    parser.add_argument(
+        "--save_file",
+        default=None,
+        type=str,
+        required=True,
+        help="the result file path"
+    )
+    parser.add_argument(
+        "--truncation_seq_length",
+        default=4096,
+        type=int,
+        required=True,
+        help="truncation seq length(include: [CLS] and [SEP]"
+    )
+    parser.add_argument(
+        "--emb_dir",
+        default=None,
+        type=str,
+        help="the llm embedding save dir. default: None"
+    )
+    parser.add_argument(
+        "--pdb_dir",
+        default=None,
+        type=str,
+        help="the 3d-structure pdb save dir. default: None"
+    )
+    parser.add_argument(
+        "--chain",
+        default=None,
+        type=str,
+        help="pdb chain for contact map computing"
+    )
+
+    # for trained checkpoint
+    parser.add_argument(
+        "--dataset_name",
+        default="rdrp_40_extend",
+        type=str,
+        required=True,
+        help="the dataset name for model building."
+    )
+    parser.add_argument(
+        "--dataset_type",
+        default="protein",
+        type=str,
+        required=True,
+        help="the dataset type for model building."
+    )
+    parser.add_argument(
+        "--task_type",
+        default=None,
+        type=str,
+        required=True,
+        choices=["multi_label", "multi_class", "binary_class"],
+        help="the task type for model building."
+    )
+    parser.add_argument(
+        "--model_type",
+        default=None,
+        type=str,
+        required=True,
+        help="the model type."
+    )
+    parser.add_argument(
+        "--time_str",
+        default=None,
+        type=str,
+        required=True,
+        help="the running time string(yyyymmddHimiss) of trained checkpoint building."
+    )
+    parser.add_argument(
+        "--step",
+        default=None,
+        type=str,
+        required=True,
+        help="the training global step of model finalization."
+    )
+    parser.add_argument(
+        "--threshold",
+        default=0.5,
+        type=float,
+        help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5."
+    )
+    parser.add_argument(
+        "--print_per_number",
+        default=100,
+        type=int,
+        help="print per number"
+    )
+    parser.add_argument(
+        "--gpu_id",
+        default=None,
+        type=int,
+        help="the used gpu index, -1 for cpu"
+    )
     input_args = parser.parse_args()
     return input_args
 
@@ -593,7 +677,7 @@ if __name__ == "__main__":
     )
     config_dir = "%s/../logs/%s/%s/%s/%s/%s" % (
         SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
-        args.model_type,  args.time_str
+        args.model_type, args.time_str
     )
     predict_dir = "%s/../predicts/%s/%s/%s/%s/%s/%s" % (
         SCRIPT_DIR, args.dataset_name, args.dataset_type, args.task_type,
@@ -656,22 +740,24 @@ if __name__ == "__main__":
         elif args.task_type in ["binary-class", "binary_class"]:
             args.sigmoid = True
 
-    if args.gpu_id == -1:
+    if args.gpu_id <= -1:
         args.device = torch.device("cpu")
     else:
-        args.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        args.device = torch.device("cuda:%d" % args.gpu_id) if torch.cuda.is_available() else torch.device("cpu")
 
     print("-" * 25 + "args:" + "-" * 25)
     print(args.__dict__.items())
     print("-" * 60)
+    '''
     print("-" * 25 + "model_dir list:" + "-" * 25)
     print(os.listdir(model_dir))
     print("-" * 60)
+    '''
 
     if args.device.type == 'cpu':
         print("Running Device is CPU!")
     else:
-        print("Running Device is GPU!")
+        print("Running Device is GPU(%d)!" % args.gpu_id)
     print("-" * 60)
 
     # Step2: loading the tokenizer and model

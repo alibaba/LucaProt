@@ -39,3 +39,5 @@ networkx==3.0
 fair-esm[esmfold]
 # OpenFold and its remaining dependency
 dllogger @ git+https://github.com/NVIDIA/dllogger.git
+pynvml==11.5.0
+flask==3.1.0

@@ -44,7 +44,6 @@ except ImportError:
     from src.utils import set_seed, plot_bins, csv_reader
     from src.SSFN.model import *
     from src.data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
-
 import logging
 logger = logging.getLogger(__name__)
 
@@ -62,9 +61,9 @@ def load_label_code_2_name(args, filename):
     :return:
     '''
     label_code_2_name = {}
-    filename = "../dataset/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, filename)
-    if filename and os.path.exists(filename):
-        with open(filename, "r") as rfp:
+    label_filepath = "../dataset/%s/%s/%s/%s" % (args.dataset_name, args.dataset_type, args.task_type, filename)
+    if label_filepath and os.path.exists(label_filepath):
+        with open(label_filepath, "r") as rfp:
             for line in rfp:
                 strs = line.strip().split("###")
                 label_code_2_name[strs[0]] = strs[1]
@@ -77,7 +76,7 @@ def load_args(log_dir):
     :param log_dir:
     :return: config
     '''
-    print("-" * 25 + "log dir: " + "-" * 25)
+    print("-" * 25 + "log dir:" + "-" * 25)
     print(log_dir)
     print("-" * 60)
     log_filepath = os.path.join(log_dir, "logs.txt")
@@ -107,8 +106,10 @@ def load_model(args, model_dir):
     # for sequence
     subword = None
     if args.has_seq_encoder:
-        seq_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "sequence"),
-                                                        do_lower_case=args.do_lower_case)
+        seq_tokenizer = tokenizer_class.from_pretrained(
+            os.path.join(model_dir, "sequence"),
+            do_lower_case=args.do_lower_case
+        )
         # seq_tokenizer = tokenizer_class(os.path.join(model_dir, "sequence"), "vocab.txt"), do_lower_case=args.do_lower_case)
         if args.subword:
             bpe_codes_prot = codecs.open(args.codes_file)
@@ -117,8 +118,10 @@ def load_model(args, model_dir):
         seq_tokenizer = None
 
     if args.has_struct_encoder:
-        struct_tokenizer = tokenizer_class.from_pretrained(os.path.join(model_dir, "struct"),
-                                                           do_lower_case=args.do_lower_case)
+        struct_tokenizer = tokenizer_class.from_pretrained(
+            os.path.join(model_dir, "struct"),
+            do_lower_case=args.do_lower_case
+        )
         # struct_tokenizer = tokenizer_class(os.path.join(model_dir, "struct", "vocab.txt"), do_lower_case=args.do_lower_case)
     else:
         struct_tokenizer = None
@@ -140,7 +143,7 @@ def load_model(args, model_dir):
             label_id_2_name[len(label_id_2_name)] = label_name
             label_name_2_id[label_name] = len(label_name_2_id)
 
-    print("-" * 25 + "label_id_2_name: " + "-" * 25)
+    print("-" * 25 + "label_id_2_name:" + "-" * 25)
     if len(label_id_2_name) < 20:
         print(label_id_2_name)
     print("label size: ", len(label_id_2_name))
@@ -348,28 +351,6 @@ def transform_sample_2_feature(
         else:
             embedding_info = None
             embedding_attention_mask = None
-
-        '''
-        if args.task_type in ["multi-class", "multi_class"]:
-            label = label_map[label]
-        elif args.task_type == "regression":
-            label = float(label)
-        elif args.task_type in ["multi-label", "multi_label"]:
-            if isinstance(label, str):
-                label = [0] * len(label_map)
-                for label_name in eval(label):
-                    label_id = label_map[label_name]
-                    label[label_id] = 1
-            else:
-                label = [0] * len(label_map)
-                for label_name in label:
-                    label_id = label_map[label_name]
-                    label[label_id] = 1
-        elif args.task_type in ["binary-class", "binary_class"]:
-            label = label_map[label]
-        else:
-            raise KeyError(args.task_type)
-        '''
         features.append(
             InputFeatures(
                 input_ids=input_ids,
@@ -385,7 +366,6 @@ def transform_sample_2_feature(
             )
         )
     batch_input = {}
-    # "labels": torch.tensor([f.label for f in features], dtype=torch.long).to(args.device),
     if seq_tokenizer:
         batch_input.update(
             {
@@ -402,11 +382,15 @@ def transform_sample_2_feature(
             }
         )
     if args.embedding_type:
-        batch_input["embedding_info"] = torch.tensor(np.array([f.embedding_info for f in features], dtype=np.float32),
-                                                     dtype=torch.float32).to(args.device)
+        batch_input["embedding_info"] = torch.tensor(
+            np.array([f.embedding_info for f in features], dtype=np.float32),
+            dtype=torch.float32
+        ).to(args.device)
         if args.embedding_type != "bos":
-            batch_input["embedding_attention_mask"] = torch.tensor([f.embedding_attention_mask for f in features],
-                                                                   dtype=torch.long).to(args.device)
+            batch_input["embedding_attention_mask"] = torch.tensor(
+                [f.embedding_attention_mask for f in features],
+                dtype=torch.long
+            ).to(args.device)
 
     return batch_info, batch_input
 
@@ -428,10 +412,6 @@ def predict_probs(
     :param model:
     :param rows:
     :return:
-    '''
-    '''
-    label_list = processor.get_labels(label_filepath=args.label_filepath)
-    label_map = {label: i for i, label in enumerate(label_list)}
     '''
     batch_info, batch_input = transform_sample_2_feature(args, rows, seq_tokenizer, subword, struct_tokenizer)
     if torch.cuda.is_available():
@@ -535,40 +515,109 @@ def predict_multi_label(
 
 
 parser = argparse.ArgumentParser(description="Prediction for RdRP(embedding in advance)")
-parser.add_argument("--torch_hub_dir", default=None, type=str,
-                    help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)")
-parser.add_argument("--data_path", default=None, type=str, required=True,
-                    help="the data filepath(if it is csv format, Column 0 must be id, Colunm 1 must be seq.")
-parser.add_argument("--emb_dir", default=None, type=str,
-                    help="the structural embedding file dir.")
-parser.add_argument("--pdb_dir", default=None, type=str,
-                    help="the 3d-structure pdb file dir.")
-parser.add_argument("--dataset_name", default="rdrp_40_extend", type=str, required=True,
-                    help="the dataset name for model building.")
-parser.add_argument("--dataset_type", default="protein", type=str, required=True,
-                    help="the dataset type for model building.")
-parser.add_argument("--task_type", default=None, type=str, required=True,
-                    choices=["multi_label", "multi_class", "binary_class"],
-                    help="the task type for model building.")
-parser.add_argument("--model_type", default=None, type=str, required=True,
-                    help="model type.")
-parser.add_argument("--time_str", default=None, type=str, required=True,
-                    help="the running time string(yyyymmddHimiss) of model building.")
-parser.add_argument("--step", default=None, type=str, required=True,
-                    help="the training global step of model finalization.")
-parser.add_argument("--evaluate", action="store_true",
-                    help="whether to evaluate the predicted results.")
-parser.add_argument("--ground_truth_col_index",  default=None, type=int,
-                    help="the ground truth col inde of the ${data_path}, default: None.")
-parser.add_argument("--threshold",  default=0.5, type=float,
-                    help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5.")
-parser.add_argument("--batch_size",  default=16, type=int,
-                    help="batch size per GPU/CPU for evaluatio, default: 16.")
-parser.add_argument("--print_per_batch",  default=1000,
-                    type=int,
-                    help="how many batches are completed every time for printing progress information, default: 1000.")
-parser.add_argument("--gpu_id", default=None, type=int,
-                    help="the used gpu index, -1 for cpu")
+parser.add_argument(
+    "--torch_hub_dir",
+    default=None,
+    type=str,
+    help="set the torch hub dir path for saving pretrained model(default:~/.cache/torch/hub)"
+)
+parser.add_argument(
+    "--data_path",
+    default=None,
+    type=str,
+    required=True,
+    help="the data filepath(if it is csv format, Column 0 must be seq_id, Colunm 1 must be seq."
+)
+parser.add_argument(
+    "--emb_dir",
+    default=None,
+    type=str,
+    help="the structural embedding file dir."
+)
+parser.add_argument(
+    "--pdb_dir",
+    default=None,
+    type=str,
+    help="the 3d-structure pdb file dir."
+)
+parser.add_argument(
+    "--dataset_name",
+    default="rdrp_40_extend",
+    type=str,
+    required=True,
+    help="the dataset name for model building."
+)
+parser.add_argument(
+    "--dataset_type",
+    default="protein",
+    type=str,
+    required=True,
+    help="the dataset type for model building."
+)
+parser.add_argument(
+    "--task_type",
+    default=None,
+    type=str,
+    required=True,
+    choices=["multi_label", "multi_class", "binary_class"],
+    help="the task type for model building."
+)
+parser.add_argument(
+    "--model_type",
+    default=None,
+    type=str,
+    required=True,
+    help="model type."
+)
+parser.add_argument(
+    "--time_str",
+    default=None,
+    type=str,
+    required=True,
+    help="the running time string(yyyymmddHimiss) of trained checkpoint building."
+)
+parser.add_argument(
+    "--step",
+    default=None,
+    type=str,
+    required=True,
+    help="the training global step of model finalization."
+)
+parser.add_argument(
+    "--evaluate",
+    action="store_true",
+    help="whether to evaluate the predicted results."
+)
+parser.add_argument(
+    "--ground_truth_col_index",
+    default=None,
+    type=int,
+    help="the ground truth col inde of the ${data_path}, default: None."
+)
+parser.add_argument(
+    "--threshold",
+    default=0.5,
+    type=float,
+    help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5."
+)
+parser.add_argument(
+    "--batch_size",
+    default=16,
+    type=int,
+    help="batch size per GPU/CPU for evaluation, default: 16."
+)
+parser.add_argument(
+    "--print_per_batch",
+    default=1000,
+    type=int,
+    help="how many batches are completed every time for printing progress information, default: 1000."
+)
+parser.add_argument(
+    "--gpu_id",
+    default=None,
+    type=int,
+    help="the used gpu index, -1 for cpu"
+)
 args = parser.parse_args()
 
 if args.torch_hub_dir is not None:
@@ -642,29 +691,37 @@ if __name__ == "__main__":
         elif args.task_type in ["binary-class", "binary_class"]:
             args.sigmoid = True
 
-    if args.gpu_id == -1:
+    if args.gpu_id <= -1:
         args.device = torch.device("cpu")
     else:
-        args.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        args.device = torch.device("cuda:%d" % args.gpu_id) if torch.cuda.is_available() else torch.device("cpu")
 
     print("-" * 25 + "args:" + "-" * 25)
     print(args.__dict__.items())
     print("-" * 60)
+    '''
     print("-" * 25 + "model_dir list:" + "-" * 25)
     print(os.listdir(model_dir))
     print("-" * 60)
+    '''
 
     if args.device.type == 'cpu':
         print("Running Device is CPU!")
     else:
-        print("Running Device is GPU!")
+        print("Running Device is GPU(%d)!" % args.gpu_id)
     print("-" * 60)
 
     # Step2: loading the tokenizer and model
     config, subword, seq_tokenizer, struct_tokenizer, model, label_id_2_name, label_name_2_id = \
         load_model(args=args, model_dir=model_dir)
 
-    col_names = ["protein_id", "seq", "predict_prob", "predict_label", "seq_len", "pdb_filename", "ptm", "mean_plddt", "emb_filename"]
+    col_names = [
+        "protein_id", "seq",
+        "predict_prob", "predict_label",
+        "seq_len",
+        "pdb_filename", "ptm", "mean_plddt",
+        "emb_filename"
+    ]
     predict_func = None
     evaluate_func = None
     if args.task_type in ["multi-label", "multi_label"]:
@@ -834,7 +891,10 @@ if __name__ == "__main__":
         print("prediction done. total batch: %d, use time: %f." % (done_batch_num, use_time))
 
     # plot the Sequence Length Distribution
-    seq_length_distribution_pic_savepath = os.path.join(predict_dir, "seq_length_distribution.png")
+    seq_length_distribution_pic_savepath = os.path.join(
+        predict_dir,
+        "seq_length_distribution.png"
+    )
     if not os.path.exists(os.path.dirname(seq_length_distribution_pic_savepath)):
         os.makedirs(os.path.dirname(seq_length_distribution_pic_savepath))
     seq_len_list = []
@@ -864,7 +924,8 @@ if __name__ == "__main__":
             for row in reader:
                 predict_prob = row[2]
                 predict_label = row[3]
-                # because the file has added two columns (the third column and the fourth column), the column number is increased by 2
+                # because the file has added two columns (the third column and the fourth column),
+                # the column number is increased by 2
                 ground_truth = row[args.ground_truth_col_index + 2]
                 if ground_truth not in ground_truth_stats:
                     ground_truth_stats[ground_truth] = 1

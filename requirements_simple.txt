@@ -36,4 +36,5 @@ BeautifulSoup4==4.11.1
 requests==2.24.0
 gemmi==0.5.8
 networkx==3.0
-
+pynvml==11.5.0
+flask==3.1.0
