@@ -5,18 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f651ee9e-c089-4c9d-a8a8-c43a211c1f18" name="Changes" comment="feature: Add the deployable application (based on flask, in 'src/app/')">
-      <change afterPath="$PROJECT_DIR$/src/app/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/args.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements_simple.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements_simple.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/deep_baselines/predict_deep_baselines.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/deep_baselines/predict_deep_baselines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/predict_many_samples.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_many_samples.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/predict_one_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/predict_one_sample.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/metrics.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -331,14 +321,12 @@
       <workItem from="1744872418492" duration="7241000" />
       <workItem from="1745653764031" duration="5437000" />
       <workItem from="1745972928950" duration="957000" />
-      <workItem from="1746095325799" duration="12812000" />
-    </task>
-    <task id="LOCAL-00003" summary="Update README.md">
-      <created>1703067784490</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1703067784490</updated>
+      <workItem from="1746095325799" duration="13161000" />
+      <workItem from="1748428953399" duration="14000" />
+      <workItem from="1748933877519" duration="11000" />
+      <workItem from="1749092027871" duration="296000" />
+      <workItem from="1750851681202" duration="85000" />
+      <workItem from="1754121788337" duration="1042000" />
     </task>
     <task id="LOCAL-00004" summary="Update README.md">
       <created>1703771152842</created>
@@ -676,7 +664,14 @@
       <option name="project" value="LOCAL" />
       <updated>1745973309214</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="feature: Add the deployable application (based on flask, in 'src/app/')">
+      <created>1746111974207</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1746111974208</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

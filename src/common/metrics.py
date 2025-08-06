@@ -24,7 +24,7 @@
 '''
 import csv, sys
 import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score,  average_precision_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score,  average_precision_score, confusion_matrix, matthews_corrcoef
 sys.path.append("./")
 sys.path.append("../")
 sys.path.append("../src")
@@ -139,11 +139,33 @@ def metrics_multi_class(targets, probs, average="macro"):
         "pr_auc": round(pr_auc, 4),
         "roc_auc": round(roc_auc, 4)
     })
-
+    try:
+        mcc = matthews_corrcoef(targets, preds)
+        result.update({
+            "mcc": round(mcc, 6)
+        })
+        sn_avg = metrics_multi_class_sn(targets, preds)
+        result.update({
+            "sn": sn_avg
+        })
+        sp_avg = metrics_multi_class_sp(targets, preds)
+        result.update({
+            "sp": sp_avg
+        })
+    except Exception as e:
+        pass
+    try:
+        cm = confusion_matrix(targets, preds)
+        cm = cm.tolist()
+        result.update({
+            "confusion_matrix": cm
+        })
+    except Exception as e:
+        pass
     return result
 
 
-def metrics_multi_class_for_pred(targets, preds, savepath=None):
+def metrics_multi_class_for_pred(targets, preds, probs=None, average="macro", savepath=None):
     '''
     metrcis for multi-class classification
     :param targets: 1d-array class index (n_samples, )
@@ -156,16 +178,90 @@ def metrics_multi_class_for_pred(targets, preds, savepath=None):
         targets = np.squeeze(targets, axis=1)
 
     acc = accuracy_score(targets, preds)
-    prec = precision_score(targets, preds, average='macro')
-    recall = recall_score(targets, preds, average='macro')
-    f1 = f1_score(y_true=targets, y_pred=preds, average='macro')
+    prec = precision_score(targets, preds, average=average)
+    recall = recall_score(targets, preds, average=average)
+    f1 = f1_score(y_true=targets, y_pred=preds, average=average)
     result = {
+        "top2_acc": round(topk_accuracy_score(targets, probs, k=2), 4),
+        "top3_acc": round(topk_accuracy_score(targets, probs, k=3), 4),
+        "top5_acc": round(topk_accuracy_score(targets, probs, k=5), 4),
+        "top10_acc": round(topk_accuracy_score(targets, probs, k=10), 4),
         "acc": round(acc, 4),
         "prec": round(prec, 4),
         "recall": round(recall, 4),
         "f1": round(f1, 4)
     }
+
+    try:
+        roc_auc = roc_auc_score(targets, probs, average=average, multi_class='ovr')
+        result.update({
+            "roc_auc": round(float(roc_auc), 6)
+        })
+    except Exception as e:
+        pass
+    try:
+        z = probs.shape[1]
+        new_targets = np.eye(z)[targets]
+        pr_auc = average_precision_score(new_targets, probs, average=average)
+        result.update({
+            "pr_auc": round(float(pr_auc), 6),
+        })
+    except Exception as e:
+        pass
+    try:
+        mcc = matthews_corrcoef(targets, preds)
+        result.update({
+            "mcc": round(mcc, 6)
+        })
+        sn_avg = metrics_multi_class_sn(targets, preds)
+        result.update({
+            "sn": sn_avg
+        })
+        sp_avg = metrics_multi_class_sp(targets, preds)
+        result.update({
+            "sp": sp_avg
+        })
+    except Exception as e:
+        pass
+
+    try:
+        cm = confusion_matrix(targets, preds)
+        cm = cm.tolist()
+        result.update({
+            "confusion_matrix": cm
+        })
+    except Exception as e:
+        pass
     return result
+
+
+def metrics_multi_class_sn(targets, preds):
+    n_classes = np.unique(targets).size
+    con_mat = confusion_matrix(targets, preds)
+    sn_list = []
+    for class_idx in range(n_classes):
+        tp = con_mat[class_idx][class_idx]
+        fn = np.sum(con_mat[class_idx, :]) - tp
+        sn = tp / (tp + fn)
+        sn_list.append(sn)
+    sn_avg = round(sum(sn_list)/len(sn_list), 6)
+    return sn_avg
+
+
+def metrics_multi_class_sp(targets, preds):
+    n_classes = np.unique(targets).size
+    con_mat = confusion_matrix(targets, preds)
+    sp_list = []
+    n = targets.size
+    for class_idx in range(n_classes):
+        tp = con_mat[class_idx][class_idx]
+        fn = np.sum(con_mat[class_idx, :]) - tp
+        fp = np.sum(con_mat[:, class_idx]) - tp
+        tn = n - tp - fn - fp
+        sp = tn / (tn + fp)
+        sp_list.append(sp)
+    sp_avg = round(sum(sp_list)/len(sp_list), 6)
+    return sp_avg
 
 
 def transform(targets, probs, threshold):
