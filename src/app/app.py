@@ -22,7 +22,7 @@ try:
     from app.args import Args
     from common.multi_label_metrics import *
     from protein_structure.predict_structure import predict_embedding, predict_pdb, calc_distance_maps
-    from utils import set_seed, plot_bins, csv_reade, fasta_reader, clean_seq, available_gpu_id
+    from utils import set_seed, plot_bins, csv_reader, fasta_reader, clean_seq, available_gpu_id
     from SSFN.model import *
     from data_loader import load_and_cache_examples, convert_examples_to_features, InputExample, InputFeatures
 except ImportError:
