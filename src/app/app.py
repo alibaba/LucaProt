@@ -603,7 +603,7 @@ def virus_rdrp_identification(input_fasta, threshold):
         global_args.no_position_embeddings = global_config["no_position_embeddings"]
         global_args.no_token_type_embeddings = global_config["no_token_type_embeddings"]
         global_args.cmap_type = global_config["cmap_type"]
-        global_args.cmap_type = float(global_config["cmap_thresh"])
+        global_args.cmap_thresh = float(global_config["cmap_thresh"])
         global_args.embedding_input_size = global_config["embedding_input_size"]
         global_args.embedding_pooling_type = global_config["embedding_pooling_type"]
         global_args.embedding_max_length = global_config["embedding_max_length"]
