@@ -671,8 +671,8 @@ def virus_rdrp_identification(input_fasta, threshold):
         results += "%s: [prob=%0.4f%%, label=%s, %s]<br><br>" % (
             row[0],
             res[0][2] * 100,
-            "viral-RdRP" if res[0][2] == 1 else "non-viral-RdRP",
-            "Yes" if res[0][2] == 1 else "No"
+            "viral-RdRP" if res[0][2] >= global_args.threshold else "non-viral-RdRP",
+            "Yes" if res[0][2] >= global_args.threshold else "No"
         )
     return results
 
