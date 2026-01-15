@@ -23,12 +23,14 @@ Add the deployable web application (based on flask, in `src/app/`)
 Add the post-processing workflow to classify the viral RdRPs predicted by LucaProt into our 180 supergroups or novel supergroups.     
 (**Guidance listed in `PostProcessingWorkflow.md` or `PostProcessingWorkflow_zh.md`of this project**).       
 
+<!-- 
 * **2024-09-24<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />:**    
-A free CPU version of `LucaProt Server` is available online (https://lucaprot.org).      
+A free CPU version of `LucaProt Server` is available online (https://lucaprot.org).
+-->
 
 * **2024-09-01**:       
 Optimize inference and prediction code to run on GPU with small graphics memory, such as `A10`.            
-
+<!-- 
 ## LucaProt Server<img src="https://img.shields.io/badge/🔥-orange" alt="Hot Badge" />        
 LucaProt Server(CPU) is available at: https://lucaprot.org.     
 Limit inference to a maximum of 100 sequences at a time.     
@@ -38,7 +40,7 @@ The GPU version will come soon.
 
 LucaProt Server
 </center>
-
+-->
 # Introduction    
 **LucaProt**: A novel deep learning framework that incorporates protein amino acid sequence and structural information to predict protein function.
 
