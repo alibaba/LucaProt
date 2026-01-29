@@ -637,7 +637,7 @@ def main():
         "--threshold",
         default=0.5,
         type=float,
-        help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, defualt: 0.5."
+        help="sigmoid threshold for binary-class or multi-label classification, None for multi-class classification, default: 0.5."
     )
     parser.add_argument(
         "--print_per_number",
@@ -774,16 +774,22 @@ if __name__ == "__main__":
         raise Exception("Not Support Task Type: %s" % args.task_type)
     done = 0
     with open(args.save_file, "w") as wfp:
-        writer = csv.writer(wfp)
-        writer.writerow(["protein_id", "seq", "prob", "label"])
-        for row in fasta_reader(args.fasta_file):
-            # Step 3: prediction
-            row = [row[0], clean_seq(row[0], row[1])]
-            res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)
-            writer.writerow(res[0])
-            done += 1
-            if done % args.print_per_number == 0:
-                print("done : %d" % done)
+        with open(os.path.join(os.path.dirname(args.fasta_file), "RdRPs_only_using_threshold%f.csv" % args.threshold), "w") as positive_wfp:
+            writer = csv.writer(wfp)
+            positive_writer = csv.writer(positive_wfp)
+            writer.writerow(["protein_id", "seq", "prob", "label"])
+            positive_writer.writerow(["protein_id", "seq", "prob", "label"])
+            for row in fasta_reader(args.fasta_file):
+                # Step 3: prediction
+                row = [row[0], clean_seq(row[0], row[1])]
+                res = predict_func(args, label_id_2_name, seq_tokenizer, subword, struct_tokenizer, model, row)
+                writer.writerow(res[0])
+                prob = res[0][-2]
+                if prob >= args.threshold:
+                    positive_writer.writerow(res[0])
+                done += 1
+                if done % args.print_per_number == 0:
+                    print("done : %d" % done)
     print("all done: %d" % done)
 
 
