@@ -774,7 +774,7 @@ if __name__ == "__main__":
         raise Exception("Not Support Task Type: %s" % args.task_type)
     done = 0
     with open(args.save_file, "w") as wfp:
-        with open(os.path.join(os.path.dirname(args.fasta_file), "RdRPs_only_using_threshold%f.csv" % args.threshold), "w") as positive_wfp:
+        with open(os.path.join(os.path.dirname(args.save_file), "RdRPs_only_using_threshold%f.csv" % args.threshold), "w") as positive_wfp:
             writer = csv.writer(wfp)
             positive_writer = csv.writer(positive_wfp)
             writer.writerow(["protein_id", "seq", "prob", "label"])
